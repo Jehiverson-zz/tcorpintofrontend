@@ -67,7 +67,11 @@ import RatingPage from './pages/RatingPage';
 //Mis rutas
 import Login from './pages/auth/Login';
 import PageNotFound from './pages/404/PageNotFound';
-import Landing from './pages/bitacoras/Landing';
+
+//Bitacoras
+import Landing_Bitacoras from './pages/bitacoras/Landing';
+import BitacoraVenta from './pages/bitacoras/ventadiaria/Ventadiaria'
+
 import Persons from './pages/persons/Persons';
 class Routes extends React.Component {
 
@@ -75,7 +79,9 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path='/' component={Login} />
-        <Route exact path='/bitacoras' component={Landing} />
+        <Route exact path='/bitacoras' component={Landing_Bitacoras} />
+        <Route exact path='/bitacora_ventas_diarias' component={BitacoraVenta} />
+
         <Route exact path='/persons/detail' component={Persons} />
         
         <Route exact path='/addons' component={AddonsNavPage} />

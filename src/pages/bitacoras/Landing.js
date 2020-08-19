@@ -41,7 +41,7 @@ const Landing = () => {
                     </MDBRow>
                 </MDBContainer>
             </MDBAnimation>
-        </ Navbar>
+        </Navbar>
     )
 }
 

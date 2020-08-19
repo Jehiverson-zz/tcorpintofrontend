@@ -81,12 +81,91 @@ class Navbar extends Component {
               </MDBNavItem>
               <MDBNavItem>
                 <MDBNavLink
+                  exact
+                  to='/tickets'
+                  onClick={this.closeCollapse('mainNavbarCollapse')}
+                >
+                  <strong>Tickets</strong>
+                </MDBNavLink>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBNavLink
                   onClick={this.closeCollapse('mainNavbarCollapse')}
                   to='/modals'
                 >
                   <strong>Modals</strong>
                 </MDBNavLink>
               </MDBNavItem>
+              <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/css'
+                  >
+                    <strong>CSS</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/components'
+                  >
+                    <strong>Components</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/advanced'
+                  >
+                    <strong>Advanced</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/navigation'
+                  >
+                    <strong>Navigation</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/forms'
+                  >
+                    <strong>Forms</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/tables'
+                  >
+                    <strong>Tables</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/modals'
+                  >
+                    <strong>Modals</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse('mainNavbarCollapse')}
+                    to='/addons'
+                  >
+                    <strong>Addons</strong>
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBLink className='waves-effect waves-light' to='#!'>
+                    <MDBIcon icon='cog' className='mr-1' />
+                    Configuración
+                  </MDBLink>
+                </MDBNavItem>
               <MDBNavItem>
                 <MDBDropdown>
                   <MDBDropdownToggle nav caret>

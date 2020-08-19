@@ -1,15 +1,15 @@
 import axios from 'axios'
-export const login = user => { 
+export const login = (user) => {
 
   let url = process.env.REACT_APP_URL_BASE + "/login";
   const data = { user: user.user,password: user.password};
   return axios
-    .post(url,data) 
+    .post(url,data)
     .then(response => {
 
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
-      let data = { error: 0, message: "Exito" }; 
+      let data = { error: 0, message: "Exito", response }; 
       return data;
       
     })
@@ -32,7 +32,6 @@ export const login_google = user => {
       localStorage.setItem('session',true);
       let data = { error: 0, message: "Exito" }; 
       return data;
-      
     })
     .catch(err => {
       console.log(err.response.data)
@@ -42,7 +41,7 @@ export const login_google = user => {
 }
 
 export const data = () => {
-  
+
   let url = process.env.REACT_APP_URL_BASE + "/";
   let data = {};
   return axios

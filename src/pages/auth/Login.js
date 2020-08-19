@@ -34,10 +34,13 @@ const Login = () => {
             password: password
         }
 
-        login(userData).then(res => {
+        login(userData).then(async res => {
             if (res.error === 1) {
                 Swal.fire('Oops...', res.message, 'error');
             } else {
+                localStorage.setItem('identity', JSON.stringify(res.response.data.user));
+                localStorage.setItem('token', JSON.stringify(res.response.data.token));
+                localStorage.setItem('session',true);
                 history.push(`/bitacoras`);
             }
         })

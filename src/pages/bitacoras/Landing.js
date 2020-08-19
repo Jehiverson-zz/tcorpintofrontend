@@ -42,7 +42,7 @@ const Landing = () => {
                     </MDBRow>
                 </MDBContainer>
             </MDBAnimation>
-        </ Layaout>
+        </Layaout>
     )
 }
 

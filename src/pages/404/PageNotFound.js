@@ -5,6 +5,7 @@ import {
 	MDBCol,
 	MDBBtn
 } from 'mdbreact';
+import Layaout from '../parcials/Layaout'
 
 import './PageNotFound.css'
 
@@ -15,6 +16,7 @@ class PageNotFound extends Component {
 
 	render() {
 		return (
+			<Layaout>
 			<MDBContainer className='mt-5'>
 				<SectionContainer noBorder>
 					<MDBRow>
@@ -36,6 +38,7 @@ class PageNotFound extends Component {
 					</MDBRow>
 				</SectionContainer>
 			</MDBContainer>
+			</Layaout>
 		)
 	}
 }

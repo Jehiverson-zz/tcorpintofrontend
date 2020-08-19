@@ -9,12 +9,12 @@ import {
     MDBAnimation
 } from 'mdbreact';
 import MenuLink from '../../components/menuLink';
-import Navbar from '../parcials/Navbar'
+import Layaout from '../parcials/Layaout'
 
 const TicketsPage = () => {
 
     return (
-        <Navbar>
+        <Layaout>
             <MDBEdgeHeader color='indigo darken-3' className='sectionPage' />
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
@@ -37,7 +37,7 @@ const TicketsPage = () => {
                     </MDBRow>
                 </MDBContainer>
             </MDBAnimation>
-        </Navbar>
+        </Layaout>
     )
 }
 

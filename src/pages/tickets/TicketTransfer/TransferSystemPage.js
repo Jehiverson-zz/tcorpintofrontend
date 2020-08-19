@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../../parcials/Navbar';
+import Layaout from '../../parcials/Layaout';
 import {
     MDBCard,
     MDBCardBody,
@@ -11,7 +11,7 @@ import {
 
 const TransferSystemPage = () => {
     return (
-        <Navbar>
+        <Layaout>
             <br></br>
             <MDBContainer>
                 <MDBCard>
@@ -36,7 +36,7 @@ const TransferSystemPage = () => {
                     </MDBCardBody>
                 </MDBCard>
             </MDBContainer>
-        </Navbar>
+        </Layaout>
     )
 }
 

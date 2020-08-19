@@ -72,7 +72,7 @@ import PageNotFound from './pages/404/PageNotFound';
 import Landing_Bitacoras from './pages/bitacoras/Landing';
 import BitacoraVenta from './pages/bitacoras/ventadiaria/Ventadiaria'
 
-import Persons from './pages/persons/Persons';
+
 class Routes extends React.Component {
 
   render() {
@@ -81,8 +81,6 @@ class Routes extends React.Component {
         <Route exact path='/' component={Login} />
         <Route exact path='/bitacoras' component={Landing_Bitacoras} />
         <Route exact path='/bitacora_ventas_diarias' component={BitacoraVenta} />
-
-        <Route exact path='/persons/detail' component={Persons} />
         
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />

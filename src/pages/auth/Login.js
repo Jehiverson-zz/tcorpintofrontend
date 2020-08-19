@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom";
+import GoogleLogin from 'react-google-login';
 import Swal from 'sweetalert2'
 import {
     MDBContainer,
@@ -11,15 +12,17 @@ import {
 
 //Complements
 import SectionContainer from '../../components/sectionContainer';
-import Navbar from '../parcials/Navbar'
-
+import Layaout from '../parcials/Layaout'
 //Css
 import './Login.css'
 
 //Functions
-import { login } from '../../functions/UserFunctions';
+import { login,login_google } from '../../functions/UserFunctions';
 
 const Login = () => {
+    
+    const clientId = process.env.REACT_APP_GOOGLE_ID;
+
     const history = useHistory();
     const [user, setUser] = useState();
     const [password, setPassword] = useState();
@@ -48,12 +51,28 @@ const Login = () => {
         setPassword(e.target.value);
     }
 
+    const responseGoogle = (response) => {
+        
+        const userData = {
+            email: response.profileObj.email,
+        }
+
+        login_google(userData).then(res => {
+            if (res.error === 1) {
+                Swal.fire('Oops...', res.message, 'error');
+            } else {
+                history.push(`/bitacoras`);
+            }
+        })
+
+      }
+
     if (localStorage.getItem('session')) {
         history.push(`/bitacoras`);
     }
 
     return (
-        <Navbar>
+        <Layaout>
             <MDBContainer className='mt-5'>
                 <SectionContainer noBorder>
                     <MDBRow>
@@ -85,6 +104,14 @@ const Login = () => {
                                     </div>
                                     <div className='text-center'>
                                         <MDBBtn color="info" onClick={_Login}>Ingresar</MDBBtn>
+                                        <GoogleLogin
+                                            className="btn-google"
+                                            clientId={clientId}
+                                            buttonText="Ingresar"
+                                            onSuccess={responseGoogle}
+                                            onFailure={responseGoogle}
+                                            cookiePolicy={'single_host_origin'}
+                                        />
                                     </div>
                                 </form>
                             </SectionContainer>
@@ -92,7 +119,7 @@ const Login = () => {
                     </MDBRow>
                 </SectionContainer>
             </MDBContainer>
-            </Navbar>
+            </Layaout>
     )
 }
 

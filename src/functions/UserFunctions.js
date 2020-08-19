@@ -6,9 +6,31 @@ export const login = user => {
   return axios
     .post(url,data) 
     .then(response => {
+
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
-      let data = { error: 0, message: "Exito" };
+      let data = { error: 0, message: "Exito" }; 
+      return data;
+      
+    })
+    .catch(err => {
+      console.log(err.response.data)
+      let data = { error: 1, message: err.response.data.message };
+      return data;
+    })
+}
+
+export const login_google = user => { 
+
+  let url = process.env.REACT_APP_URL_BASE + "/login/google";
+  const data = { user: user.email};
+  return axios
+    .post(url,data) 
+    .then(response => {
+      
+      localStorage.setItem('usertoken', response.data);
+      localStorage.setItem('session',true);
+      let data = { error: 0, message: "Exito" }; 
       return data;
       
     })

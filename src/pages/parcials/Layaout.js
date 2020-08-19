@@ -2,7 +2,7 @@ import React, { useState, Component, Children } from 'react'
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import MenuLink from '../../components/menuLink';
-import './Navbar.css'
+import './Layaout.css'
 import {
   MDBNavbar,
   MDBNavbarBrand,
@@ -68,7 +68,7 @@ class Navbar extends Component {
 
           <MDBCollapse id='mainNavbarCollapse' isOpen={collapseID} navbar >
 
-            <MDBNavbarNav right >
+            <MDBNavbarNav right className={localStorage.getItem('session')?"visibility_navbar":"visibility_navbar_none"}>
 
               <MDBNavItem>
                 <MDBNavLink
@@ -77,14 +77,6 @@ class Navbar extends Component {
                   onClick={this.closeCollapse('mainNavbarCollapse')}
                 >
                   <strong>Bitácoras</strong>
-                </MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBNavLink
-                  onClick={this.closeCollapse('mainNavbarCollapse')}
-                  to='/modals'
-                >
-                  <strong>Modals</strong>
                 </MDBNavLink>
               </MDBNavItem>
               <MDBNavItem>

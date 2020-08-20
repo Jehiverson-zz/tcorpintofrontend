@@ -55,19 +55,21 @@ const Login = () => {
     }
 
     const responseGoogle = (response) => {
-        
-        const userData = {
-            email: response.profileObj.email,
-        }
-
-        login_google(userData).then(res => {
-            if (res.error === 1) {
-                Swal.fire('Oops...', res.message, 'error');
-            } else {
-                history.push(`/bitacoras`);
+        if(typeof response.profileObj !== "undefined"){
+            const userData = {
+                email: response.profileObj.email,
             }
-        })
 
+            login_google(userData).then(res => {
+                if (res.error === 1) {
+                    Swal.fire('Oops...', res.message, 'error');
+                } else {
+                    history.push(`/bitacoras`);
+                }
+            })
+        }else{
+            Swal.fire('Oops... Tenemos problemas con google','prueba con el login normal o informa a IT', 'error');
+        }
       }
 
     if (localStorage.getItem('session')) {

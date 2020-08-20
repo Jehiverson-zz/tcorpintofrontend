@@ -27,7 +27,7 @@ const TicketsPage = () => {
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
                                     <MenuLink to='/tickets/traslado_sistema' title='Traslado de Sistema' />
-                                    <MenuLink to='/addons/iframe' title='Entregas Inmediatas' />
+                                    <MenuLink to='/tickets/Immediate_delivery' title='Entregas Inmediatas' />
                                     <MenuLink to='/addons/iframe' title='Retiros Externos' />
                                     <MenuLink to='/addons/iframe' title='Retiros Fotografía' />
                                     <MenuLink to='/addons/iframe' title='Histórico Tickets' />

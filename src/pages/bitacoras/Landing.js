@@ -36,6 +36,7 @@ const Landing = () => {
                                 <ul className='list-unstyled example-components-list'>
                                     <MenuLink to='/bitacora_ventas_diarias' title='Bitácora Ejecución' />
                                     <MenuLink to='/addons/iframe' title='Bitácora Venta Diaria' />
+                                    <MenuLink to='/addons/iframe' title='Mis Datos de Venta' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>

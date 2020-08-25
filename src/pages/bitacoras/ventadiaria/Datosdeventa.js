@@ -24,8 +24,6 @@ const DatosdeVenta = () => {
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(20);
-
-
     useEffect(() => {
         salesShow().then((res) => setdataSales(dataSales.concat(res)) )
     },[0])

@@ -26,7 +26,7 @@ const Login = () => {
     const history = useHistory();
     const [user, setUser] = useState();
     const [password, setPassword] = useState();
-
+ 
     const _Login = () => {
 
         const userData = {
@@ -39,7 +39,7 @@ const Login = () => {
                 Swal.fire('Oops...', res.message, 'error');
             } else {
                 localStorage.setItem('identity', JSON.stringify(res.response.data.user));
-                localStorage.setItem('token', JSON.stringify(res.response.data.token));
+                localStorage.setItem('token', res.response.data.token);
                 localStorage.setItem('session',true);
                 history.push(`/bitacoras`);
             }

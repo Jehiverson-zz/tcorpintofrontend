@@ -3,9 +3,14 @@ import axios from 'axios'
 const url = process.env.REACT_APP_URL_BASE;
 
 export const salesShow = () => {
-  
+
+    let config = {
+        headers: {
+            token: localStorage.getItem('token'),
+        }
+      }
     return axios
-    .get(url + '/binnacles/sales_show')
+    .get(url + '/binnacles/sales_show',config)
     .then((response) => {
         return response.data.sales;
     })

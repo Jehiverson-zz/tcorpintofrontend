@@ -9,14 +9,15 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
-
+import {confirmdataVendors, confirmdataInvoice} from '../../../functions/salesFunctions'
 import {
     MDBRow,
     MDBCol,
     MDBInput,
     MDBBtn,
     MDBIcon,
-    MDBAnimation
+    MDBCard,
+    MDBCardBody,
 } from 'mdbreact';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,16 +39,15 @@ function getSteps() {
 
 const TransferSystemPage = () => {
     const [activeStep, setActiveStep] = useState(0);
-    const [dataCollaboration, setdataCollaboration] = useState([]);
-    const [vendor, setVendor] = useState([{ nombre: "", venta: 0 }]);
+    const [vendor, setVendor] = useState([{ nombre: null,venta: 0 }]);
     const [dataSales, setdataSales] = useState([{
         venta_diaria: 0,
         no_personas: 0,
         no_ventas: 0,
         meta: 0,
         venta_anterior: 0,
-        encargado: 0,
-        factoresDeVenta:"",
+        encargado: null,
+        factoresDeVenta: "-",
         facturas_sis_desde: "-",
         facturas_sis_hasta: "-",
         facturas_sis_total: 0,
@@ -86,33 +86,21 @@ const TransferSystemPage = () => {
         observaciones: "-",
     }]);
 
-    console.log(dataSales, vendor);
-
+    const [skipped, setSkipped] = React.useState(new Set());
+    const [stepper,setStepper] = useState(null);
+    const [stepperMessage,setStepperMessage] = useState(null);
     const classes = useStyles();
     const steps = getSteps();
 
     let datos = [];
-    const manager = { value: '', label: 'Encargado' };
-    const value = { value: 'Selecciona un colaborador', label: 'Selecciona un colaborador' };
-
-    getCollaboration().then((res) => { _data(res) });
-    let _data = (stores) => {
-        stores.map(res => datos.push({ value: res.name, label: res.name }))
-    }
-
-    function handleChangeData(event, name) {
-        const values = [...dataSales];
-        if (event.target.value == "") {
-            values[0][name] = 0;
-        } else {
-            values[0][name] = event.target.value;
-        }
-        setdataSales(values);
-    }
-
+  
+    getCollaboration().then((res) => { res.map(resdata => datos.push({ resdata: res.name, label: resdata.name }))});
+    
     function getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
+                let userManager = dataSales[0].encargado === null ? 'Encargado' : dataSales[0].encargado
+                const valueManager = { value: userManager , label: userManager };
                 return (
                     <>
                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
@@ -133,42 +121,53 @@ const TransferSystemPage = () => {
                             </MDBCol>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
-                                    onChange={e => handleChangeData(e, "collaboration")}
-                                    defaultValue={manager}
+                                    onChange={e => handleChangeData(e, "encargado")}
+                                    defaultValue={valueManager}
                                     options={datos}
                                 />
                             </MDBCol>
                             <MDBCol md='12'>
-                            <MDBInput
-                                type='textarea'
-                                rows='3'
-                                label='Factores clave que afectan el comercio'
-                                value={dataSales[0].observaciones} onChange={e => handleChangeData(e, "factoresDeVenta")}
-                            />
-                        </MDBCol>
+                                <MDBInput
+                                    type='textarea'
+                                    rows='3'
+                                    label='Factores clave que afectan el comercio'
+                                    value={dataSales[0].factoresDeVenta} onChange={e => handleChangeData(e, "factoresDeVenta")}
+                                />
+                            </MDBCol>
                         </MDBRow>
                     </>
                 );
             case 1:
                 return (
                     <>
+                    {stepper !== null? <MDBCol md='12'>
+                            <MDBCard color='red lighten-1' text='white' className='text-center'>
+                            <MDBCardBody>
+                               {stepperMessage}
+                            </MDBCardBody>
+                        </MDBCard>
+                        </MDBCol>:""}
+                    
+
                         <MDBCol md="4">
                             <Button color='primary' onClick={() => handleAdd()}><MDBIcon icon="plus" />Agregar Vendedor</Button>
                         </MDBCol>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             {vendor.map((field, idx) => {
+                                let user = vendor[idx].nombre == null ? 'Vendedor' : vendor[idx].nombre
+                                const valueVendor = { value: user , label: user };
                                 return (
                                     <MDBCol md="4" key={`${field}-${idx}`}>
                                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                                             <MDBCol md='7' style={{ marginTop: "26px" }}>
                                                 <Select
                                                     onChange={e => handleChangeVendors(idx, e, "nombre")}
-                                                    defaultValue={value}
+                                                    defaultValue={valueVendor}
                                                     options={datos}
                                                 />
                                             </MDBCol>
                                             <MDBCol md='3'>
-                                                <MDBInput label='total' type='text' validate onChange={e => handleChangeVendors(idx, e, "venta")} />
+                                                <MDBInput label='total' type='text' value={vendor[idx].venta}  onChange={e => handleChangeVendors(idx, e, "venta")} />
                                             </MDBCol>
                                             <MDBCol md='2' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
                                                 {idx !== 0 && (<MDBBtn size="sm" color='danger' onClick={() => handleRemove(idx)}>X</MDBBtn>)}
@@ -182,6 +181,14 @@ const TransferSystemPage = () => {
                 );
             case 2:
                 return (
+                    <>
+                    {stepper !== null? <MDBCol md='12'>
+                            <MDBCard color='red lighten-1' text='white' className='text-center'>
+                            <MDBCardBody>
+                               {stepperMessage}
+                            </MDBCardBody>
+                        </MDBCard>
+                        </MDBCol>:""}
                     <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                         <MDBCol md='4'>
                             Factura De Sistema
@@ -235,11 +242,12 @@ const TransferSystemPage = () => {
                             <MDBInput label='Total' type='text' value={dataSales[0].facturas_nota_total} onChange={e => handleChangeData(e, "facturas_nota_total")} />
                         </MDBCol>
                     </MDBRow>
+                    </>
                 );
             case 3:
                 return (
                     <>
-                        <MDBRow style={{ justifyContent: "left", display: "flex" }}>
+                    <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             1. Efectivo
                     </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
@@ -358,7 +366,47 @@ const TransferSystemPage = () => {
     }
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        let pagNext = 1;
+        switch(activeStep){
+          case 0:
+            if(dataSales[0].venta_diaria === 0){
+                alert("Está seguro que su venta del día fue 0?");    
+            }
+          break;
+          case 1:
+            const vendorsValid = confirmdataVendors(vendor,dataSales[0].venta_diaria)
+            if(vendorsValid.status){
+                setStepper(null)
+                pagNext = 1;
+            }else{
+                setStepper(1) 
+                setStepperMessage(vendorsValid.message)
+                console.log(stepper)  
+                pagNext = 0;
+            }
+            
+          break;
+          case 2:
+            const invoiceValid = confirmdataInvoice(dataSales[0])
+            if(invoiceValid.status){
+                setStepper(null)
+                pagNext = 1;
+            }else{
+                setStepper(2) 
+                setStepperMessage(invoiceValid.message)
+                console.log(stepper)  
+                pagNext = 0;
+            }
+          break;
+          case 3:
+             
+          break;
+          case 4:
+          break;
+          default:
+
+        }
+        setActiveStep((prevActiveStep) => prevActiveStep + pagNext );
     };
 
     const handleBack = () => {
@@ -371,7 +419,9 @@ const TransferSystemPage = () => {
 
     function handleChangeVendors(i, event, name) {
         const values = [...vendor];
-        if (event.target.value == "") {
+        if (name == "nombre") {
+            values[i][name] = event.label;
+        } else if (event.target.value == "") {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -380,9 +430,13 @@ const TransferSystemPage = () => {
     }
 
     function handleAdd() {
-        const values = [...vendor];
-        values.push({ nombre: "", venta: 0 });
-        setVendor(values);
+        if (vendor.length <= 8) {
+            const values = [...vendor];
+            values.push({ nombre: "", venta: 0 });
+            setVendor(values);
+        } else {
+            alert("Se alconzó el limite vendedores")
+        }
     }
 
     function handleRemove(i) {
@@ -393,17 +447,67 @@ const TransferSystemPage = () => {
         }
     }
 
+    function handleChangeData(event, name) {
+        const values = [...dataSales];
+        
+        if (name == "encargado") {
+            values[0][name] = event.label;
+        } else if (event.target.value == "") {
+            values[0][name] = null;
+        } else {
+            values[0][name] = event.target.value;
+        }
+        setdataSales(values);
+    }
+
+    const handleSkip = () => {
+        if (!isStepOptional(activeStep)) {
+            // You probably want to guard against something like this,
+            // it should never occur unless someone's actively trying to break something.
+            throw new Error("You can't skip a step that isn't optional.");
+        }
+    }
+    const isStepFailed = (step) => {
+        return step === stepper;
+    };
+
+    const isStepSkipped = (step) => {
+        return skipped.has(step);
+    };
+
+    const isStepOptional = (step) => {
+        return step === stepper;
+    };
+
+
+
     return (
         <Layaout>
             <br></br>
             <CardHeader title="Tickets" icon="ticket-alt">
                 <div className={classes.root}>
                     <Stepper activeStep={activeStep} alternativeLabel>
-                        {steps.map((label) => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
+                        {steps.map((label, index) => {
+                            const stepProps = {};
+                            const labelProps = {};
+                            if (isStepOptional(index)) {
+                                labelProps.optional = (
+                                    <Typography variant="caption" color="error">
+                                    </Typography>
+                                );
+                            }
+                            if (isStepFailed(index)) {
+                                labelProps.error = true;
+                            }
+                            if (isStepSkipped(index)) {
+                                stepProps.completed = false;
+                            }
+                            return (
+                                <Step key={label} {...stepProps}>
+                                    <StepLabel {...labelProps}>{label}</StepLabel>
+                                </Step>
+                            );
+                        })}
                     </Stepper>
                     <div>
                         {activeStep === steps.length ? (
@@ -421,7 +525,7 @@ const TransferSystemPage = () => {
                                             className={classes.backButton}
                                         >
                                             Regresar
-              </Button>
+                                        </Button>
                                         <Button variant="contained" color="primary" onClick={handleNext}>
                                             {activeStep === steps.length - 1 ? 'Terminar' : 'Siguente'}
                                         </Button>

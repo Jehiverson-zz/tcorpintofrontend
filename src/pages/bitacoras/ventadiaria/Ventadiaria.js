@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Layaout from '../../parcials/Layaout';
-import CardHeader from '../../../components/CardHeader'
-import { getCollaboration } from '../../../functions/collaboratorFunction'
+import NumericInput from 'react-numeric-input';
+//Librerias de diseño
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Select from 'react-select';
-import {confirmdataVendors, confirmdataInvoice} from '../../../functions/salesFunctions'
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import {
     MDBRow,
     MDBCol,
@@ -19,6 +19,18 @@ import {
     MDBCard,
     MDBCardBody,
 } from 'mdbreact';
+
+//componentes
+import Layaout from '../../parcials/Layaout';
+import CardHeader from '../../../components/CardHeader'
+import { getCollaboration } from '../../../functions/collaboratorFunction'
+import Select from 'react-select';
+import Swal from 'sweetalert2'
+
+//Funciones
+import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment } from '../../../functions/salesFunctions'
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,8 +50,20 @@ function getSteps() {
 }
 
 const TransferSystemPage = () => {
+
+
+
+    //Stepper
     const [activeStep, setActiveStep] = useState(0);
-    const [vendor, setVendor] = useState([{ nombre: null,venta: 0 }]);
+    const [skipped, setSkipped] = useState(new Set());
+    const [stepper, setStepper] = useState(null);
+    const [stepperMessage, setStepperMessage] = useState(null);
+    const classes = useStyles();
+    const steps = getSteps();
+
+    //Hooks Datos formulario
+    const [vendor, setVendor] = useState([{ nombre: null, venta: 0 }]);
+    const [vendorDescount, setVendorDescount] = useState([]);
     const [dataSales, setdataSales] = useState([{
         venta_diaria: 0,
         no_personas: 0,
@@ -86,38 +110,95 @@ const TransferSystemPage = () => {
         observaciones: "-",
     }]);
 
-    const [skipped, setSkipped] = React.useState(new Set());
-    const [stepper,setStepper] = useState(null);
-    const [stepperMessage,setStepperMessage] = useState(null);
-    const classes = useStyles();
-    const steps = getSteps();
-
-    let datos = [];
-  
-    getCollaboration().then((res) => { res.map(resdata => datos.push({ resdata: res.name, label: resdata.name }))});
-    
+    //ApiRest datos de colaboradores
+    const datos = [];
+    getCollaboration().then((res) => { res.map(resdata => datos.push({ resdata: res.name, label: resdata.name })) });
+    //Pinta datos en el stepper
     function getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
                 let userManager = dataSales[0].encargado === null ? 'Encargado' : dataSales[0].encargado
-                const valueManager = { value: userManager , label: userManager };
+                const valueManager = { value: userManager, label: userManager };
                 return (
                     <>
+                        {stepper !== null ? <MDBCol md='12'>
+                            <MDBCard color='red lighten-1' text='white' className='text-center'>
+                                <MDBCardBody>
+                                    {stepperMessage}
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol> : ""}
+
                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                             <MDBCol md='2'>
-                                <MDBInput label='Venta diaria' type='text' value={dataSales[0].venta_diaria} onChange={e => handleChangeData(e, "venta_diaria")} />
+                                <Typography variant="body2">Venta Diaria</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].venta_diaria}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "venta_diaria", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='No. personas' type='text' value={dataSales[0].no_personas} onChange={e => handleChangeData(e, "no_personas")} />
+                                <Typography variant="body2">No. personas</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].no_personas}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "no_personas", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='No. Ventas' type='text' value={dataSales[0].no_ventas} onChange={e => handleChangeData(e, "no_ventas")} />
+                                <Typography variant="body2">No. Ventas</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].no_ventas}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "no_ventas", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Meta Diaria' type='text' value={dataSales[0].meta} onChange={e => handleChangeData(e, "meta")} />
+                                <Typography variant="body2">Meta Diaria</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].meta}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "meta", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Venta Anterior' type='text' value={dataSales[0].venta_anterior} onChange={e => handleChangeData(e, "venta_anterior")} />
+                                <Typography variant="body2">Venta Anterior</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].venta_anterior}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "venta_anterior", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
@@ -138,37 +219,51 @@ const TransferSystemPage = () => {
                     </>
                 );
             case 1:
+
                 return (
                     <>
-                    {stepper !== null? <MDBCol md='12'>
+                        {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
-                            <MDBCardBody>
-                               {stepperMessage}
-                            </MDBCardBody>
-                        </MDBCard>
-                        </MDBCol>:""}
-                    
+                                <MDBCardBody>
+                                    {stepperMessage}
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol> : ""}
 
-                        <MDBCol md="4">
-                            <Button color='primary' onClick={() => handleAdd()}><MDBIcon icon="plus" />Agregar Vendedor</Button>
+
+                        <MDBCol md="8">
+                            <Button color='primary' onClick={() => handleAdd()}><MDBIcon icon="plus" />Vendedor</Button>
+                            <Button color='secondary' onClick={() => handleAddVendorsDesconunt()}><MDBIcon icon="plus" />Nota de credito Vendedor</Button>
                         </MDBCol>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             {vendor.map((field, idx) => {
-                                let user = vendor[idx].nombre == null ? 'Vendedor' : vendor[idx].nombre
-                                const valueVendor = { value: user , label: user };
+                                let user = vendor[idx].nombre == null || vendor[idx].nombre == ' ' ? 'Vendedor' : vendor[idx].nombre
+                                const valueVendor = { value: user, label: user };
                                 return (
-                                    <MDBCol md="4" key={`${field}-${idx}`}>
+                                    <MDBCol md="6" key={`${field}-${idx}`}>
                                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
-                                            <MDBCol md='7' style={{ marginTop: "26px" }}>
+                                            <MDBCol md='6' style={{ marginTop: "26px" }}>
                                                 <Select
                                                     onChange={e => handleChangeVendors(idx, e, "nombre")}
                                                     defaultValue={valueVendor}
                                                     options={datos}
                                                 />
                                             </MDBCol>
-                                            <MDBCol md='3'>
-                                                <MDBInput label='total' type='text' value={vendor[idx].venta}  onChange={e => handleChangeVendors(idx, e, "venta")} />
+                                            <MDBCol md='4'>
+                                                <Typography variant="body2">total</Typography>
+                                                <NumericInput
+                                                    className="form-control"
+                                                    value={vendor[idx].venta}
+                                                    step={1}
+                                                    precision={2}
+                                                    size={2}
+                                                    mobile
+                                                    pattern="[0-9].[0-9][0-9]"
+                                                    inputmode="numeric"
+                                                    onChange={e => handleChangeVendors(idx, e, "venta", "number")}
+                                                />
                                             </MDBCol>
+
                                             <MDBCol md='2' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
                                                 {idx !== 0 && (<MDBBtn size="sm" color='danger' onClick={() => handleRemove(idx)}>X</MDBBtn>)}
                                             </MDBCol>
@@ -177,85 +272,196 @@ const TransferSystemPage = () => {
                                 )
                             })}
                         </MDBRow>
+                        {vendorDescount.length > 0 ? <Typography variant="body2">Notas de crédito</Typography> : ""}
+                        <MDBRow style={{ justifyContent: "left", display: "flex" }}>
+
+                            {vendorDescount.map((field, idx) => {
+                                let user = vendorDescount[idx].nombre == null || vendorDescount[idx].nombre == ' ' ? 'Vendedor' : vendorDescount[idx].nombre
+                                const valueVendor = { value: user, label: user };
+                                return (
+                                    <MDBCol md="6" key={`${field}-${idx}`}>
+                                        <MDBRow style={{ justifyContent: "center", display: "flex" }}>
+                                            <MDBCol md='6' style={{ marginTop: "26px" }}>
+                                                <Select
+                                                    onChange={e => handleChangeVendorsDesconunt(idx, e, "nombre")}
+                                                    defaultValue={valueVendor}
+                                                    options={datos}
+                                                />
+                                            </MDBCol>
+                                            <MDBCol md='4'>
+                                                <Typography variant="body2">total</Typography>
+                                                <NumericInput
+                                                    className="form-control"
+                                                    value={vendorDescount[idx].venta}
+                                                    step={1}
+                                                    precision={2}
+                                                    size={2}
+                                                    mobile
+                                                    pattern="[0-9].[0-9][0-9]"
+                                                    inputmode="numeric"
+                                                    onChange={e => handleChangeVendorsDesconunt(idx, e, "venta", "number")}
+                                                />
+                                            </MDBCol>
+                                            <MDBCol md='2' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
+                                                <MDBBtn size="sm" color='danger' onClick={() => handleRemoveVendorsDesconunt(idx)}>X</MDBBtn>
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </MDBCol>
+                                )
+                            })}
+                        </MDBRow>
+                        <br></br>
                     </>
                 );
             case 2:
                 return (
                     <>
-                    {stepper !== null? <MDBCol md='12'>
+                        {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
-                            <MDBCardBody>
-                               {stepperMessage}
-                            </MDBCardBody>
-                        </MDBCard>
-                        </MDBCol>:""}
-                    <MDBRow style={{ justifyContent: "center", display: "flex" }}>
-                        <MDBCol md='4'>
-                            Factura De Sistema
+                                <MDBCardBody>
+                                    {stepperMessage}
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol> : ""}
+                        <MDBRow style={{ justifyContent: "center", display: "flex" }}>
+                            <MDBCol md='4'>
+                                Factura De Sistema
                         </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Desde' type='text' value={dataSales[0].facturas_sis_desde} onChange={e => handleChangeData(e, "facturas_sis_desde")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_sis_hasta} onChange={e => handleChangeData(e, "facturas_sis_hasta")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Total' type='text' value={dataSales[0].facturas_sis_total} onChange={e => handleChangeData(e, "facturas_sis_total")} />
-                        </MDBCol>
+                            <MDBCol md='2'>
+                                <MDBInput label='Desde' type='text' value={dataSales[0].facturas_sis_desde} onChange={e => handleChangeData(e, "facturas_sis_desde")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_sis_hasta} onChange={e => handleChangeData(e, "facturas_sis_hasta")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <Typography variant="body2">Total</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].facturas_sis_total}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "facturas_sis_total", "number")}
+                                />
+                            </MDBCol>
 
-                        <MDBCol md='4'>
-                            Factura Manual
+                            <MDBCol md='4'>
+                                Factura Manual
                         </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Desde' type='text' value={dataSales[0].facturas_man_desde} onChange={e => handleChangeData(e, "facturas_man_desde")} />
+                            <MDBCol md='2'>
+                                <MDBInput label='Desde' type='text' value={dataSales[0].facturas_man_desde} onChange={e => handleChangeData(e, "facturas_man_desde")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_man_hasta} onChange={e => handleChangeData(e, "facturas_man_hasta")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <Typography variant="body2">Total</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].facturas_man_total}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "facturas_man_total", "number")}
+                                />
+                            </MDBCol>
+                            <MDBCol md='4'>
+                                Factura COD
                         </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_man_hasta} onChange={e => handleChangeData(e, "facturas_man_hasta")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Total' type='text' value={dataSales[0].facturas_man_total} onChange={e => handleChangeData(e, "facturas_man_total")} />
-                        </MDBCol>
+                            <MDBCol md='2'>
+                                <MDBInput label='Desde' type='text' value={dataSales[0].facturas_cod_desde} onChange={e => handleChangeData(e, "facturas_cod_desde")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_cod_hasta} onChange={e => handleChangeData(e, "facturas_cod_hasta")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <Typography variant="body2">Total</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].facturas_cod_total}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "facturas_cod_total", "number")}
+                                />
+                            </MDBCol>
 
-                        <MDBCol md='4'>
-                            Factura COD
+                            <MDBCol md='4'>
+                                Notas De Crédito
                         </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Desde' type='text' value={dataSales[0].facturas_cod_desde} onChange={e => handleChangeData(e, "facturas_cod_desde")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_cod_hasta} onChange={e => handleChangeData(e, "facturas_cod_hasta")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Total' type='text' value={dataSales[0].facturas_cod_total} onChange={e => handleChangeData(e, "facturas_cod_total")} />
-                        </MDBCol>
-
-                        <MDBCol md='4'>
-                            Notas De Crédito
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Desde' type='text' value={dataSales[0].facturas_nota_desde} onChange={e => handleChangeData(e, "facturas_nota_desde")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_nota_hasta} onChange={e => handleChangeData(e, "facturas_nota_hasta")} />
-                        </MDBCol>
-                        <MDBCol md='2'>
-                            <MDBInput label='Total' type='text' value={dataSales[0].facturas_nota_total} onChange={e => handleChangeData(e, "facturas_nota_total")} />
-                        </MDBCol>
-                    </MDBRow>
+                            <MDBCol md='2'>
+                                <MDBInput label='Desde' type='text' value={dataSales[0].facturas_nota_desde} onChange={e => handleChangeData(e, "facturas_nota_desde")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <MDBInput label='Hasta' type='text' value={dataSales[0].facturas_nota_hasta} onChange={e => handleChangeData(e, "facturas_nota_hasta")} />
+                            </MDBCol>
+                            <MDBCol md='2'>
+                                <Typography variant="body2">Total</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].facturas_nota_total}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "facturas_nota_total", "number")}
+                                />
+                            </MDBCol>
+                        </MDBRow>
                     </>
                 );
             case 3:
                 return (
                     <>
-                    <MDBRow style={{ justifyContent: "left", display: "flex" }}>
+                    {stepper !== null ? <MDBCol md='12'>
+                            <MDBCard color='red lighten-1' text='white' className='text-center'>
+                                <MDBCardBody>
+                                    {stepperMessage}
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol> : ""}
+                        <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             1. Efectivo
                     </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='3'>
-                                <MDBInput label='Efectivo En Quetzáles' type='text' value={dataSales[0].efectivoQuetzales} onChange={e => handleChangeData(e, "efectivoQuetzales")} />
+                                <Typography variant="body2">Efectivo En Quetzáles</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].efectivoQuetzales}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "efectivoQuetzales", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='3'>
-                                <MDBInput label='Efectivo En Doláres(Quetzáles)' type='text' value={dataSales[0].efectivoQuetzalesDolares} onChange={e => handleChangeData(e, "efectivoQuetzalesDolares")} />
+                                <Typography variant="body2">Efectivo En Doláres(Quetzáles)</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].efectivoQuetzalesDolares}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "efectivoQuetzalesDolares", "number")}
+                                />
                             </MDBCol>
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
@@ -263,19 +469,74 @@ const TransferSystemPage = () => {
                     </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
-                                <MDBInput label='Credomatic' type='text' value={dataSales[0].credomatic} onChange={e => handleChangeData(e, "credomatic")} />
+                                <Typography variant="body2">Credomatic</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].credomatic}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "credomatic", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Visa' type='text' value={dataSales[0].visa} onChange={e => handleChangeData(e, "visa")} />
+                                <Typography variant="body2">Visa</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].visa}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "visa", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Visa Online' type='text' value={dataSales[0].visaOnline} onChange={e => handleChangeData(e, "visaOnline")} />
+                                <Typography variant="body2">Visa Online</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].visaOnline}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "visaOnline", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Visa Doláres' type='text' value={dataSales[0].visaDolares} onChange={e => handleChangeData(e, "visaDolares")} />
+                                <Typography variant="body2">Visa Doláres</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].visaDolares}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "visaDolares", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Master Card' type='text' value={dataSales[0].masterCard} onChange={e => handleChangeData(e, "masterCard")} />
+                                <Typography variant="body2">Master Card</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].masterCard}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "masterCard", "number")}
+                                />
                             </MDBCol>
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
@@ -283,10 +544,32 @@ const TransferSystemPage = () => {
                     </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
-                                <MDBInput label='Credi Cuotas' type='text' value={dataSales[0].crediCuotas} onChange={e => handleChangeData(e, "crediCuotas")} />
+                                <Typography variant="body2">Credi Cuotas</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].crediCuotas}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "crediCuotas", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Visa Cuotas' type='text' value={dataSales[0].visaCuotas} onChange={e => handleChangeData(e, "visaCuotas")} />
+                                <Typography variant="body2">Visa Cuotas</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].visaCuotas}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "visaCuotas", "number")}
+                                />
                             </MDBCol>
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
@@ -294,7 +577,18 @@ const TransferSystemPage = () => {
                     </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
-                                <MDBInput label='Valor De Envio Efectivo' type='text' value={dataSales[0].valorEnvioEfectivo} onChange={e => handleChangeData(e, "valorEnvioEfectivo")} />
+                                <Typography variant="body2">Valor De Envio Efectivo</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].valorEnvioEfectivo}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "valorEnvioEfectivo", "number")}
+                                />
                             </MDBCol>
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
@@ -305,34 +599,144 @@ const TransferSystemPage = () => {
                                 <MDBInput label='Life Miles Número' type='text' value={dataSales[0].lifeMilesNumber} onChange={e => handleChangeData(e, "lifeMilesNumber")} />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Life Miles Valor' type='text' value={dataSales[0].lifeMilesValor} onChange={e => handleChangeData(e, "lifeMilesValor")} />
+                                <Typography variant="body2">Life Miles Valor</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].lifeMilesValor}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "lifeMilesValor", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Exención Iva' type='text' value={dataSales[0].exencionIva} onChange={e => handleChangeData(e, "exencionIva")} />
+                                <Typography variant="body2">Exención Iva</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].exencionIva}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "exencionIva", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Loyalty' type='text' value={dataSales[0].loyalty} onChange={e => handleChangeData(e, "loyalty")} />
+                                <Typography variant="body2">Loyalty</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].loyalty}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "loyalty", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Gasto Autorizados Valor' type='text' value={dataSales[0].gastosAutorizados} onChange={e => handleChangeData(e, "gastosAutorizados")} />
+                                <Typography variant="body2">Gasto Autorizados Valor</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].gastosAutorizados}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "gastosAutorizados", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Retiros De Mercadería' type='text' value={dataSales[0].retirosMercaderia} onChange={e => handleChangeData(e, "retirosMercaderia")} />
+                                <Typography variant="body2">Retiros De Mercadería</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].retirosMercaderia}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "retirosMercaderia", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Venta En Línea Total' type='text' value={dataSales[0].ventaEnLinea} onChange={e => handleChangeData(e, "ventaEnLinea")} />
+                                <Typography variant="body2">Venta En Línea Total</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].ventaEnLinea}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "ventaEnLinea", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Nota De Crédito' type='text' value={dataSales[0].notaDeCredito} onChange={e => handleChangeData(e, "notaDeCredito")} />
+                                <Typography variant="body2">Nota De Crédito</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].notaDeCredito}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "notaDeCredito", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Faltante' type='text' value={dataSales[0].faltante} onChange={e => handleChangeData(e, "faltante")} />
+                                <Typography variant="body2">Faltante</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].faltante}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "faltante", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Cuadre De Caja' type='text' value={dataSales[0].cuadreDeCaja} onChange={e => handleChangeData(e, "cuadreDeCaja")} />
+                                <Typography variant="body2">Cuadre De Caja</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].cuadreDeCaja}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "cuadreDeCaja", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Diferencias' type='text' value={dataSales[0].diferencia} onChange={e => handleChangeData(e, "diferencia")} />
+                                <Typography variant="body2">Diferencias</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].diferencia}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "diferencia", "number")}
+                                />
                             </MDBCol>
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
@@ -340,10 +744,32 @@ const TransferSystemPage = () => {
                     </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
-                                <MDBInput label='Valor Cashback' type='text' value={dataSales[0].cashback} onChange={e => handleChangeData(e, "cashback")} />
+                                <Typography variant="body2">Valor Cashback</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].cashback}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "cashback", "number")}
+                                />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Valor Gift Card' type='text' value={dataSales[0].giftcard} onChange={e => handleChangeData(e, "giftcard")} />
+                                <Typography variant="body2">Valor Gift Card</Typography>
+                                <NumericInput
+                                    className="form-control"
+                                    value={dataSales[0].giftcard}
+                                    step={1}
+                                    precision={2}
+                                    size={2}
+                                    mobile
+                                    pattern="[0-9].[0-9][0-9]"
+                                    inputmode="numeric"
+                                    onChange={e => handleChangeData(e, "giftcard", "number")}
+                                />
                             </MDBCol>
                         </MDBRow>
                     </>
@@ -367,46 +793,83 @@ const TransferSystemPage = () => {
 
     const handleNext = () => {
         let pagNext = 1;
-        switch(activeStep){
-          case 0:
-            if(dataSales[0].venta_diaria === 0){
-                alert("Está seguro que su venta del día fue 0?");    
-            }
-          break;
-          case 1:
-            const vendorsValid = confirmdataVendors(vendor,dataSales[0].venta_diaria)
-            if(vendorsValid.status){
-                setStepper(null)
-                pagNext = 1;
-            }else{
-                setStepper(1) 
-                setStepperMessage(vendorsValid.message)
-                console.log(stepper)  
-                pagNext = 0;
-            }
-            
-          break;
-          case 2:
-            const invoiceValid = confirmdataInvoice(dataSales[0])
-            if(invoiceValid.status){
-                setStepper(null)
-                pagNext = 1;
-            }else{
-                setStepper(2) 
-                setStepperMessage(invoiceValid.message)
-                console.log(stepper)  
-                pagNext = 0;
-            }
-          break;
-          case 3:
-             
-          break;
-          case 4:
-          break;
-          default:
+        switch (activeStep) {
+            case 0:
+                if (parseFloat(dataSales[0].venta_diaria) === 0) {
+                    Swal.fire('Observación', '¿Está seguro que su venta del día fue 0?', 'info');
+                }
+
+                if (dataSales[0].encargado === null || dataSales[0].encargado === " ") {
+                    setStepper(0)
+                    setStepperMessage("Tienes que seleccionar un encargado para la tienda")
+                    pagNext = 0;
+                } else {
+                    setStepper(null)
+                    pagNext = 1;
+                }
+
+                break;
+            case 1:
+                var validateVendorsempty = 0;
+                vendor.map((res) => {
+                    if (res.nombre === null) {
+                        validateVendorsempty += 1
+                    }
+                })
+
+                vendorDescount.map((res) => {
+                    if (res.nombre === null) {
+                        validateVendorsempty += 1
+                    }
+                })
+
+                if (validateVendorsempty < 1) {
+
+                    const vendorsValid = confirmdataVendors(vendor, vendorDescount, dataSales[0].venta_diaria)
+                    if (vendorsValid.status) {
+                        setStepper(null)
+                        pagNext = 1;
+                    } else {
+                        setStepper(1)
+                        setStepperMessage(vendorsValid.message)
+                        pagNext = 0;
+                    }
+                } else {
+                    setStepper(1)
+                    setStepperMessage("No puedes dejar el nombre de un vendedor en blanco.")
+                    pagNext = 0;
+                }
+
+
+                break;
+            case 2:
+                const invoiceValid = confirmdataInvoice(dataSales[0])
+                if (invoiceValid.status) {
+                    setStepper(null)
+                    pagNext = 1;
+                } else {
+                    setStepper(2)
+                    setStepperMessage(invoiceValid.message)
+                    pagNext = 0;
+                }
+                break;
+            case 3:
+                const dataPayMethod = confirmdataMethodPayment(dataSales[0])
+                if (dataPayMethod.status) {
+                    setStepper(null)
+                    pagNext = 1;
+                } else {
+                    setStepper(3)
+                    setStepperMessage(dataPayMethod.message)
+                    pagNext = 0;
+                }
+                break;
+            case 4:
+                break;
+            default:
 
         }
-        setActiveStep((prevActiveStep) => prevActiveStep + pagNext );
+        setActiveStep((prevActiveStep) => prevActiveStep + pagNext);
     };
 
     const handleBack = () => {
@@ -417,22 +880,27 @@ const TransferSystemPage = () => {
         setActiveStep(0);
     };
 
-    function handleChangeVendors(i, event, name) {
+    function handleChangeVendors(i, event, name, type) {
         const values = [...vendor];
-        if (name == "nombre") {
-            values[i][name] = event.label;
-        } else if (event.target.value == "") {
-            values[i][name] = null;
+        if (type !== "number") {
+            if (name == "nombre") {
+                values[i][name] = event.label;
+            } else if (event.target.value == "") {
+                values[i][name] = null;
+            } else {
+                values[i][name] = event.target.value;
+            }
         } else {
-            values[i][name] = event.target.value;
+            values[i][name] = event
         }
+
         setVendor(values);
     }
 
     function handleAdd() {
         if (vendor.length <= 8) {
             const values = [...vendor];
-            values.push({ nombre: "", venta: 0 });
+            values.push({ nombre: null, venta: 0 });
             setVendor(values);
         } else {
             alert("Se alconzó el limite vendedores")
@@ -447,17 +915,52 @@ const TransferSystemPage = () => {
         }
     }
 
-    function handleChangeData(event, name) {
-        const values = [...dataSales];
-        
-        if (name == "encargado") {
-            values[0][name] = event.label;
-        } else if (event.target.value == "") {
-            values[0][name] = null;
+    function handleChangeVendorsDesconunt(i, event, name, type) {
+        const values = [...vendorDescount];
+        if (type !== "number") {
+            if (name == "nombre") {
+                values[i][name] = event.label;
+            } else if (event.target.value == "") {
+                values[i][name] = null;
+            } else {
+                values[i][name] = event.target.value;
+            }
         } else {
-            values[0][name] = event.target.value;
+            values[i][name] = event
         }
-        setdataSales(values);
+        setVendorDescount(values);
+    }
+
+    function handleAddVendorsDesconunt() {
+        if (vendorDescount.length <= 8) {
+            const values = [...vendorDescount];
+            values.push({ nombre: null, venta: 0 });
+            setVendorDescount(values);
+        } else {
+            alert("Se alconzó el limite vendedores")
+        }
+    }
+
+    function handleRemoveVendorsDesconunt(i) {
+        const values = [...vendorDescount];
+        values.splice(i, 1);
+        setVendorDescount(values);
+    }
+
+    function handleChangeData(event, name, type) {
+        const values = [...dataSales];
+        if (type !== "number") {
+            if (name == "encargado") {
+                values[0][name] = event.label;
+            } else if (event.target.value == "") {
+                values[0][name] = null;
+            } else {
+                values[0][name] = event.target.value;
+            }
+            setdataSales(values);
+        } else {
+            values[0][name] = event
+        }
     }
 
     const handleSkip = () => {

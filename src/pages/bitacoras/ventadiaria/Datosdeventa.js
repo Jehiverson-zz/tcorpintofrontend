@@ -3,14 +3,6 @@ import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
 import {salesShow} from '../../../functions/salesFunctions'
 import {
-    MDBRow,
-    MDBCol,
-    MDBInput,
-    MDBBtn,
-    MDBIcon,
-    MDBCard,
-    MDBCardBody,
-    MDBContainer,
     MDBTable,
     MDBTableBody,
     MDBTableHead

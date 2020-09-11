@@ -3,6 +3,7 @@ import {
     MDBCard,
     MDBCardBody,
     MDBContainer,
+    MDBCardTitle,
     MDBJumbotron,
     MDBIcon,
 } from 'mdbreact';
@@ -11,8 +12,9 @@ export default function CardHeader(props) {
     return (
         <React.Fragment>
             <MDBContainer>
-                <MDBCard style={{paddingLeft: "10px"}}>
-                    <MDBCardBody className="center" style={{marginTop: "60px"}}>
+                <MDBCard>
+                    <MDBCardTitle style={{paddingTop: "10px"}}><h1 className="center-element"><b>{props.title}</b></h1></MDBCardTitle>
+                    <MDBCardBody className="center">
                         {props.children}
                     </MDBCardBody>
                 </MDBCard>

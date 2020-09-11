@@ -103,16 +103,16 @@ var totalDay = 0
                     parseFloat(sale.cuadreDeCaja) +
                     //Certificados
                     parseFloat(sale.cashback) +
-                    parseFloat(sale.giftcard);
-    console.log(saleTotalDay)
+                    parseFloat(sale.giftcard)
+    
     // Son los campos negativos que se tienen dentro de la venta del dia para cuadrar el total
     
     saleTotalDayDescounst +=
                     parseFloat(sale.faltante) +
                     parseFloat(sale.diferencia) +
                     parseFloat(sale.notaDeCredito) 
-    console.log(saleTotalDayDescounst)
-    totalDay = saleTotalDay -saleTotalDayDescounst
+    
+    totalDay = Math.round10(saleTotalDay, -1) - Math.round10(saleTotalDayDescounst, -1)
 
     if(parseFloat(totalDay) === parseFloat(sale.venta_diaria)){
         message =""

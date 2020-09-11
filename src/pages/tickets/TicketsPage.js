@@ -26,11 +26,11 @@ const TicketsPage = () => {
                                     Tickets
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
-                                    <MenuLink to='/tickets/traslado_sistema' title='Traslado de Sistema' />
+                                    <MenuLink to='/tickets/system_transfer' title='Traslado de Sistema' />
                                     <MenuLink to='/tickets/Immediate_delivery' title='Entregas Inmediatas' />
-                                    <MenuLink to='/addons/iframe' title='Retiros Externos' />
-                                    <MenuLink to='/addons/iframe' title='Retiros Fotografía' />
-                                    <MenuLink to='/addons/iframe' title='Histórico Tickets' />
+                                    <MenuLink to='/tickets/external_retreats' title='Retiros Externos' />
+                                    <MenuLink to='/tickets/photo_retreats' title='Retiros Fotografía' />
+                                    <MenuLink to='/tickets/history' title='Histórico Tickets' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>

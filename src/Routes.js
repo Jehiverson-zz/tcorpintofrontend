@@ -77,6 +77,10 @@ import Datosdeventa from './pages/bitacoras/ventadiaria/Datosdeventa'
 import TicketsPage from './pages/tickets/TicketsPage';
 import TransferSystemPage from './pages/tickets/TicketTransfer/TransferSystemPage';
 import ImmediateDelivery from './pages/tickets/ImmediateDelivery/ImmediateDelivery';
+import TicketsPhotoRetreats from './pages/tickets/TicketsPhoto/TiketsPhotoRetreats';
+import ExternalRetreats from './pages/tickets/ExternalRetreats/ExternalRetreats';
+import HistoryTickets from './pages/tickets/HistoryTickets/HistoryTickets';
+
 
 class Routes extends React.Component {
 
@@ -89,8 +93,11 @@ class Routes extends React.Component {
         <Route exact path='/bitacora_ventas_show' component={Datosdeventa} />
 
         <Route exact path='/tickets' component={TicketsPage} />
-        <Route exact path='/tickets/traslado_sistema' component={TransferSystemPage} />
+        <Route exact path='/tickets/system_transfer' component={TransferSystemPage} />
         <Route exact path='/tickets/Immediate_delivery' component={ImmediateDelivery} />
+        <Route exact path='/tickets/photo_retreats' component={TicketsPhotoRetreats} />
+        <Route exact path='/tickets/external_retreats' component={ExternalRetreats} />
+        <Route exact path='/tickets/history' component={HistoryTickets} />
 
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />

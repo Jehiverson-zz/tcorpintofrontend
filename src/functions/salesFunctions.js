@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const url = process.env.REACT_APP_URL_BASE;
-
+/*Muestra los datos de venta*/
 export const salesShow = () => {
 
     let config = {
@@ -19,7 +19,7 @@ export const salesShow = () => {
     })
 
 }
-
+/*Vlida los datos de vendedores*/
 export const confirmdataVendors = (vendors, vendorDescount, sale) => {
     var totalVendors = 0;
     var totalDesconuntVendors = 0;
@@ -27,9 +27,9 @@ export const confirmdataVendors = (vendors, vendorDescount, sale) => {
     var message = ""
     var status =""
     //Venta de vendedores
-    vendors.map(res => totalVendors += parseFloat(res.venta) == ' ' ? 0 : parseFloat(res.venta))
+    vendors.map(res => totalVendors += parseFloat(res.venta) === ' ' ? 0 : parseFloat(res.venta))
     //Descuento que se le hace a los vendedores encaso un cliente devuelva el producto que compro
-    vendorDescount.map(resp => totalDesconuntVendors += parseFloat(resp.venta) == ' ' ? 0 : parseFloat(resp.venta))
+    vendorDescount.map(resp => totalDesconuntVendors += parseFloat(resp.venta) === ' ' ? 0 : parseFloat(resp.venta))
 
     totalFinanVendors = totalVendors - totalDesconuntVendors
 
@@ -42,7 +42,7 @@ export const confirmdataVendors = (vendors, vendorDescount, sale) => {
     }
     return {message:message, status:status}
 }
-
+/*valida la data de las facturas*/
 export const confirmdataInvoice = (sale) => {
     var totalInvoice_sis_total = 0
     var totalInvoice_man_total = 0
@@ -52,10 +52,10 @@ export const confirmdataInvoice = (sale) => {
     var message = ""
     var status =""
    
-    totalInvoice_sis_total += parseFloat(sale.facturas_sis_total) == ' ' ? 0 : parseFloat(sale.facturas_sis_total)
-    totalInvoice_man_total += parseFloat(sale.facturas_man_total) == ' ' ? 0 : parseFloat(sale.facturas_man_total)
-    totalInvoice_cod_total += parseFloat(sale.facturas_cod_total) == ' ' ? 0 : parseFloat(sale.facturas_cod_total)
-    totalInvoice_nota_total += parseFloat(sale.facturas_nota_total) == ' ' ? 0 : parseFloat(sale.facturas_nota_total)
+    totalInvoice_sis_total += parseFloat(sale.facturas_sis_total) === ' ' ? 0 : parseFloat(sale.facturas_sis_total)
+    totalInvoice_man_total += parseFloat(sale.facturas_man_total) === ' ' ? 0 : parseFloat(sale.facturas_man_total)
+    totalInvoice_cod_total += parseFloat(sale.facturas_cod_total) === ' ' ? 0 : parseFloat(sale.facturas_cod_total)
+    totalInvoice_nota_total += parseFloat(sale.facturas_nota_total) === ' ' ? 0 : parseFloat(sale.facturas_nota_total)
 
 
     total = (parseFloat(totalInvoice_sis_total) + parseFloat(totalInvoice_man_total) + parseFloat(totalInvoice_cod_total)) - parseFloat(totalInvoice_nota_total)
@@ -70,7 +70,7 @@ export const confirmdataInvoice = (sale) => {
     return {message:message, status:status}
 
 }
-
+/*valida la data de los metodos de pago*/
 export const confirmdataMethodPayment = (sale) => {
     console.log(sale)
 var message =""
@@ -103,16 +103,16 @@ var totalDay = 0
                     parseFloat(sale.cuadreDeCaja) +
                     //Certificados
                     parseFloat(sale.cashback) +
-                    parseFloat(sale.giftcard);
-    console.log(saleTotalDay)
+                    parseFloat(sale.giftcard)
+    
     // Son los campos negativos que se tienen dentro de la venta del dia para cuadrar el total
     
     saleTotalDayDescounst +=
                     parseFloat(sale.faltante) +
                     parseFloat(sale.diferencia) +
                     parseFloat(sale.notaDeCredito) 
-    console.log(saleTotalDayDescounst)
-    totalDay = saleTotalDay -saleTotalDayDescounst
+    
+    totalDay = parseFloat(saleTotalDay).toFixed(2) - parseFloat(saleTotalDayDescounst).toFixed(2)
 
     if(parseFloat(totalDay) === parseFloat(sale.venta_diaria)){
         message =""
@@ -125,5 +125,22 @@ var totalDay = 0
     return {message:message, status:status}
 
  
+}
+
+export const createDataSales = (sales,vendors,vendorsDescount) => {
+   
+    let store = localStorage.getItem('name')
+    let data = {sales, vendors, vendorsDescount,store }
+    
+    return axios
+        .post(`${url}/sales/create`, {data})
+        .then((response) => {
+            console.log("Entro!")
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    
 }
 

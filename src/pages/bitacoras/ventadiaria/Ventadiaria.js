@@ -28,7 +28,7 @@ import Select from 'react-select';
 import Swal from 'sweetalert2'
 
 //Funciones
-import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment } from '../../../functions/salesFunctions'
+import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales } from '../../../functions/salesFunctions'
 
 
 
@@ -237,7 +237,7 @@ const TransferSystemPage = () => {
                         </MDBCol>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             {vendor.map((field, idx) => {
-                                let user = vendor[idx].nombre == null || vendor[idx].nombre == ' ' ? 'Vendedor' : vendor[idx].nombre
+                                let user = vendor[idx].nombre === null || vendor[idx].nombre === ' ' ? 'Vendedor' : vendor[idx].nombre
                                 const valueVendor = { value: user, label: user };
                                 return (
                                     <MDBCol md="6" key={`${field}-${idx}`}>
@@ -276,7 +276,7 @@ const TransferSystemPage = () => {
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
 
                             {vendorDescount.map((field, idx) => {
-                                let user = vendorDescount[idx].nombre == null || vendorDescount[idx].nombre == ' ' ? 'Vendedor' : vendorDescount[idx].nombre
+                                let user = vendorDescount[idx].nombre === null || vendorDescount[idx].nombre === ' ' ? 'Vendedor' : vendorDescount[idx].nombre
                                 const valueVendor = { value: user, label: user };
                                 return (
                                     <MDBCol md="6" key={`${field}-${idx}`}>
@@ -795,9 +795,6 @@ const TransferSystemPage = () => {
         let pagNext = 1;
         switch (activeStep) {
             case 0:
-                if (parseFloat(dataSales[0].venta_diaria) === 0) {
-                    Swal.fire('Observación', '¿Está seguro que su venta del día fue 0?', 'info');
-                }
 
                 if (dataSales[0].encargado === null || dataSales[0].encargado === " ") {
                     setStepper(0)
@@ -807,6 +804,17 @@ const TransferSystemPage = () => {
                     setStepper(null)
                     pagNext = 1;
                 }
+
+                if (parseFloat(dataSales[0].venta_diaria) === 0) {
+                    Swal.fire('Observación', '¿Está seguro que su venta del día fue 0?', 'info');
+                }
+
+                if (parseFloat(dataSales[0].venta_diaria) === null ) {
+                    Swal.fire('Error', 'No puedes dejar vacio el dato de venta diaria', 'info');
+                    pagNext = 0;
+                }
+
+                
 
                 break;
             case 1:
@@ -865,7 +873,9 @@ const TransferSystemPage = () => {
                 }
                 break;
             case 4:
-                break;
+                const salesCreate = createDataSales(dataSales[0],vendor,vendorDescount)
+                console.log("Test")
+            break;
             default:
 
         }
@@ -883,9 +893,9 @@ const TransferSystemPage = () => {
     function handleChangeVendors(i, event, name, type) {
         const values = [...vendor];
         if (type !== "number") {
-            if (name == "nombre") {
+            if (name === "nombre") {
                 values[i][name] = event.label;
-            } else if (event.target.value == "") {
+            } else if (event.target.value === "") {
                 values[i][name] = null;
             } else {
                 values[i][name] = event.target.value;
@@ -918,9 +928,9 @@ const TransferSystemPage = () => {
     function handleChangeVendorsDesconunt(i, event, name, type) {
         const values = [...vendorDescount];
         if (type !== "number") {
-            if (name == "nombre") {
+            if (name === "nombre") {
                 values[i][name] = event.label;
-            } else if (event.target.value == "") {
+            } else if (event.target.value === "") {
                 values[i][name] = null;
             } else {
                 values[i][name] = event.target.value;
@@ -950,16 +960,21 @@ const TransferSystemPage = () => {
     function handleChangeData(event, name, type) {
         const values = [...dataSales];
         if (type !== "number") {
-            if (name == "encargado") {
+            if (name === "encargado") {
                 values[0][name] = event.label;
-            } else if (event.target.value == "") {
+            } else if (event.target.value === "") {
                 values[0][name] = null;
             } else {
                 values[0][name] = event.target.value;
             }
             setdataSales(values);
         } else {
-            values[0][name] = event
+            if(event === null){
+                Swal.fire('Error', 'No puedes dejar el valor en blanco', 'info');
+                values[0][name] = 0
+            }else{
+                values[0][name] = event
+            }
         }
     }
 

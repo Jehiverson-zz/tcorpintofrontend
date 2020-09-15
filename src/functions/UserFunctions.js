@@ -11,8 +11,8 @@ export const login = (user) => {
       localStorage.setItem('name', response.data.user.name);
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
-    
-      let data = { error: 0, message: "Exito", response }; 
+
+      let data = { error: 0, message: "Exito", response };
       return data;
     })
     .catch(err => {
@@ -22,12 +22,12 @@ export const login = (user) => {
     })
 }
 
-export const login_google = user => { 
+export const login_google = user => {
 
   let url = process.env.REACT_APP_URL_BASE + "/login/google";
   const data = { user: user.email};
   return axios
-    .post(url,data) 
+    .post(url,data)
     .then(response => {
 
       localStorage.setItem('usertoken', response.data);
@@ -36,7 +36,7 @@ export const login_google = user => {
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
 
-      let data = { error: 0, message: "Exito" }; 
+      let data = { error: 0, message: "Exito" };
       return data;
     })
     .catch(err => {

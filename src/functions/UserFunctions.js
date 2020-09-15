@@ -6,12 +6,13 @@ export const login = (user) => {
   return axios
     .post(url,data)
     .then(response => {
-
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
+      localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('token', response.data.token);
+    
       let data = { error: 0, message: "Exito", response }; 
       return data;
-      
     })
     .catch(err => {
       console.log(err.response.data)
@@ -27,15 +28,18 @@ export const login_google = user => {
   return axios
     .post(url,data) 
     .then(response => {
-      
+
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
+      localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('token', response.data.token);
+
       let data = { error: 0, message: "Exito" }; 
       return data;
     })
     .catch(err => {
       console.log(err.response.data)
-      let data = { error: 1, message: err.response.data.message };
+      let data = { error: 1, message: err};
       return data;
     })
 }

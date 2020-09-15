@@ -38,9 +38,6 @@ const Login = () => {
             if (res.error === 1) {
                 Swal.fire('Oops...', res.message, 'error');
             } else {
-                localStorage.setItem('identity', JSON.stringify(res.response.data.user));
-                localStorage.setItem('token', res.response.data.token);
-                localStorage.setItem('session',true);
                 history.push(`/bitacoras`);
             }
         })

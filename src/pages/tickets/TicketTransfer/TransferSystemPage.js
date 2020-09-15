@@ -82,7 +82,7 @@ function a11yProps(index) {
 
 
 const TransferSystemPage = () => {
-    const my_store = JSON.parse(localStorage.getItem("identity")).store;
+    const my_store = JSON.parse(localStorage.getItem("store"));
     const [value, setValue] = useState(0);
     const [dataStores, setdataStores] = useState([]);
     const [dataTicketsCreated, setdataTicketsCreated] = useState([]);

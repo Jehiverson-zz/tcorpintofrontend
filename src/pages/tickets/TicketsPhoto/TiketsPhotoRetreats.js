@@ -40,7 +40,7 @@ const Toast = Swal.mixin({
 })
 
 const TicketsPhotoRetreats = () => {
-    const my_store = JSON.parse(localStorage.getItem("identity")).store;
+    const my_store = JSON.parse(localStorage.getItem("store"));
     const [fields, setFields] = useState([{ upc: null, alu: null, size: null, caurier: null, store_created: my_store }]);
     const [photoRetreats, setphotoRetreats] = useState([]);
     let caurierList = [

@@ -29,7 +29,7 @@ const Toast = Swal.mixin({
 })
 
 const ImmediateDelivery = () => {
-    const my_store = JSON.parse(localStorage.getItem("identity")).store;
+    const my_store = JSON.parse(localStorage.getItem("store"));
     const [fields, setFields] = useState([
         {
             store_asigned: null,
@@ -55,9 +55,8 @@ const ImmediateDelivery = () => {
 
     function crearTicket(e) {
         e.preventDefault();
-        let data = new FormData()
-        data.append('hook', fields)
-        storeTicketInmediates(data)
+        console.log("antes de mandarlo", fields)
+        storeTicketInmediates(fields)
             .then((response) => {
                 alert("Creado")
             }).catch(err => {
@@ -77,7 +76,9 @@ const ImmediateDelivery = () => {
         if (name == "store_asigned" || name == "encargado") {
             values[0][name] = event.value;
         } else if (name == "image") {
-            values[0][name] = event.target.files[0];
+            let data = new FormData()
+            data.append('params', event.target.files[0])
+            values[0][name] = data;
         } else {
             console.log(event.target)
             values[0][name] = event.target.value;
@@ -160,7 +161,7 @@ const ImmediateDelivery = () => {
                         <MDBInput label='Total a Pagar' type="text" validate onChange={e => handleChange1(e, "total")}/>
                     </MDBCol>
                     <MDBCol md='4'>
-                        <MDBInput type="file" validate onChange={e => handleChange1(e, "image")}/>
+                        <MDBInput type="file" accept="image/png, image/jpeg" validate onChange={e => handleChange1(e, "image")}/>
                     </MDBCol>
                 </MDBRow>
                 {fields.map((field, idx) => {

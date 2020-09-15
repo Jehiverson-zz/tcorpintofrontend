@@ -38,7 +38,7 @@ const Toast = Swal.mixin({
 })
 
 const ExternalRetreats = () => {
-    const my_store = JSON.parse(localStorage.getItem("identity")).store;
+    const my_store = JSON.parse(localStorage.getItem("store"));
     const [fields, setFields] = useState([{ person_retreats: null, person_authorizing: null, bill: null, upc: null, alu: null, size: null, store_created: my_store }]);
     const [externalRetreats, setExternalRetreats] = useState([]);
 

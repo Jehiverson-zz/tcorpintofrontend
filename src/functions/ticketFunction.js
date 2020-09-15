@@ -17,10 +17,9 @@ export const storeTicketsSystemTransfer = (data) => {
 export const storeTicketInmediates = (data) => {
     console.log(`AXIOS=========== ${data}`);
     return axios
-        .post(`${url}/tickets/add/inmediates`, {data}, {
+        .post(`${url}/tickets/add/inmediates`, data, {
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': `aplication/json;multipart/form-data; boundary=${data._boundary}`
             }
         })
         .then((response) => {

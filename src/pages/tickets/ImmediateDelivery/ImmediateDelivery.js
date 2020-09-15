@@ -29,7 +29,7 @@ const Toast = Swal.mixin({
 })
 
 const ImmediateDelivery = () => {
-    const my_store = JSON.parse(localStorage.getItem("identity")).store;
+    const my_store = JSON.parse(localStorage.getItem("store"));
     const [fields, setFields] = useState([
         {
             store_asigned: null,

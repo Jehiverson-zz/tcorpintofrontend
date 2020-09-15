@@ -9,6 +9,7 @@ export const login = (user) => {
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
       localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
     
       let data = { error: 0, message: "Exito", response }; 
@@ -32,6 +33,7 @@ export const login_google = user => {
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
       localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
 
       let data = { error: 0, message: "Exito" }; 

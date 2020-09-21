@@ -79,15 +79,38 @@ const TicketsPhotoRetreats = () => {
     }
 
     function crearTicket() {
-        storeTicketPhotoRetrats(fields)
-            .then(response => {
-                get_photo_retreats();
-                result_function('success', response.data.message);
-            })
-            .catch(error => {
-                console.log(error)
-                result_function('error', "Error al crear el ticket");
-            })
+        let cont = 0;
+        fields.some( function(x,i){
+            if (x.upc === null) {
+                result_function('error', 'El valor de UPC está vacío');
+                cont++;
+                return true;
+            } else if (x.alu === null) {
+                result_function('error', 'El valor de ALU está vacío');
+                cont++;
+                return true;
+            } else if (x.size === null) {
+                result_function('error', 'Debes ingresar la TALLA');
+                cont++;
+                return true;
+            }
+        })
+
+        if (fields[0]["store_asigned"] === null) {
+            result_function('error', 'Debes seleccionar alguna tienda');
+        } else {
+            if(cont == 0){
+                storeTicketPhotoRetrats(fields)
+                    .then(response => {
+                        get_photo_retreats();
+                        result_function('success', response.data.message);
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        result_function('error', "Error al crear el ticket");
+                    })
+            }
+        }
     }
 
     function removeTicket(id) {
@@ -221,7 +244,13 @@ const TicketsPhotoRetreats = () => {
                         })
                     )
                         :
-                        <h4>No hay datos</h4>
+                        <MDBCol md='12'>
+                                    <MDBCard color='grey' text='white' className='text-center'>
+                                        <MDBCardBody>
+                                            NO HAY DATOS
+                                        </MDBCardBody>
+                                    </MDBCard>
+                                </MDBCol>
                 }
             </MDBRow>
             </MDBContainer>

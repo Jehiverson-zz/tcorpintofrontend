@@ -13,20 +13,18 @@ export const storeTicketsSystemTransfer = (data) => {
             console.error(error);
         })
 }
+
 /* Crea un nuevo ticket de retiros inmediatos */
 export const storeTicketInmediates = (data) => {
-    console.log(`AXIOS=========== ${data}`);
+    let formData = new FormData();
+    formData.append('file',data[0].image);
+    formData.append('data',JSON.stringify(data));
+
     return axios
-        .post(`${url}/tickets/add/inmediates`, data, {
-            headers: {
-                'Content-Type': `aplication/json;multipart/form-data; boundary=${data._boundary}`
+        .post(`${url}/tickets/add/inmediates`, formData,{
+            headers:{
+                'Content-type': 'multipart/form-data'
             }
-        })
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            console.error(error);
         })
 }
 
@@ -56,7 +54,7 @@ export const storeTicketExternalRetrats = (data) => {
 
 /* Obtiene la data de movimientos de tikets entre tiendas */
 export const getTicketsSystemTransferCreated = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : "Meatpack Web"}
     return axios
         .post(`${url}/tickets/transfer_created`, data)
         .then((response) => {
@@ -69,7 +67,7 @@ export const getTicketsSystemTransferCreated = () => {
 
 /* Obtiene la data de movimientos de tikets entre tiendas */
 export const getTicketsSystemTransferAssigned = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : localStorage.getItem("store")}
     return axios
         .post(`${url}/tickets/transfer_assigned`, data)
         .then((response) => {
@@ -80,9 +78,35 @@ export const getTicketsSystemTransferAssigned = () => {
         })
 }
 
+/* Obtiene la data de tickets de entregas inmediatas creados por el usuario */
+export const getTicketsImmediatesDeliveriesCreated = () => {
+    const data = {store : localStorage.getItem("store")}
+    return axios
+        .post(`${url}/tickets/immediate_deliveries_created`, data)
+        .then((response) => {
+            return response.data.ticketInmediates;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene la data de tickets de entregas inmediatas asignados al usuario*/
+export const getTicketsImmediatesDeliveriesAssigned = () => {
+    const data = {store : localStorage.getItem("store")}
+    return axios
+        .post(`${url}/tickets/immediate_deliveries_assignad`, data)
+        .then((response) => {
+            return response.data.ticketInmediates;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
 /* Obtiene la data de movimientos de tikets entre tiendas */
 export const getPhotoRetreats = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : localStorage.getItem("store")}
     return axios
         .post(`${url}/tickets/photo_retreats`, data)
         .then((response) => {
@@ -95,7 +119,7 @@ export const getPhotoRetreats = () => {
 
 /* Obtiene la data de los tickets retiros externos */
 export const getExternalRetreats = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : "Meatpack Web"}
     return axios
         .post(`${url}/tickets/external_retreats`, data)
         .then((response) => {
@@ -166,6 +190,7 @@ export const completeTicket = (id) =>{
         console.log(error)
     })
 }
+
 /* Cambia el estado de un ticket de fotos retiradas a 'Completado' */
 export const completePhotoRetreats = (id) =>{
     return axios

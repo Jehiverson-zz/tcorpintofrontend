@@ -106,6 +106,7 @@ const TransferSystemPage = () => {
 
     function tickets_created() {
         getTicketsSystemTransferCreated().then((res) => setdataTicketsCreated(res));
+        console.log(dataTicketsCreated);
     }
 
     function tickets_asigned() {
@@ -113,25 +114,32 @@ const TransferSystemPage = () => {
     }
 
     function crearTicket() {
-        const values = [...fields];
-        console.log(values)
-        fields.map(x => {
-            console.log(x)
+        let cont = 0;
+        fields.some( function(x,i){
             if (x.upc === null) {
                 result_function('error', 'El valor de UPC está vacío');
+                cont++;
+                return true;
             } else if (x.alu === null) {
                 result_function('error', 'El valor de ALU está vacío');
+                cont++;
+                return true;
             } else if (x.size === null) {
-                result_function('error', 'Debes ingresar la talla');
+                result_function('error', 'Debes ingresar la TALLA');
+                cont++;
+                return true;
             } else if (x.bill === null) {
-                result_function('error', 'Ingresa un número de factura');
+                result_function('error', 'Ingresa un número de FACTURA');
+                cont++;
+                return true;
             }
         })
 
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            storeTicketsSystemTransfer(fields)
+            if(cont == 0){
+                storeTicketsSystemTransfer(fields)
                 .then((response) => {
                     tickets_created();
                     tickets_asigned();
@@ -139,6 +147,7 @@ const TransferSystemPage = () => {
                 }).catch(err => {
                     alert("Error")
                 })
+            }
         }
     }
 
@@ -257,7 +266,7 @@ const TransferSystemPage = () => {
                 </AppBar>
 
                 <TabPanel value={value} index={0}>
-                    <MDBRow>
+                <MDBRow>
                         {
                             dataTicketsCreated.length > 0 ? (
                                 dataTicketsCreated.map((data) => {
@@ -282,18 +291,24 @@ const TransferSystemPage = () => {
                                                                     </tr>
                                                                 </MDBTableHead>
                                                                 <MDBTableBody>
-                                                                    {data.product.map((prod) => {
-                                                                        orden++;
-                                                                        return (
-                                                                            <tr>
-                                                                                <td>{orden}</td>
-                                                                                <td>{prod.upc}</td>
-                                                                                <td>{prod.alu}</td>
-                                                                                <td>{prod.size}</td>
-                                                                                <td>{prod.bill}</td>
-                                                                            </tr>
+                                                                    {
+                                                                        data.product.length>0?(
+                                                                            data.product.map((prod) => {
+                                                                                orden++;
+                                                                                return (
+                                                                                    <tr>
+                                                                                        <td>{orden}</td>
+                                                                                        <td>{prod.upc}</td>
+                                                                                        <td>{prod.alu}</td>
+                                                                                        <td>{prod.size}</td>
+                                                                                        <td>{prod.bill}</td>
+                                                                                    </tr>
+                                                                                )
+                                                                            })
+                                                                        ):(
+                                                                                        <h1>HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa</h1>
                                                                         )
-                                                                    })}
+                                                                    }
                                                                 </MDBTableBody>
                                                             </MDBTable>
                                                         </MDBCardText>
@@ -305,10 +320,16 @@ const TransferSystemPage = () => {
                                 })
                             )
                                 :
-                                <h4>No hay datos</h4>
+                                <MDBCol md='12'>
+                                    <MDBCard color='grey' text='white' className='text-center'>
+                                        <MDBCardBody>
+                                            NO HAY DATOS
+                                        </MDBCardBody>
+                                    </MDBCard>
+                                </MDBCol>
                         }
-                    </MDBRow>
 
+                    </MDBRow>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <MDBRow>
@@ -361,7 +382,13 @@ const TransferSystemPage = () => {
                                 })
                             )
                                 :
-                                <h4>No hay datos</h4>
+                                <MDBCol md='12'>
+                                    <MDBCard color='grey' text='white' className='text-center'>
+                                        <MDBCardBody>
+                                            NO HAY DATOS
+                                        </MDBCardBody>
+                                    </MDBCard>
+                                </MDBCol>
                         }
                     </MDBRow>
                 </TabPanel>

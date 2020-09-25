@@ -3,9 +3,7 @@ import {
     MDBCard,
     MDBCardBody,
     MDBContainer,
-    MDBCardTitle,
-    MDBJumbotron,
-    MDBIcon,
+    MDBCardTitle
 } from 'mdbreact';
 
 export default function CardHeader(props) {

@@ -9,6 +9,8 @@ export const login = (user) => {
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
       localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('email', response.data.user.email);
+      localStorage.setItem('type', response.data.user.type);
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
 
@@ -29,10 +31,11 @@ export const login_google = user => {
   return axios
     .post(url,data)
     .then(response => {
-
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
       localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('email', response.data.user.email);
+      localStorage.setItem('type', response.data.user.type);
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
 

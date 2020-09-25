@@ -4,20 +4,31 @@ const url = process.env.REACT_APP_URL_BASE;
 /*Muestra los datos de venta*/
 export const salesShow = () => {
 
-    let config = {
-        headers: {
-            token: localStorage.getItem('token'),
-        }
-      }
     return axios
-    .get(url + '/binnacles/sales_show',config)
+    .get(url + '/binnacles/sales_show')
     .then((response) => {
-        return response.data.sales;
+        console.log(response);
+        return response;
     })
     .catch((error) => {
         console.log(error);
     })
 
+}
+//Valida si tiene un dato de venta ingresado este dia
+export const validDataSales = async() => {
+   
+    let store = localStorage.getItem('name')
+    
+    return axios
+        .post(`${url}/sales/validationDataSale`, store)
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    
 }
 /*Vlida los datos de vendedores*/
 export const confirmdataVendors = (vendors, vendorDescount, sale) => {
@@ -72,7 +83,6 @@ export const confirmdataInvoice = (sale) => {
 }
 /*valida la data de los metodos de pago*/
 export const confirmdataMethodPayment = (sale) => {
-    console.log(sale)
 var message =""
 var status = false
 var saleTotalDay = 0
@@ -126,21 +136,23 @@ var totalDay = 0
 
  
 }
-
-export const createDataSales = (sales,vendors,vendorsDescount) => {
+//Crea el dato de venta del dia
+export const createDataSales = async(sales,vendors,vendorsDescount,email) => {
    
     let store = localStorage.getItem('name')
-    let data = {sales, vendors, vendorsDescount,store }
+    let data = {sales, vendors, vendorsDescount,store,email }
     
     return axios
-        .post(`${url}/sales/create`, {data})
+        .post(`${url}/sales/create`, data)
         .then((response) => {
-            console.log("Entro!")
-            return response;
+            return response.data
+
         })
         .catch((error) => {
             console.error(error);
         })
     
 }
+
+
 

@@ -287,7 +287,7 @@ const PanelPage = () => {
               </MDBCardBody>
             </MDBCard>
 
-            <MDBCard color='info-color' text='white' className='text-center'>
+            <MDBCard color='indigo' text='white' className='text-center'>
               <MDBCardBody>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
                 posuere erat a ante.

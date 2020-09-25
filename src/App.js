@@ -28,7 +28,7 @@ class App extends Component {
             <Routes />
           </main>
           
-          <MDBFooter color='info-color' style={{marginTop: '30px'}}>
+          <MDBFooter color='indigo' style={{marginTop: '30px'}}>
             <p className='footer-copyright mb-0 py-3 text-center' style={{ color: 'white'}}>
               &copy; {new Date().getFullYear()} Copyright:
               Corpinto S. A.

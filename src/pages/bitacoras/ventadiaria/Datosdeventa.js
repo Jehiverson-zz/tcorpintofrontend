@@ -29,28 +29,7 @@ const DatosdeVenta = () => {
    const paginate = pageNumber => setCurrentPage(pageNumber);
     return(
         <Layaout>
-        <br></br>
-            <CardHeader title="Tickets" icon="ticket-alt">
-            <MDBTable>
-                  <MDBTableHead>
-                    <tr>
-                      <th>Venta</th>
-                      <th>Meta</th>
-                      <th>Encargado</th>
-                      <th>Fecha</th>
-                    </tr>
-                  </MDBTableHead>
-                  <MDBTableBody>
-                    <Tablebinnacle posts={currentPosts} loading={loading} />
-                  </MDBTableBody>
-                  <Pagination
-                        postsPerPage={postsPerPage}
-                        totalPosts={dataSales.length}
-                        paginate={paginate}
-                        currentPage={currentPage}
-                    />
-                </MDBTable>
-            </CardHeader>
+        
         </Layaout>
     )
 

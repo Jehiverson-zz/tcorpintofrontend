@@ -202,9 +202,6 @@ const TransferSystemPage = () => {
     };
 
     const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
-    console.log(dataTicketsCreated);
-    console.log(dataTicketsAssigned);
-    console.log(my_store);
     return (
         <Layaout>
             <br></br>
@@ -213,7 +210,7 @@ const TransferSystemPage = () => {
                     return (
                         <MDBRow id={idx} className="center-element" key={`${field}-${idx}`}>
                             <MDBCol md='2'>
-                                <MDBInput label='Upc' type='text' validate onChange={e => handleChange(idx, e, "upc")} />
+                                <MDBInput label='Upc' type='text' id='text' validate onChange={e => handleChange(idx, e, "upc")} />
                             </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Alu' type='text' validate onChange={e => handleChange(idx, e, "alu")} />

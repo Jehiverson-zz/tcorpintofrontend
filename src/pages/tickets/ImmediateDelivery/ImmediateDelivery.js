@@ -94,7 +94,7 @@ const ImmediateDelivery = () => {
             alu: null,
             size: null
         }]);
-        const [fileInfos, setFileInfos] = useState([]);
+    const [fileInfos, setFileInfos] = useState([]);
     const storesList = [];
 
     getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
@@ -354,6 +354,7 @@ const ImmediateDelivery = () => {
                                                     <MDBCardBody style={{ Height: "300px" }}>
                                                         <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
                                                             <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}><FaTimes style={{ fontSize: '15px' }} /></MDBBtn>
+                                                            <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completeTicket(data._id)}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
                                                         </MDBCardTitle>
                                                         <MDBCardText>
                                                             <MDBTypography>
@@ -421,7 +422,6 @@ const ImmediateDelivery = () => {
                                                 <MDBCard>
                                                     <MDBCardBody>
                                                         <MDBCardTitle><span><FaStoreAlt /> {data.store_created}</span>
-                                                            <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completeTicket(data._id)}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
                                                         </MDBCardTitle>
                                                         <MDBCardText>
                                                             <MDBTypography>

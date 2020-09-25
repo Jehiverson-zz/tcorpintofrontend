@@ -8,9 +8,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import DatePicker from 'react-datepicker'
 import {
     MDBRow,
     MDBCol,
@@ -30,7 +28,7 @@ import Swal from 'sweetalert2'
 import Loading from './img/loading.gif'
 //Funciones
 import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales,validDataSales } from '../../../functions/salesFunctions'
-
+import {getStore} from '../../../functions/ticketFunction'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -111,12 +109,15 @@ const history = useHistory();
         giftcard: 0,
         observaciones: "-",
     }]);
-
+    const [startDate, setStartDate] = useState(new Date());
     //Datos devueltos de la creación
     const[dataResult, setDataResult] = useState({});
     //ApiRest datos de colaboradores
     const datos = [];
-    getCollaboration().then((res) => { res.map(resdata => datos.push({ resdata: res.name, label: resdata.name })) });
+    getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
+    //ApiRest datos de tienndas
+    const datosTiendas = [];
+    getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) })
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
         switch (stepIndex) {
@@ -125,6 +126,19 @@ const history = useHistory();
                 const valueManager = { value: userManager, label: userManager };
                 return (
                     <>
+                        <MDBRow style={{ justifyContent: "center", display: "flex" }}>
+                            <MDBCol md='2' style={{ marginTop: "26px" }}>
+                                <Select
+                                    onChange={e => handleChangeData(e, "encargado")}
+                                    defaultValue={valueManager}
+                                    options={datos}
+                                />
+                            </MDBCol>
+                            <MDBCol md='2' style={{ marginTop: "26px" }}>
+                            <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                            </MDBCol>
+                        </MDBRow>
+                            
                         {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>

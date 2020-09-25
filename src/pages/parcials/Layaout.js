@@ -1,6 +1,6 @@
 import React, { useState, Component, Children } from 'react'
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
-import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { ReactComponent as Logo } from '../../assets/corpinto.svg';
 import MenuLink from '../../components/menuLink';
 import './Layaout.css'
 import {
@@ -57,7 +57,7 @@ class Navbar extends Component {
     const { collapseID } = this.state;
     return (
       <>
-        <MDBNavbar color='info-color' dark expand='md' fixed='top' scrolling>
+        <MDBNavbar color='indigo' dark expand='md' fixed='top' scrolling>
           <MDBNavbarBrand href='/' className='py-0 font-weight-bold'>
             <Logo style={{ height: '2.5rem', width: '2.5rem' }} />
             <strong className='align-middle'>Corpinto</strong>

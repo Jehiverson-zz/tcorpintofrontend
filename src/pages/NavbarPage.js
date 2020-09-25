@@ -418,7 +418,7 @@ class NavbarPage extends Component {
 
         <SectionContainer header='Supportet content'>
           <MDBNavbar
-            color='info-color'
+            color='indigo'
             dark
             expand='md'
             style={{ marginTop: '20px' }}

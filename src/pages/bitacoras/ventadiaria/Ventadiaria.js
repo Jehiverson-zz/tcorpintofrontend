@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NumericInput from 'react-numeric-input';
+import { useHistory } from "react-router-dom";
 //Librerias de diseño
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -26,9 +27,9 @@ import CardHeader from '../../../components/CardHeader'
 import { getCollaboration } from '../../../functions/collaboratorFunction'
 import Select from 'react-select';
 import Swal from 'sweetalert2'
-
+import Loading from './img/loading.gif'
 //Funciones
-import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales } from '../../../functions/salesFunctions'
+import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales,validDataSales } from '../../../functions/salesFunctions'
 
 
 
@@ -50,7 +51,7 @@ function getSteps() {
 }
 
 const TransferSystemPage = () => {
-
+const history = useHistory();
 
 
     //Stepper
@@ -58,9 +59,10 @@ const TransferSystemPage = () => {
     const [skipped, setSkipped] = useState(new Set());
     const [stepper, setStepper] = useState(null);
     const [stepperMessage, setStepperMessage] = useState(null);
+    const [loading, setLoading] = useState(true);
     const classes = useStyles();
     const steps = getSteps();
-
+    
     //Hooks Datos formulario
     const [vendor, setVendor] = useState([{ nombre: null, venta: 0 }]);
     const [vendorDescount, setVendorDescount] = useState([]);
@@ -110,6 +112,8 @@ const TransferSystemPage = () => {
         observaciones: "-",
     }]);
 
+    //Datos devueltos de la creación
+    const[dataResult, setDataResult] = useState({});
     //ApiRest datos de colaboradores
     const datos = [];
     getCollaboration().then((res) => { res.map(resdata => datos.push({ resdata: res.name, label: resdata.name })) });
@@ -139,8 +143,6 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
                                     onChange={e => handleChangeData(e, "venta_diaria", "number")}
                                 />
                             </MDBCol>
@@ -153,8 +155,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "no_personas", "number")}
                                 />
                             </MDBCol>
@@ -167,8 +168,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "no_ventas", "number")}
                                 />
                             </MDBCol>
@@ -181,8 +181,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "meta", "number")}
                                 />
                             </MDBCol>
@@ -195,8 +194,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "venta_anterior", "number")}
                                 />
                             </MDBCol>
@@ -258,8 +256,6 @@ const TransferSystemPage = () => {
                                                     precision={2}
                                                     size={2}
                                                     mobile
-                                                    pattern="[0-9].[0-9][0-9]"
-                                                    inputmode="numeric"
                                                     onChange={e => handleChangeVendors(idx, e, "venta", "number")}
                                                 />
                                             </MDBCol>
@@ -297,8 +293,6 @@ const TransferSystemPage = () => {
                                                     precision={2}
                                                     size={2}
                                                     mobile
-                                                    pattern="[0-9].[0-9][0-9]"
-                                                    inputmode="numeric"
                                                     onChange={e => handleChangeVendorsDesconunt(idx, e, "venta", "number")}
                                                 />
                                             </MDBCol>
@@ -342,8 +336,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "facturas_sis_total", "number")}
                                 />
                             </MDBCol>
@@ -366,8 +359,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "facturas_man_total", "number")}
                                 />
                             </MDBCol>
@@ -389,8 +381,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "facturas_cod_total", "number")}
                                 />
                             </MDBCol>
@@ -413,8 +404,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "facturas_nota_total", "number")}
                                 />
                             </MDBCol>
@@ -444,8 +434,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "efectivoQuetzales", "number")}
                                 />
                             </MDBCol>
@@ -458,8 +447,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "efectivoQuetzalesDolares", "number")}
                                 />
                             </MDBCol>
@@ -477,8 +465,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "credomatic", "number")}
                                 />
                             </MDBCol>
@@ -491,8 +478,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "visa", "number")}
                                 />
                             </MDBCol>
@@ -505,8 +491,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "visaOnline", "number")}
                                 />
                             </MDBCol>
@@ -519,8 +504,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "visaDolares", "number")}
                                 />
                             </MDBCol>
@@ -533,8 +517,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "masterCard", "number")}
                                 />
                             </MDBCol>
@@ -552,8 +535,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "crediCuotas", "number")}
                                 />
                             </MDBCol>
@@ -566,8 +548,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "visaCuotas", "number")}
                                 />
                             </MDBCol>
@@ -585,8 +566,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "valorEnvioEfectivo", "number")}
                                 />
                             </MDBCol>
@@ -607,8 +587,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "lifeMilesValor", "number")}
                                 />
                             </MDBCol>
@@ -621,8 +600,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "exencionIva", "number")}
                                 />
                             </MDBCol>
@@ -635,8 +613,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "loyalty", "number")}
                                 />
                             </MDBCol>
@@ -649,8 +626,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "gastosAutorizados", "number")}
                                 />
                             </MDBCol>
@@ -663,8 +639,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "retirosMercaderia", "number")}
                                 />
                             </MDBCol>
@@ -677,8 +652,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "ventaEnLinea", "number")}
                                 />
                             </MDBCol>
@@ -691,8 +665,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "notaDeCredito", "number")}
                                 />
                             </MDBCol>
@@ -705,8 +678,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "faltante", "number")}
                                 />
                             </MDBCol>
@@ -719,8 +691,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "cuadreDeCaja", "number")}
                                 />
                             </MDBCol>
@@ -733,8 +704,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "diferencia", "number")}
                                 />
                             </MDBCol>
@@ -752,8 +722,7 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "cashback", "number")}
                                 />
                             </MDBCol>
@@ -766,16 +735,25 @@ const TransferSystemPage = () => {
                                     precision={2}
                                     size={2}
                                     mobile
-                                    pattern="[0-9].[0-9][0-9]"
-                                    inputmode="numeric"
+                                    
                                     onChange={e => handleChangeData(e, "giftcard", "number")}
                                 />
                             </MDBCol>
                         </MDBRow>
+                        <br></br>
+                    
                     </>
                 );
             case 4:
                 return (
+                    <>
+                    {stepper !== null ? <MDBCol md='12'>
+                            <MDBCard color='red lighten-1' text='white' className='text-center'>
+                                <MDBCardBody>
+                                    {stepperMessage}
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol> : ""}
                     <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                         <MDBCol md='12'>
                             <MDBInput
@@ -785,24 +763,41 @@ const TransferSystemPage = () => {
                                 value={dataSales[0].observaciones} onChange={e => handleChangeData(e, "observaciones")}
                             />
                         </MDBCol>
-                    </MDBRow>)
+                    </MDBRow>
+                    </>
+                    )
             default:
                 return 'Ooooups! Este paso no existe';
         }
     }
 
-    const handleNext = () => {
+    const handleNext = async() => {
         let pagNext = 1;
         switch (activeStep) {
             case 0:
-
                 if (dataSales[0].encargado === null || dataSales[0].encargado === " ") {
                     setStepper(0)
-                    setStepperMessage("Tienes que seleccionar un encargado para la tienda")
+                    setStepperMessage("Tienes que seleccionar un encargado para la tienda.")
+                    Swal.fire('Error', 'Tienes que seleccionar un encargado para la tienda.', 'error');
                     pagNext = 0;
                 } else {
-                    setStepper(null)
-                    pagNext = 1;
+                    await validDataSales()
+                    .then((res) => {
+                      if(res.salesNew.length > 0){
+                        setStepper(0)
+                        setStepperMessage("Ya tienes ingresado un dato de venta, no puedes ingresar otro.")
+                        pagNext = 0;
+                      }else{
+                        setStepper(null)
+                        pagNext = 1;
+                      }
+                    })
+                    .catch((err)=>{
+                        setStepper(0)
+                        setStepperMessage("Hubo un problema técnico por comunicar a soporte técnico.")
+                        pagNext = 0;
+                    })
+                    
                 }
 
                 if (parseFloat(dataSales[0].venta_diaria) === 0) {
@@ -813,8 +808,6 @@ const TransferSystemPage = () => {
                     Swal.fire('Error', 'No puedes dejar vacio el dato de venta diaria', 'info');
                     pagNext = 0;
                 }
-
-                
 
                 break;
             case 1:
@@ -873,8 +866,28 @@ const TransferSystemPage = () => {
                 }
                 break;
             case 4:
-                const salesCreate = createDataSales(dataSales[0],vendor,vendorDescount)
-                console.log("Test")
+            createDataSales(dataSales[0],vendor,vendorDescount,localStorage.getItem('email'))
+                .then((response) => {
+                    setDataResult(response)
+                    if (response.status === true) {
+                        setLoading(false)
+                        Swal.fire('Felicitaciones!', response.message, 'success');
+                        setStepper(null)
+                        pagNext = 0;
+                    }
+    
+                    if (response.status === false){
+                        Swal.fire('Error', response.message, 'error');
+                        pagNext = 0;
+                        setStepper(5)
+                    }
+                })
+                .catch(err => {
+                    setStepper(4)
+                    setStepperMessage("Error, no se pudo crear su registro de dato de venta")
+                    pagNext = 0;
+                })
+
             break;
             default:
 
@@ -886,8 +899,8 @@ const TransferSystemPage = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
+    const handleMenu = () => {
+        history.push(`/bitacoras`);
     };
 
     function handleChangeVendors(i, event, name, type) {
@@ -958,6 +971,7 @@ const TransferSystemPage = () => {
     }
 
     function handleChangeData(event, name, type) {
+        console.log(dataSales   )
         const values = [...dataSales];
         if (type !== "number") {
             if (name === "encargado") {
@@ -997,12 +1011,10 @@ const TransferSystemPage = () => {
         return step === stepper;
     };
 
-
-
     return (
         <Layaout>
             <br></br>
-            <CardHeader title="Tickets" icon="ticket-alt">
+            <CardHeader title="Venta Diaria" icon="ticket-alt">
                 <div className={classes.root}>
                     <Stepper activeStep={activeStep} alternativeLabel>
                         {steps.map((label, index) => {
@@ -1030,8 +1042,13 @@ const TransferSystemPage = () => {
                     <div>
                         {activeStep === steps.length ? (
                             <div>
-                                <Typography className={classes.instructions}>All steps completed</Typography>
-                                <Button onClick={handleReset}>Reset</Button>
+                                { loading?
+                                (<center> <img
+                                    alt='Preload'
+                                    className='img-fluid'
+                                    src={Loading}
+                                /></center>)
+                                :(<Button onClick={handleMenu}>Regresar a menu</Button>)}
                             </div>
                         ) : (
                                 <div>

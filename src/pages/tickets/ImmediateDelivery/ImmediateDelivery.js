@@ -47,6 +47,7 @@ const ImmediateDelivery = () => {
             alu: null,
             size: null
         }]);
+        const [fileInfos, setFileInfos] = useState([]);
     const storesList = [];
 
     getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
@@ -55,8 +56,7 @@ const ImmediateDelivery = () => {
 
     function crearTicket(e) {
         e.preventDefault();
-        console.log("antes de mandarlo", fields)
-        storeTicketInmediates(fields)
+        storeTicketInmediates(fields,fileInfos)
             .then((response) => {
                 alert("Creado")
             }).catch(err => {
@@ -76,16 +76,16 @@ const ImmediateDelivery = () => {
         if (name == "store_asigned" || name == "encargado") {
             values[0][name] = event.value;
         } else if (name == "image") {
-            let data = new FormData()
-            data.append('params', event.target.files[0])
-            values[0][name] = data;
+            values[0][name] = event.target.files[0];
         } else {
-            console.log(event.target)
             values[0][name] = event.target.value;
         }
         setFields(values);
-        console.log(fields);
     }
+
+    const selectFile = (event) => {
+        setFileInfos(event.target.files);
+      };
 
     function handleChange2(i, event, name) {
         const values = [...fields];
@@ -97,7 +97,6 @@ const ImmediateDelivery = () => {
             values[i][name] = event.target.value;
         }
         setFields(values);
-        console.log(fields);
     }
 
     /* Crea los nuevs inputs */
@@ -161,7 +160,7 @@ const ImmediateDelivery = () => {
                         <MDBInput label='Total a Pagar' type="text" validate onChange={e => handleChange1(e, "total")}/>
                     </MDBCol>
                     <MDBCol md='4'>
-                        <MDBInput type="file" accept="image/png, image/jpeg" validate onChange={e => handleChange1(e, "image")}/>
+                        <MDBInput type="file" accept="image/png, image/jpeg" validate onChange={selectFile}/>
                     </MDBCol>
                 </MDBRow>
                 {fields.map((field, idx) => {

@@ -14,14 +14,13 @@ export const storeTicketsSystemTransfer = (data) => {
         })
 }
 /* Crea un nuevo ticket de retiros inmediatos */
-export const storeTicketInmediates = (data) => {
-    console.log(`AXIOS=========== ${data}`);
+export const storeTicketInmediates = (data,img) => {
+
+    let formData = new FormData();
+    formData.append("data", data);
+
     return axios
-        .post(`${url}/tickets/add/inmediates`, data, {
-            headers: {
-                'Content-Type': `aplication/json;multipart/form-data; boundary=${data._boundary}`
-            }
-        })
+        .get(`${url}/tickets/add/inmediates/${data}`, data) 
         .then((response) => {
             return response;
         })

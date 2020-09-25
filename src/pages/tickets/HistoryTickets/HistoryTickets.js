@@ -27,7 +27,7 @@ import {
     MDBTableHead
 } from 'mdbreact';
 import Moment from 'react-moment';
-import { FaTimes, FaCheckDouble, FaPersonBooth, FaStoreAlt, FaCheck, FaRegCalendar } from 'react-icons/fa';
+import { FaBan, FaCheckDouble, FaPersonBooth, FaStoreAlt, FaCheckCircle, FaRegCalendar,FaHandPaper } from 'react-icons/fa';
 import Select from 'react-select';
 import Loading from '../../bitacoras/ventadiaria/img/loading.gif'
 
@@ -186,6 +186,9 @@ const HistoryTickets = () => {
                                                     <MDBCard>
                                                         <MDBCardBody style={{ Height: "300px" }}>
                                                             <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
+                                                            {data.status == 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
+                                                            {data.status == 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
+                                                            {data.status == 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
                                                             </MDBCardTitle>
                                                             <MDBCardText>
                                                                 <MDBTable small>
@@ -267,6 +270,9 @@ const HistoryTickets = () => {
                                                     <MDBCard>
                                                         <MDBCardBody style={{ Height: "300px" }}>
                                                             <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
+                                                            {data.status == 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
+                                                            {data.status == 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
+                                                            {data.status == 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
                                                             </MDBCardTitle>
                                                             <MDBCardText>
                                                                 <MDBTypography>
@@ -352,7 +358,10 @@ const HistoryTickets = () => {
                                                             <MDBCardBody style={{ Height: "300px" }}>
                                                                 <MDBCardTitle>
                                                                     <span style={{ fontSize: "18px" }}><FaPersonBooth /> {data.name}  </span>
-                                                                    <span className="float-right" style={{ marginLeft: "10px", fontSize: "18px" }}><FaCheckDouble /> {data.manager}</span>
+                                                                    <span style={{ marginLeft: "10px", fontSize: "18px" }}><FaCheckDouble /> {data.manager}</span>
+                                                                    {data.status == 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
+                                                                    {data.status == 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
+                                                                    {data.status == 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
                                                                 </MDBCardTitle>
                                                                 <MDBCardText>
                                                                     <MDBTable small>
@@ -431,7 +440,11 @@ const HistoryTickets = () => {
                                                     <MDBCol md="4" style={{ marginBottom: "15px" }}>
                                                         <MDBCard>
                                                             <MDBCardBody style={{ Height: "300px" }}>
-                                                                <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span></MDBCardTitle>
+                                                                <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span>
+                                                                {data.status == 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
+                                                                {data.status == 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
+                                                                {data.status == 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
+                                                                </MDBCardTitle>
                                                                 <MDBCardText>
                                                                     <MDBTable small>
                                                                         <MDBTableHead>

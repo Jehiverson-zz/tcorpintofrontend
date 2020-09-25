@@ -54,12 +54,12 @@ const ExternalRetreats = () => {
     }, []);
 
     function get_external_retreats() {
-        getExternalRetreats().then((res) => setExternalRetreats(res.result));
+        getExternalRetreats().then((res) => setExternalRetreats(res));
     }
     /* CREAT UN NUEVO TICKET */
     function crearTicket() {
         let cont = 0;
-        fields.some( function(x,i){
+        fields.some(function (x, i) {
             console.log(x)
             if (x.person_retreats === null) {
                 result_function('error', 'Ingresa el nombre de la persona que retirara el producto');
@@ -91,7 +91,7 @@ const ExternalRetreats = () => {
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            if(cont == 0){
+            if (cont == 0) {
                 storeTicketExternalRetrats(fields)
                     .then(response => {
                         get_external_retreats();
@@ -246,28 +246,18 @@ const ExternalRetreats = () => {
                                                             </MDBTableHead>
                                                             <MDBTableBody>
                                                                 {
-                                                                    data.product.length > 0 ? (
-                                                                        data.product.map((prod) => {
-                                                                            orden++;
-                                                                            return (
-                                                                                <tr>
-                                                                                    <td>{orden}</td>
-                                                                                    <td>{prod.upc}</td>
-                                                                                    <td>{prod.alu}</td>
-                                                                                    <td>{prod.size}</td>
-                                                                                </tr>
-                                                                            )
-                                                                        })
-                                                                    )
-                                                                        :
-                                                                        (
+                                                                    data.product.map((prod) => {
+                                                                        orden++;
+                                                                        return (
                                                                             <tr>
                                                                                 <td>{orden}</td>
-                                                                                <td>{data.upc}</td>
-                                                                                <td>{data.alu}</td>
-                                                                                <td>{data.siz}</td>
+                                                                                <td>{prod.upc}</td>
+                                                                                <td>{prod.alu}</td>
+                                                                                <td>{prod.siz || prod.size}</td>
+                                                                                <td>{data.fact}</td>
                                                                             </tr>
                                                                         )
+                                                                    })
                                                                 }
                                                             </MDBTableBody>
                                                         </MDBTable>
@@ -281,12 +271,12 @@ const ExternalRetreats = () => {
                         )
                             :
                             <MDBCol md='12'>
-                                    <MDBCard color='grey' text='white' className='text-center'>
-                                        <MDBCardBody>
-                                            NO HAY DATOS
+                                <MDBCard color='grey' text='white' className='text-center'>
+                                    <MDBCardBody>
+                                        NO HAY DATOS
                                         </MDBCardBody>
-                                    </MDBCard>
-                                </MDBCol>
+                                </MDBCard>
+                            </MDBCol>
                     }
                 </MDBRow>
             </MDBContainer>

@@ -31,7 +31,7 @@ import {
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
-import { FaRegPaperPlane,FaStoreAlt } from 'react-icons/fa'
+import { FaRegPaperPlane, FaStoreAlt } from 'react-icons/fa'
 import Select from 'react-select';
 import Swal from 'sweetalert2'
 
@@ -67,12 +67,6 @@ function TabPanel(props) {
     );
 }
 
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.any.isRequired,
-//     value: PropTypes.any.isRequired,
-// };
-
 function a11yProps(index) {
     return {
         id: `full-width-tab-${index}`,
@@ -106,58 +100,68 @@ const TransferSystemPage = () => {
 
     function tickets_created() {
         getTicketsSystemTransferCreated().then((res) => setdataTicketsCreated(res));
+        console.log("CREATED", dataTicketsCreated)
     }
 
     function tickets_asigned() {
         getTicketsSystemTransferAssigned().then((res) => setdataTicketsAssigned(res));
+        console.log("ASSIGNED", dataTicketsAssigned)
     }
 
     function crearTicket() {
-        const values = [...fields];
-        console.log(values)
-        fields.map(x => {
-            console.log(x)
+        let cont = 0;
+        fields.some(function (x, i) {
             if (x.upc === null) {
                 result_function('error', 'El valor de UPC está vacío');
+                cont++;
+                return true;
             } else if (x.alu === null) {
                 result_function('error', 'El valor de ALU está vacío');
+                cont++;
+                return true;
             } else if (x.size === null) {
-                result_function('error', 'Debes ingresar la talla');
+                result_function('error', 'Debes ingresar la TALLA');
+                cont++;
+                return true;
             } else if (x.bill === null) {
-                result_function('error', 'Ingresa un número de factura');
+                result_function('error', 'Ingresa un número de FACTURA');
+                cont++;
+                return true;
             }
         })
 
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            storeTicketsSystemTransfer(fields)
-                .then((response) => {
-                    tickets_created();
-                    tickets_asigned();
-                    result_function('success', response.data.message);
-                }).catch(err => {
-                    alert("Error")
-                })
+            if (cont == 0) {
+                storeTicketsSystemTransfer(fields)
+                    .then((response) => {
+                        tickets_created();
+                        tickets_asigned();
+                        result_function('success', response.data.message);
+                    }).catch(err => {
+                        alert("Error")
+                    })
+            }
         }
     }
 
     function removeTicket(id) {
-        inactivateTicket(id).then((res)=>{
+        inactivateTicket(id).then((res) => {
             tickets_created();
             tickets_asigned();
             result_function('success', res.data.message);
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
         })
     }
 
     function completarTicket(id) {
-        completeTicket(id).then((res)=>{
+        completeTicket(id).then((res) => {
             tickets_created();
             tickets_asigned();
             result_function('success', res.data.message);
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
         })
     }
@@ -178,7 +182,7 @@ const TransferSystemPage = () => {
     function handleAdd() {
         const values = [...fields];
         if (fields.length <= 10) {
-            values.push({ upc: null, alu: null, size: null, bill: null, store_asigned: null, store_created: my_store });
+            values.push({ upc: null, alu: null, size: null });
             setFields(values);
         } else {
             result_function('warning', 'Alcanzaste el número maximo de alementos')
@@ -198,7 +202,9 @@ const TransferSystemPage = () => {
     };
 
     const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
-
+    console.log(dataTicketsCreated);
+    console.log(dataTicketsAssigned);
+    console.log(my_store);
     return (
         <Layaout>
             <br></br>
@@ -215,9 +221,11 @@ const TransferSystemPage = () => {
                             <MDBCol md='2'>
                                 <MDBInput label='Talla' type='text' validate onChange={e => handleChange(idx, e, "size")} />
                             </MDBCol>
-                            <MDBCol md='2'>
-                                <MDBInput label='Factura' type='text' validate onChange={e => handleChange(idx, e, "bill")} />
-                            </MDBCol>
+                            {idx == 0 && (
+                                <MDBCol md='2'>
+                                    <MDBInput label='Factura' type='text' validate onChange={e => handleChange(idx, e, "bill")} />
+                                </MDBCol>
+                            )}
                             {idx == 0 && (
                                 <MDBCol md='3' style={{ marginTop: "26px" }}>
                                     <Select
@@ -228,9 +236,9 @@ const TransferSystemPage = () => {
                                 </MDBCol>
                             )}
                             {idx !== 0 && (
-                            <MDBCol md='1' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
-                                <MDBBtn size="sm" color='danger' onClick={() => handleRemove(idx)}>X</MDBBtn>
-                            </MDBCol>)}
+                                <MDBCol md='1' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
+                                    <MDBBtn size="sm" color='danger' onClick={() => handleRemove(idx)}>X</MDBBtn>
+                                </MDBCol>)}
                         </MDBRow>
                     )
                 })}
@@ -261,7 +269,7 @@ const TransferSystemPage = () => {
                         {
                             dataTicketsCreated.length > 0 ? (
                                 dataTicketsCreated.map((data) => {
-                                    if (data.store_created == my_store) {
+                                    if (data.store_created == my_store || data.store_created == 'Meatpack Web') {
                                         let orden = 0;
                                         return (
                                             <MDBCol md="6" style={{ marginBottom: "15px" }}>
@@ -282,18 +290,22 @@ const TransferSystemPage = () => {
                                                                     </tr>
                                                                 </MDBTableHead>
                                                                 <MDBTableBody>
-                                                                    {data.product.map((prod) => {
-                                                                        orden++;
-                                                                        return (
-                                                                            <tr>
-                                                                                <td>{orden}</td>
-                                                                                <td>{prod.upc}</td>
-                                                                                <td>{prod.alu}</td>
-                                                                                <td>{prod.size}</td>
-                                                                                <td>{prod.bill}</td>
-                                                                            </tr>
+                                                                    {
+                                                                        data.product.length > 0 && (
+                                                                            data.product.map((prod) => {
+                                                                                orden++;
+                                                                                return (
+                                                                                    <tr>
+                                                                                        <td>{orden}</td>
+                                                                                        <td>{prod.upc}</td>
+                                                                                        <td>{prod.alu}</td>
+                                                                                        <td>{prod.siz || prod.size}</td>
+                                                                                        <td>{data.fact || prod.bill}</td>
+                                                                                    </tr>
+                                                                                )
+                                                                            })
                                                                         )
-                                                                    })}
+                                                                    }
                                                                 </MDBTableBody>
                                                             </MDBTable>
                                                         </MDBCardText>
@@ -301,14 +313,22 @@ const TransferSystemPage = () => {
                                                 </MDBCard>
                                             </MDBCol>
                                         )
+                                    } else {
+                                        return (data.store_created)
                                     }
                                 })
                             )
                                 :
-                                <h4>No hay datos</h4>
+                                <MDBCol md='12'>
+                                    <MDBCard color='grey' text='white' className='text-center'>
+                                        <MDBCardBody>
+                                            NO HAY DATOS
+                                        </MDBCardBody>
+                                    </MDBCard>
+                                </MDBCol>
                         }
-                    </MDBRow>
 
+                    </MDBRow>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <MDBRow>
@@ -323,7 +343,7 @@ const TransferSystemPage = () => {
                                                     <MDBCardBody>
                                                         <MDBCardTitle><span><FaStoreAlt /> {data.store_created}</span>
                                                             <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completarTicket(data._id)}>
-                                                                <FaRegPaperPlane style={{fontSize: '15px'}}/>
+                                                                <FaRegPaperPlane style={{ fontSize: '15px' }} />
                                                             </MDBBtn>
                                                         </MDBCardTitle>
                                                         <MDBCardText>
@@ -331,26 +351,29 @@ const TransferSystemPage = () => {
                                                                 <MDBTableHead>
                                                                     <tr>
                                                                         <th>No.</th>
-                                                                        <th>Upc</th>
-                                                                        <th>Alu</th>
-                                                                        <th>Talla</th>
-                                                                        <th>Factura</th>
+                                                                        <th>UPC</th>
+                                                                        <th>ALU</th>
+                                                                        <th>TALLA</th>
+                                                                        <th>FACTURA</th>
                                                                     </tr>
                                                                 </MDBTableHead>
-                                                                {data.product.map((prod) => {
-                                                                    orden++;
-                                                                    return (
-                                                                        <MDBTableBody>
-                                                                            <tr>
-                                                                                <td>{orden}</td>
-                                                                                <td>{prod.upc}</td>
-                                                                                <td>{prod.alu}</td>
-                                                                                <td>{prod.size}</td>
-                                                                                <td>{prod.bill}</td>
-                                                                            </tr>
-                                                                        </MDBTableBody>
-                                                                    )
-                                                                })}
+                                                                {
+                                                                    data.product.length > 0 && (
+                                                                        data.product.map((prod) => {
+                                                                            orden++;
+                                                                            return (
+                                                                                <MDBTableBody>
+                                                                                    <tr>
+                                                                                        <td>{orden}</td>
+                                                                                        <td>{prod.upc}</td>
+                                                                                        <td>{prod.alu}</td>
+                                                                                        <td>{prod.siz || prod.size}</td>
+                                                                                        <td>{data.fact || prod.bill}</td>
+                                                                                    </tr>
+                                                                                </MDBTableBody>
+                                                                            )
+                                                                        })
+                                                                    )}
                                                             </MDBTable>
                                                         </MDBCardText>
                                                     </MDBCardBody>
@@ -361,7 +384,13 @@ const TransferSystemPage = () => {
                                 })
                             )
                                 :
-                                <h4>No hay datos</h4>
+                                <MDBCol md='12'>
+                                    <MDBCard color='grey' text='white' className='text-center'>
+                                        <MDBCardBody>
+                                            NO HAY DATOS
+                                        </MDBCardBody>
+                                    </MDBCard>
+                                </MDBCol>
                         }
                     </MDBRow>
                 </TabPanel>

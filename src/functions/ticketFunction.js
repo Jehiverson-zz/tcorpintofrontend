@@ -13,19 +13,18 @@ export const storeTicketsSystemTransfer = (data) => {
             console.error(error);
         })
 }
-/* Crea un nuevo ticket de retiros inmediatos */
-export const storeTicketInmediates = (data,img) => {
 
+/* Crea un nuevo ticket de retiros inmediatos */
+export const storeTicketInmediates = (data) => {
     let formData = new FormData();
-    formData.append("data", data);
+    formData.append('file',data[0].image);
+    formData.append('data',JSON.stringify(data));
 
     return axios
-        .get(`${url}/tickets/add/inmediates/${data}`, data) 
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            console.error(error);
+        .post(`${url}/tickets/add/inmediates`, formData,{
+            headers:{
+                'Content-type': 'multipart/form-data'
+            }
         })
 }
 
@@ -53,9 +52,22 @@ export const storeTicketExternalRetrats = (data) => {
         })
 }
 
-/* Obtiene la data de movimientos de tikets entre tiendas */
+/* Obtiene todos los tikets de traslados entre tiendas (de la tienda registrada)*/
+export const getAllTicketsSystemTransfer = (status) => {
+    const data = {store : localStorage.getItem("store"), status: status}
+    return axios
+        .post(`${url}/tickets/transfer`, data)
+        .then((response) => {
+            return response.data.ticketSystem;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene la data de movimientos de tikets entre tiendas (de la tienda registrada)*/
 export const getTicketsSystemTransferCreated = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : localStorage.getItem("store")}
     return axios
         .post(`${url}/tickets/transfer_created`, data)
         .then((response) => {
@@ -66,9 +78,9 @@ export const getTicketsSystemTransferCreated = () => {
         })
 }
 
-/* Obtiene la data de movimientos de tikets entre tiendas */
+/* Obtiene la data de movimientos de tikets entre tiendas (de la tienda registrada)*/
 export const getTicketsSystemTransferAssigned = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : localStorage.getItem("store")}
     return axios
         .post(`${url}/tickets/transfer_assigned`, data)
         .then((response) => {
@@ -79,9 +91,63 @@ export const getTicketsSystemTransferAssigned = () => {
         })
 }
 
-/* Obtiene la data de movimientos de tikets entre tiendas */
+/* Obtiene todos los tikets de entregas inemediatas de una tienda (de la tienda registrada)*/
+export const getAllTicketsImmediatesDeliveries = (status) => {
+    const data = {store : localStorage.getItem("store"), status: status}
+    return axios
+        .post(`${url}/tickets/immediate_deliveries`, data)
+        .then((response) => {
+            console.log("AXIOS",response)
+            return response.data.ticketInmediates;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene la data de tickets de entregas inmediatas creados por el usuario */
+export const getTicketsImmediatesDeliveriesCreated = () => {
+    const data = {store : localStorage.getItem("store")}
+    return axios
+        .post(`${url}/tickets/immediate_deliveries_created`, data)
+        .then((response) => {
+            return response.data.ticketInmediates;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene la data de tickets de entregas inmediatas asignados al usuario*/
+export const getTicketsImmediatesDeliveriesAssigned = () => {
+    const data = {store : localStorage.getItem("store")}
+    return axios
+        .post(`${url}/tickets/immediate_deliveries_assigned`, data)
+        .then((response) => {
+            return response.data.ticketInmediates;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene toda la data de los tickets de retiros fotografía de una tienda */
+export const getAllPhotoRetreats = (status) => {
+    const data = {store : localStorage.getItem("store"), status:status}
+    return axios
+        .post(`${url}/tickets/all/photo_retreats`, data)
+        .then((response) => {
+            console.log("AXIOOOOOSSSSSSS", response)
+            return response.data.ticketPhotoRetrats;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene la data de los tickets de retiros fotografía de una tienda */
 export const getPhotoRetreats = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : localStorage.getItem("store")}
     return axios
         .post(`${url}/tickets/photo_retreats`, data)
         .then((response) => {
@@ -92,13 +158,28 @@ export const getPhotoRetreats = () => {
         })
 }
 
+/* Obtiene toda la data de los tickets retiros externos de una tienda */
+export const getAllExternalRetreats = (status) => {
+    const data = {store : localStorage.getItem("store"), status: status}
+    return axios
+        .post(`${url}/tickets/all/external_retreats`, data)
+        .then((response) => {
+            console.log(response.data.ticketExternal)
+            return response.data.ticketExternal;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
 /* Obtiene la data de los tickets retiros externos */
 export const getExternalRetreats = () => {
-    const data = JSON.parse(localStorage.getItem("identity"))
+    const data = {store : localStorage.getItem("store")}
     return axios
         .post(`${url}/tickets/external_retreats`, data)
         .then((response) => {
-            return response.data;
+            console.log(response.data.ticketExternal)
+            return response.data.ticketExternal;
         })
         .catch((error) => {
             console.error(error);
@@ -122,6 +203,18 @@ export const getStore = () => {
 export const inactivateTicket = (id) =>{
     return axios
     .put(`${url}/ticket/inactive/${id}`)
+    .then((response) => {
+        return response
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
+}
+
+/* Inactiva un ticket de entregas inmeditas */
+export const inactivateTicketInmediates = (id) =>{
+    return axios
+    .put(`${url}/ticket/immediate_deliveries/inactive/${id}`)
     .then((response) => {
         return response
     })
@@ -165,6 +258,19 @@ export const completeTicket = (id) =>{
         console.log(error)
     })
 }
+
+/* Cambia el estado de un ticket de entregas inmediatas a 'Completado' */
+export const completeTicketInmediates = (id) =>{
+    return axios
+    .put(`${url}/ticket/immediate_deliveries/complete/${id}`)
+    .then((response) => {
+        return response
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
+}
+
 /* Cambia el estado de un ticket de fotos retiradas a 'Completado' */
 export const completePhotoRetreats = (id) =>{
     return axios

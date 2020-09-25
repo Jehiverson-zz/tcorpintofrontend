@@ -54,19 +54,55 @@ const ExternalRetreats = () => {
     }, []);
 
     function get_external_retreats() {
-        getExternalRetreats().then((res) => setExternalRetreats(res.result));
+        getExternalRetreats().then((res) => setExternalRetreats(res));
     }
     /* CREAT UN NUEVO TICKET */
     function crearTicket() {
-        storeTicketExternalRetrats(fields)
-            .then(response => {
-                get_external_retreats();
-                result_function('success', response.data.message)
-            })
-            .catch(error => {
-                console.log(error)
-                result_function('error', 'Algo salió mal')
-            })
+        let cont = 0;
+        fields.some(function (x, i) {
+            console.log(x)
+            if (x.person_retreats === null) {
+                result_function('error', 'Ingresa el nombre de la persona que retirara el producto');
+                cont++;
+                return true;
+            } else if (x.person_authorizing === null) {
+                result_function('error', 'Ingresa el nombre de la persona que autoriza el retiro');
+                cont++;
+                return true;
+            } else if (x.bill === null) {
+                result_function('error', 'Ingresa un número de FACTURA');
+                cont++;
+                return true;
+            } else if (x.upc === null) {
+                result_function('error', 'El valor de UPC está vacío');
+                cont++;
+                return true;
+            } else if (x.alu === null) {
+                result_function('error', 'El valor de ALU está vacío');
+                cont++;
+                return true;
+            } else if (x.size === null) {
+                result_function('error', 'Debes ingresar la TALLA');
+                cont++;
+                return true;
+            }
+        })
+
+        if (fields[0]["store_asigned"] === null) {
+            result_function('error', 'Debes seleccionar alguna tienda');
+        } else {
+            if (cont == 0) {
+                storeTicketExternalRetrats(fields)
+                    .then(response => {
+                        get_external_retreats();
+                        result_function('success', response.data.message)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        result_function('error', 'Algo salió mal')
+                    })
+            }
+        }
     }
     /* INACTIVA UN TICKET */
     function removeTicket(id) {
@@ -96,7 +132,7 @@ const ExternalRetreats = () => {
     function handleAdd() {
         const values = [...fields];
         if (fields.length <= 10) {
-            values.push({ upc: null, alu: null, size: null, bill: null, store_asigned: null, store_created: my_store });
+            values.push({ upc: null, alu: null, size: null });
             setFields(values);
         } else {
             result_function('warning', 'Alcanzaste el número maximo de alementos')
@@ -146,14 +182,14 @@ const ExternalRetreats = () => {
                         <MDBRow id={idx} className="center-element" key={`${field}-${idx}`}>
                             <MDBCol md='3'>
                                 <MDBInput
-                                    label='Upc'
+                                    label='UPC'
                                     type='text'
                                     validate onChange={e => handleChange(idx, e, "upc")}
                                 />
                             </MDBCol>
                             <MDBCol md='3'>
                                 <MDBInput
-                                    label='Alu'
+                                    label='ALU'
                                     type='text'
                                     validate onChange={e => handleChange(idx, e, "alu")}
                                 />
@@ -210,28 +246,18 @@ const ExternalRetreats = () => {
                                                             </MDBTableHead>
                                                             <MDBTableBody>
                                                                 {
-                                                                    data.product.length > 0 ? (
-                                                                        data.product.map((prod) => {
-                                                                            orden++;
-                                                                            return (
-                                                                                <tr>
-                                                                                    <td>{orden}</td>
-                                                                                    <td>{prod.upc}</td>
-                                                                                    <td>{prod.alu}</td>
-                                                                                    <td>{prod.size}</td>
-                                                                                </tr>
-                                                                            )
-                                                                        })
-                                                                    )
-                                                                        :
-                                                                        (
+                                                                    data.product.map((prod) => {
+                                                                        orden++;
+                                                                        return (
                                                                             <tr>
                                                                                 <td>{orden}</td>
-                                                                                <td>{data.upc}</td>
-                                                                                <td>{data.alu}</td>
-                                                                                <td>{data.siz}</td>
+                                                                                <td>{prod.upc}</td>
+                                                                                <td>{prod.alu}</td>
+                                                                                <td>{prod.siz || prod.size}</td>
+                                                                                <td>{data.fact}</td>
                                                                             </tr>
                                                                         )
+                                                                    })
                                                                 }
                                                             </MDBTableBody>
                                                         </MDBTable>
@@ -244,7 +270,13 @@ const ExternalRetreats = () => {
                             })
                         )
                             :
-                            <h4>No hay datos</h4>
+                            <MDBCol md='12'>
+                                <MDBCard color='grey' text='white' className='text-center'>
+                                    <MDBCardBody>
+                                        NO HAY DATOS
+                                        </MDBCardBody>
+                                </MDBCard>
+                            </MDBCol>
                     }
                 </MDBRow>
             </MDBContainer>

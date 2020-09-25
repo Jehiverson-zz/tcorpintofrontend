@@ -23,7 +23,7 @@ import {
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
-import { FaCheck,FaTimes,FaStoreAlt } from 'react-icons/fa'
+import { FaCheck, FaTimes, FaStoreAlt } from 'react-icons/fa'
 import Select from 'react-select';
 import Swal from 'sweetalert2'
 
@@ -79,15 +79,38 @@ const TicketsPhotoRetreats = () => {
     }
 
     function crearTicket() {
-        storeTicketPhotoRetrats(fields)
-            .then(response => {
-                get_photo_retreats();
-                result_function('success', response.data.message);
-            })
-            .catch(error => {
-                console.log(error)
-                result_function('error', "Error al crear el ticket");
-            })
+        let cont = 0;
+        fields.some(function (x, i) {
+            if (x.upc === null) {
+                result_function('error', 'El valor de UPC está vacío');
+                cont++;
+                return true;
+            } else if (x.alu === null) {
+                result_function('error', 'El valor de ALU está vacío');
+                cont++;
+                return true;
+            } else if (x.size === null) {
+                result_function('error', 'Debes ingresar la TALLA');
+                cont++;
+                return true;
+            }
+        })
+
+        if (fields[0]["store_asigned"] === null) {
+            result_function('error', 'Debes seleccionar alguna tienda');
+        } else {
+            if (cont == 0) {
+                storeTicketPhotoRetrats(fields)
+                    .then(response => {
+                        get_photo_retreats();
+                        result_function('success', response.data.message);
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        result_function('error', "Error al crear el ticket");
+                    })
+            }
+        }
     }
 
     function removeTicket(id) {
@@ -95,10 +118,10 @@ const TicketsPhotoRetreats = () => {
             get_photo_retreats();
             result_function('success', response.data.message);
         })
-        .catch(error => {
-            console.log(error);
-            result_function('error', 'Error al eliminar el ticket');
-        })
+            .catch(error => {
+                console.log(error);
+                result_function('error', 'Error al eliminar el ticket');
+            })
     }
 
     function completarTicket(id) {
@@ -106,10 +129,10 @@ const TicketsPhotoRetreats = () => {
             get_photo_retreats();
             result_function('success', response.data.message);
         })
-        .catch(error => {
-            console.log(error);
-            result_function('error', 'Error al completar el ticket');
-        })
+            .catch(error => {
+                console.log(error);
+                result_function('error', 'Error al completar el ticket');
+            })
     }
 
     function handleAdd() {
@@ -159,9 +182,9 @@ const TicketsPhotoRetreats = () => {
                                 </MDBCol>
                             )}
                             {idx !== 0 && (
-                            <MDBCol md='1' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
-                                <MDBBtn size="sm" color='danger' onClick={() => handleRemove(idx)}>X</MDBBtn>
-                            </MDBCol>)}
+                                <MDBCol md='1' style={{ paddingLeft: "0px", paddingTop: "20px" }}>
+                                    <MDBBtn size="sm" color='danger' onClick={() => handleRemove(idx)}>X</MDBBtn>
+                                </MDBCol>)}
                         </MDBRow>
                     )
                 })}
@@ -172,58 +195,65 @@ const TicketsPhotoRetreats = () => {
             </CardHeader>
             <br></br>
             <MDBContainer>
-            <MDBRow>
-                {
-                    photoRetreats.length > 0 ? (
-                        photoRetreats.map((data) => {
-                            if (data.store_created == my_store) {
-                                let orden = 0;
-                                return (
-                                    <MDBCol md="6" style={{ marginBottom: "15px" }}>
-                                        <MDBCard>
-                                            <MDBCardBody style={{ Height: "300px" }}>
-                                                <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span>
-                                                    <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}><FaTimes style={{fontSize: '15px'}}/></MDBBtn>
-                                                <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completarTicket(data._id)}><FaCheck style={{fontSize: '15px'}}/></MDBBtn>
-                                                </MDBCardTitle>
-                                                <MDBCardText>
-                                                    <MDBTable small>
-                                                        <MDBTableHead>
-                                                            <tr>
-                                                                <th>No.</th>
-                                                                <th>UPC</th>
-                                                                <th>ALU</th>
-                                                                <th>TALLA</th>
-                                                            </tr>
-                                                        </MDBTableHead>
-                                                        <MDBTableBody>
-                                                            {
-                                                                data.product.map((prod) => {
-                                                                    orden++;
-                                                                    return (
-                                                                        <tr>
-                                                                            <td>{orden}</td>
-                                                                            <td>{prod.upc}</td>
-                                                                            <td>{prod.alu}</td>
-                                                                            <td>{prod.size}</td>
-                                                                        </tr>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </MDBTableBody>
-                                                    </MDBTable>
-                                                </MDBCardText>
-                                            </MDBCardBody>
-                                        </MDBCard>
-                                    </MDBCol>
-                                )
-                            }
-                        })
-                    )
-                        :
-                        <h4>No hay datos</h4>
-                }
-            </MDBRow>
+                <MDBRow>
+                    {
+                        photoRetreats.length > 0 ? (
+                            photoRetreats.map((data) => {
+                                if (data.store_created == my_store) {
+                                    let orden = 0;
+                                    return (
+                                        <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                            <MDBCard>
+                                                <MDBCardBody style={{ Height: "300px" }}>
+                                                    <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span>
+                                                        <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}><FaTimes style={{ fontSize: '15px' }} /></MDBBtn>
+                                                        <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completarTicket(data._id)}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
+                                                    </MDBCardTitle>
+                                                    <MDBCardText>
+                                                        <MDBTable small>
+                                                            <MDBTableHead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>UPC</th>
+                                                                    <th>ALU</th>
+                                                                    <th>TALLA</th>
+                                                                </tr>
+                                                            </MDBTableHead>
+                                                            <MDBTableBody>
+                                                                {
+                                                                    data.product.map((prod) => {
+                                                                        orden++;
+                                                                        return (
+                                                                            <tr>
+                                                                                <td>{orden}</td>
+                                                                                <td>{prod.upc}</td>
+                                                                                <td>{prod.alu}</td>
+                                                                                <td>{prod.siz || prod.size}</td>
+                                                                                <td>{data.fact}</td>
+                                                                            </tr>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </MDBTableBody>
+                                                        </MDBTable>
+                                                    </MDBCardText>
+                                                </MDBCardBody>
+                                            </MDBCard>
+                                        </MDBCol>
+                                    )
+                                }
+                            })
+                        )
+                            :
+                            <MDBCol md='12'>
+                                <MDBCard color='grey' text='white' className='text-center'>
+                                    <MDBCardBody>
+                                        NO HAY DATOS
+                                        </MDBCardBody>
+                                </MDBCard>
+                            </MDBCol>
+                    }
+                </MDBRow>
             </MDBContainer>
         </Layaout>)
 }

@@ -2,13 +2,12 @@ import axios from 'axios'
 
 const url = process.env.REACT_APP_URL_BASE;
 /*Muestra los datos de venta*/
-export const salesShow = () => {
+export const salesShow = (store) => {
 
     return axios
-    .get(url + '/binnacles/sales_show')
+    .post(url + '/binnacles/sales_show',store)
     .then((response) => {
-        console.log(response);
-        return response;
+        return response.data.dataStore;
     })
     .catch((error) => {
         console.log(error);

@@ -9,6 +9,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 import {
     MDBRow,
     MDBCol,
@@ -109,7 +110,8 @@ const history = useHistory();
         giftcard: 0,
         observaciones: "-",
     }]);
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [store, setStore] = useState(null);
     //Datos devueltos de la creación
     const[dataResult, setDataResult] = useState({});
     //ApiRest datos de colaboradores
@@ -117,28 +119,35 @@ const history = useHistory();
     getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
     //ApiRest datos de tienndas
     const datosTiendas = [];
-    getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) })
+    getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
+    
+    
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
                 let userManager = dataSales[0].encargado === null ? 'Encargado' : dataSales[0].encargado
                 const valueManager = { value: userManager, label: userManager };
+
+                let storeManger = store === null ? 'Tienda' : store
+                const valueStore = { value: storeManger, label: storeManger };
                 return (
                     <>
+                        
                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
-                                    onChange={e => handleChangeData(e, "encargado")}
-                                    defaultValue={valueManager}
-                                    options={datos}
+                                    onChange={e => setStore(e.label)}
+                                    defaultValue={valueStore}
+                                    options={datosTiendas}
                                 />
                             </MDBCol>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
-                            <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                            <DatePicker selected={startDate} onChange={date => setStartDate(date)} dateFormat="dd/MM/yyyy"/>
                             </MDBCol>
                         </MDBRow>
-                            
+                            :""}
+                        
                         {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>

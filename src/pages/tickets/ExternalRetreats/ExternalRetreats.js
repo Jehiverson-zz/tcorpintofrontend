@@ -6,7 +6,7 @@ import {
     inactivateExternalRetreats,
     getExternalRetreats
 } from '../../../functions/ticketFunction';
-
+import Pagination from '../../../components/pagination';
 import {
     MDBRow,
     MDBCol,
@@ -22,6 +22,7 @@ import {
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
+import Button from '@material-ui/core/Button';
 import { FaTimes, FaCheckDouble, FaPersonBooth } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 
@@ -41,6 +42,8 @@ const ExternalRetreats = () => {
     const my_store = localStorage.getItem("store");
     const [fields, setFields] = useState([{ person_retreats: null, person_authorizing: null, bill: null, upc: null, alu: null, size: null, store_created: my_store }]);
     const [externalRetreats, setExternalRetreats] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(6);
 
     function result_function(icon, text) {
         Toast.fire({
@@ -51,7 +54,7 @@ const ExternalRetreats = () => {
 
     useEffect(() => {
         get_external_retreats();
-    }, []);
+    }, [0]);
 
     function get_external_retreats() {
         getExternalRetreats().then((res) => setExternalRetreats(res));
@@ -60,7 +63,6 @@ const ExternalRetreats = () => {
     function crearTicket() {
         let cont = 0;
         fields.some(function (x, i) {
-            console.log(x)
             if (x.person_retreats === null) {
                 result_function('error', 'Ingresa el nombre de la persona que retirara el producto');
                 cont++;
@@ -85,20 +87,21 @@ const ExternalRetreats = () => {
                 result_function('error', 'Debes ingresar la TALLA');
                 cont++;
                 return true;
+            }else{
+                return false;
             }
         })
 
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            if (cont == 0) {
+            if (cont === 0) {
                 storeTicketExternalRetrats(fields)
                     .then(response => {
                         get_external_retreats();
                         result_function('success', response.data.message)
                     })
                     .catch(error => {
-                        console.log(error)
                         result_function('error', 'Algo salió mal')
                     })
             }
@@ -112,16 +115,15 @@ const ExternalRetreats = () => {
                 result_function('success', response.data.message)
             })
             .catch(error => {
-                console.log(error)
-                result_function('error', 'Algo salió mal')
+                result_function('error', 'Error al eliminar el ticket')
             })
     }
     /* OBTIENE LOS VALORES DE LOS INPUTS */
     function handleChange(i, event, name, type) {
         const values = [...fields];
-        if (name == "store_asigned") {
+        if (name === "store_asigned") {
             values[i][name] = event.value;
-        } else if (event.target.value == "") {
+        } else if (event.target.value.length === 0) {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -147,6 +149,11 @@ const ExternalRetreats = () => {
         }
     }
 
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = externalRetreats.slice(indexOfFirstPost, indexOfLastPost);
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
     return (
         <Layaout>
             <br></br>
@@ -162,7 +169,7 @@ const ExternalRetreats = () => {
                     </MDBCol>
                     <MDBCol md='4'>
                         <MDBInput
-                            label='Person que autoriza'
+                            label='Persona que autoriza'
                             type='text'
                             validate
                             onChange={e => handleChange(0, e, "person_authorizing")}
@@ -213,8 +220,8 @@ const ExternalRetreats = () => {
                     )
                 })}
                 <MDBRow className="center-element">
-                    <MDBBtn color='light-blue' onClick={() => handleAdd()}><MDBIcon icon="plus" /> Agregar</MDBBtn>
-                    <MDBBtn color='light-green' onClick={() => crearTicket()}><MDBIcon icon='ticket-alt' />  Crear Ticket</MDBBtn>
+                    <Button variant="outlined" color='primary' onClick={(e) => handleAdd(e)}><span><MDBIcon icon="plus" /> Agregar</span></Button>
+                    <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={(e) => crearTicket(e)}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
                 </MDBRow>
             </CardHeader>
             <br></br>
@@ -222,11 +229,11 @@ const ExternalRetreats = () => {
                 <MDBRow>
                     {
                         externalRetreats.length > 0 ? (
-                            externalRetreats.map((data) => {
-                                if (data.store_created == my_store) {
+                            currentPosts.map((data) => {
+                                if (data.store_created === my_store) {
                                     let orden = 0;
                                     return (
-                                        <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                        <MDBCol key={data._id} md="6" style={{ marginBottom: "15px" }}>
                                             <MDBCard>
                                                 <MDBCardBody style={{ Height: "300px" }}>
                                                     <MDBCardTitle>
@@ -249,7 +256,7 @@ const ExternalRetreats = () => {
                                                                     data.product.map((prod) => {
                                                                         orden++;
                                                                         return (
-                                                                            <tr>
+                                                                            <tr key={prod._id}>
                                                                                 <td>{orden}</td>
                                                                                 <td>{prod.upc}</td>
                                                                                 <td>{prod.alu}</td>
@@ -266,7 +273,7 @@ const ExternalRetreats = () => {
                                             </MDBCard>
                                         </MDBCol>
                                     )
-                                }
+                                }else{ return '' }
                             })
                         )
                             :
@@ -279,6 +286,14 @@ const ExternalRetreats = () => {
                             </MDBCol>
                     }
                 </MDBRow>
+                <MDBRow className="center-element">
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={externalRetreats.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
+                    </MDBRow>
             </MDBContainer>
         </Layaout>
     )

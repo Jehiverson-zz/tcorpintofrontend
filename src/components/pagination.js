@@ -12,7 +12,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   return (
     <tr>
     <nav>
-      <ul className='pagination'>
+      <ul className='pagination container'>
         {pageNumbers.map(number => (
           <li key={number} className='page-item'>
             <a onClick={() => paginate(number)} className='page-link' style={{backgroundColor: number == currentPage? "#007bff":"", color: number == currentPage? "white":"" }}>

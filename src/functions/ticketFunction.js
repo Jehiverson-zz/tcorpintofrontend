@@ -25,6 +25,10 @@ export const storeTicketInmediates = (data) => {
             headers:{
                 'Content-type': 'multipart/form-data'
             }
+        }).then(response=>{
+            return response;
+        }).catch(error=>{
+            console.log(error);
         })
 }
 
@@ -97,7 +101,6 @@ export const getAllTicketsImmediatesDeliveries = (status) => {
     return axios
         .post(`${url}/tickets/immediate_deliveries`, data)
         .then((response) => {
-            console.log("AXIOS",response)
             return response.data.ticketInmediates;
         })
         .catch((error) => {
@@ -137,7 +140,6 @@ export const getAllPhotoRetreats = (status) => {
     return axios
         .post(`${url}/tickets/all/photo_retreats`, data)
         .then((response) => {
-            console.log("AXIOOOOOSSSSSSS", response)
             return response.data.ticketPhotoRetrats;
         })
         .catch((error) => {
@@ -164,7 +166,6 @@ export const getAllExternalRetreats = (status) => {
     return axios
         .post(`${url}/tickets/all/external_retreats`, data)
         .then((response) => {
-            console.log(response.data.ticketExternal)
             return response.data.ticketExternal;
         })
         .catch((error) => {
@@ -178,7 +179,6 @@ export const getExternalRetreats = () => {
     return axios
         .post(`${url}/tickets/external_retreats`, data)
         .then((response) => {
-            console.log(response.data.ticketExternal)
             return response.data.ticketExternal;
         })
         .catch((error) => {
@@ -191,7 +191,6 @@ export const getStore = () => {
     return axios
         .get(`${url}/tickets/stores`)
         .then((response) => {
-            //console.log(response);
             return response.data.result;
         })
         .catch((error) => {

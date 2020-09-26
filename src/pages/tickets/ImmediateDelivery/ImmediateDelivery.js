@@ -9,6 +9,7 @@ import {
     inactivateTicketInmediates,
     getStore,
 } from '../../../functions/ticketFunction';
+import Pagination from '../../../components/pagination';
 import {
     MDBRow,
     MDBCol,
@@ -22,12 +23,13 @@ import {
     MDBCardText,
     MDBTable,
     MDBTableBody,
-    MDBTableHead, MDBTypography
+    MDBTableHead
 } from 'mdbreact';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Moment from 'react-moment';
 import { FaStoreAlt, FaCheck, FaTimes, FaRegCalendar } from 'react-icons/fa'
 import Select from 'react-select';
@@ -94,14 +96,15 @@ const ImmediateDelivery = () => {
             alu: null,
             size: null
         }]);
-    const [fileInfos, setFileInfos] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(6);
     const storesList = [];
 
     getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
     useEffect(() => {
         getTicketsAssigned();
         getTicketsCreated();
-    }, []);
+    }, [0]);
 
     function result_function(icon, text) {
         Toast.fire({
@@ -113,7 +116,6 @@ const ImmediateDelivery = () => {
     function getTicketsCreated() {
         getTicketsImmediatesDeliveriesCreated()
             .then((response) => {
-                console.log("CREATED: ", response)
                 setdataTicketsImmeditaesCreated(response)
             })
             .catch((error) => {
@@ -124,7 +126,6 @@ const ImmediateDelivery = () => {
     function getTicketsAssigned() {
         getTicketsImmediatesDeliveriesAssigned()
             .then((response) => {
-                console.log("ASSIGNED: ", response)
                 setdataTicketsImmeditaesAssigned(response)
             })
             .catch((error) => {
@@ -148,6 +149,8 @@ const ImmediateDelivery = () => {
                 result_function('error', 'Debes ingresar la TALLA');
                 cont++;
                 return true;
+            }else{
+                return false;
             }
         })
 
@@ -170,7 +173,7 @@ const ImmediateDelivery = () => {
         } else if (fields[0]["image"] === null) {
             result_function('error', 'Selecciona una imagen');
         } else {
-            if (cont == 0) {
+            if (cont === 0) {
                 storeTicketInmediates(fields)
                     .then((response) => {
                         getTicketsCreated();
@@ -209,9 +212,9 @@ const ImmediateDelivery = () => {
 
     function handleChange1(event, name) {
         const values = [...fields];
-        if (name == "store_asigned") {
+        if (name === "store_asigned") {
             values[0][name] = event.value;
-        } else if (name == "image") {
+        } else if (name === "image") {
             values[0][name] = event.target.files[0];
         } else {
             values[0][name] = event.target.value;
@@ -219,13 +222,9 @@ const ImmediateDelivery = () => {
         setFields(values);
     }
 
-    const selectFile = (event) => {
-        setFileInfos(event.target.files);
-      };
-
     function handleChange2(i, event, name) {
         const values = [...fields];
-        if (event.target.value == "") {
+        if (event.target.value.length === 0) {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -259,7 +258,14 @@ const ImmediateDelivery = () => {
     };
 
     const default_store = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
-    const default_encargado = { value: 'lourdes@corpinto.com', label: 'Lourdes' };
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = dataTicketsImmediatesCreated.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts2 = dataTicketsImmediatesAssigned.slice(indexOfFirstPost, indexOfLastPost);
+
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
     return (
         <Layaout>
             <br></br>
@@ -320,8 +326,8 @@ const ImmediateDelivery = () => {
                         )
                     })}
                     <MDBRow className="center-element">
-                        <MDBBtn color='light-blue' onClick={(e) => handleAdd(e)}><MDBIcon icon="plus" /> Agregar</MDBBtn>
-                        <MDBBtn color='light-green' onClick={(e) => crearTicket(e)}><MDBIcon icon='ticket-alt' />  Crear Ticket</MDBBtn>
+                        <Button variant="outlined" color='primary' onClick={(e) => handleAdd(e)}><span><MDBIcon icon="plus" /> Agregar</span></Button>
+                        <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={(e) => crearTicket(e)}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
                     </MDBRow>
                 </form>
             </CardHeader>
@@ -345,21 +351,20 @@ const ImmediateDelivery = () => {
                     <MDBRow>
                         {
                             dataTicketsImmediatesCreated.length > 0 ? (
-                                dataTicketsImmediatesCreated.map((data) => {
-                                    if (data.store_created == my_store) {
+                                currentPosts.map((data) => {
+                                    if (data.store_created === my_store) {
                                         let orden = 0;
                                         return (
-                                            <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                            <MDBCol key={data._id} md="6" style={{ marginBottom: "15px" }}>
                                                 <MDBCard>
                                                     <MDBCardBody style={{ Height: "300px" }}>
                                                         <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
                                                             <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}><FaTimes style={{ fontSize: '15px' }} /></MDBBtn>
                                                             <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completeTicket(data._id)}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
                                                         </MDBCardTitle>
-                                                        <MDBCardText>
-                                                            <MDBTypography>
+                                                            <MDBCardText>
                                                                 <b>Información Destino:</b> {data.desc}
-                                                            </MDBTypography>
+                                                            </MDBCardText>
                                                             <MDBTable small>
                                                                 <MDBTableHead>
                                                                     <tr>
@@ -372,11 +377,10 @@ const ImmediateDelivery = () => {
                                                                 </MDBTableHead>
                                                                 <MDBTableBody>
                                                                     {
-                                                                        data.product.length > 0 && (
                                                                             data.product.map((prod) => {
                                                                                 orden++;
                                                                                 return (
-                                                                                    <tr>
+                                                                                    <tr key={prod._id}>
                                                                                         <td>{orden}</td>
                                                                                         <td>{prod.upc}</td>
                                                                                         <td>{prod.alu}</td>
@@ -385,17 +389,15 @@ const ImmediateDelivery = () => {
                                                                                     </tr>
                                                                                 )
                                                                             })
-                                                                        )
                                                                     }
                                                                 </MDBTableBody>
                                                             </MDBTable>
-                                                        </MDBCardText>
                                                         <span><FaRegCalendar />  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment></span>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }
+                                    }else{ return '' }
                                 })
                             )
                                 :
@@ -409,24 +411,31 @@ const ImmediateDelivery = () => {
                         }
 
                     </MDBRow>
+                    <MDBRow className="center-element">
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataTicketsImmediatesCreated.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
+                    </MDBRow>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <MDBRow>
                         {
                             dataTicketsImmediatesAssigned.length > 0 ? (
-                                dataTicketsImmediatesAssigned.map((data) => {
-                                    if (data.store_asigned == my_store) {
+                                currentPosts2.map((data) => {
+                                    if (data.store_asigned === my_store) {
                                         let orden = 0;
                                         return (
-                                            <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                            <MDBCol key={data._id} md="6" style={{ marginBottom: "15px" }}>
                                                 <MDBCard>
                                                     <MDBCardBody>
                                                         <MDBCardTitle><span><FaStoreAlt /> {data.store_created}</span>
                                                         </MDBCardTitle>
                                                         <MDBCardText>
-                                                            <MDBTypography>
                                                                 <b>Información Destino:</b> {data.desc}
-                                                            </MDBTypography>
+                                                        </MDBCardText>
                                                             <MDBTable small>
                                                                 <MDBTableHead>
                                                                     <tr>
@@ -437,30 +446,29 @@ const ImmediateDelivery = () => {
                                                                         <th>FACTURA</th>
                                                                     </tr>
                                                                 </MDBTableHead>
+                                                                            <MDBTableBody>
                                                                 {
                                                                     data.product.map((prod) => {
                                                                         orden++;
                                                                         return (
-                                                                            <MDBTableBody>
-                                                                                <tr>
+                                                                                <tr key={prod._id}>
                                                                                     <td>{orden}</td>
                                                                                     <td>{prod.upc}</td>
                                                                                     <td>{prod.alu}</td>
                                                                                     <td>{prod.siz || prod.size}</td>
                                                                                     <td>{data.fact}</td>
                                                                                 </tr>
-                                                                            </MDBTableBody>
                                                                         )
                                                                     })
                                                                 }
+                                                                            </MDBTableBody>
                                                             </MDBTable>
-                                                        </MDBCardText>
                                                         <span><FaRegCalendar />  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment></span>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }
+                                    }else{ return '' }
                                 })
                             )
                                 :
@@ -472,6 +480,14 @@ const ImmediateDelivery = () => {
                                     </MDBCard>
                                 </MDBCol>
                         }
+                    </MDBRow>
+                    <MDBRow className="center-element">
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataTicketsImmediatesAssigned.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
                     </MDBRow>
                 </TabPanel>
             </MDBContainer>

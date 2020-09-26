@@ -15,6 +15,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import {
     MDBRow,
     MDBCol,
@@ -25,8 +26,6 @@ import {
     MDBCard,
     MDBCardBody,
     MDBCardTitle,
-    MDBCardText,
-    MDBAlert,
     MDBTable,
     MDBTableBody,
     MDBTableHead
@@ -78,17 +77,18 @@ function a11yProps(index) {
 const TransferSystemPage = () => {
     const my_store = localStorage.getItem("store");
     const [value, setValue] = useState(0);
-    const [dataStores, setdataStores] = useState([]);
     const [dataTicketsCreated, setdataTicketsCreated] = useState([]);
     const [dataTicketsAssigned, setdataTicketsAssigned] = useState([]);
     const [fields, setFields] = useState([{ upc: null, alu: null, size: null, bill: null, store_asigned: null, store_created: my_store }]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(6);
     let storesList = [];
 
     getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
 
     useEffect(() => {
-        tickets_created()
-        tickets_asigned()
+        tickets_created();
+        tickets_asigned();
     }, [0])
 
     function result_function(icon, text) {
@@ -99,13 +99,15 @@ const TransferSystemPage = () => {
     }
 
     function tickets_created() {
-        getTicketsSystemTransferCreated().then((res) => setdataTicketsCreated(res));
-        console.log("CREATED", dataTicketsCreated)
+        getTicketsSystemTransferCreated()
+        .then((res) => setdataTicketsCreated(res))
+        .catch((error)=> result_function('error','No se pueden cargar los datos'));
     }
 
     function tickets_asigned() {
-        getTicketsSystemTransferAssigned().then((res) => setdataTicketsAssigned(res));
-        console.log("ASSIGNED", dataTicketsAssigned)
+        getTicketsSystemTransferAssigned()
+        .then((res) => setdataTicketsAssigned(res))
+        .catch((error)=> result_function('error','No se pueden cargar los datos'));
     }
 
     function crearTicket() {
@@ -127,13 +129,15 @@ const TransferSystemPage = () => {
                 result_function('error', 'Ingresa un número de FACTURA');
                 cont++;
                 return true;
+            }else{
+                return false;
             }
         })
 
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            if (cont == 0) {
+            if (cont === 0) {
                 storeTicketsSystemTransfer(fields)
                     .then((response) => {
                         tickets_created();
@@ -152,7 +156,7 @@ const TransferSystemPage = () => {
             tickets_asigned();
             result_function('success', res.data.message);
         }).catch((err) => {
-            console.log(err);
+            result_function('error','Error al eliminar el ticket')
         })
     }
 
@@ -162,16 +166,16 @@ const TransferSystemPage = () => {
             tickets_asigned();
             result_function('success', res.data.message);
         }).catch((err) => {
-            console.log(err);
+            result_function('error','Error al completar el ticket');
         })
     }
 
     //created input
     function handleChange(i, event, name) {
         const values = [...fields];
-        if (name == "store_asigned") {
+        if (name === "store_asigned") {
             values[i][name] = event.value;
-        } else if (event.target.value == "") {
+        } else if (event.target.value.length === 0) {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -202,6 +206,15 @@ const TransferSystemPage = () => {
     };
 
     const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
+    // Get current posts
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = dataTicketsCreated.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts2 = dataTicketsAssigned.slice(indexOfFirstPost, indexOfLastPost);
+
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
     return (
         <Layaout>
             <br></br>
@@ -210,20 +223,20 @@ const TransferSystemPage = () => {
                     return (
                         <MDBRow id={idx} className="center-element" key={`${field}-${idx}`}>
                             <MDBCol md='2'>
-                                <MDBInput label='Upc' type='text' id='text' validate onChange={e => handleChange(idx, e, "upc")} />
+                                <MDBInput label='UPC' type='text' id='text' validate onChange={e => handleChange(idx, e, "upc")} />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Alu' type='text' validate onChange={e => handleChange(idx, e, "alu")} />
+                                <MDBInput label='ALU' type='text' validate onChange={e => handleChange(idx, e, "alu")} />
                             </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Talla' type='text' validate onChange={e => handleChange(idx, e, "size")} />
                             </MDBCol>
-                            {idx == 0 && (
+                            {idx === 0 && (
                                 <MDBCol md='2'>
                                     <MDBInput label='Factura' type='text' validate onChange={e => handleChange(idx, e, "bill")} />
                                 </MDBCol>
                             )}
-                            {idx == 0 && (
+                            {idx === 0 && (
                                 <MDBCol md='3' style={{ marginTop: "26px" }}>
                                     <Select
                                         onChange={e => handleChange(idx, e, "store_asigned")}
@@ -240,8 +253,8 @@ const TransferSystemPage = () => {
                     )
                 })}
                 <MDBRow className="center-element">
-                    <MDBBtn color='light-blue' onClick={() => handleAdd()}><MDBIcon icon="plus" /> Agregar</MDBBtn>
-                    <MDBBtn color='light-green' onClick={() => crearTicket()}><MDBIcon icon='ticket-alt' />  Crear Ticket</MDBBtn>
+                    <Button variant="outlined" color='primary' onClick={() => handleAdd()}><MDBIcon icon="plus" />  Agregar</Button>
+                    <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={() => crearTicket()}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
                 </MDBRow>
             </CardHeader>
             <br></br>
@@ -265,17 +278,16 @@ const TransferSystemPage = () => {
                     <MDBRow>
                         {
                             dataTicketsCreated.length > 0 ? (
-                                dataTicketsCreated.map((data) => {
-                                    if (data.store_created == my_store || data.store_created == 'Meatpack Web') {
+                                currentPosts.map((data) => {
+                                    if (data.store_created === my_store) {
                                         let orden = 0;
                                         return (
-                                            <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                            <MDBCol key={data._id} md="6" style={{ marginBottom: "15px" }}>
                                                 <MDBCard>
                                                     <MDBCardBody style={{ Height: "300px" }}>
                                                         <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
                                                             <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}>X</MDBBtn>
                                                         </MDBCardTitle>
-                                                        <MDBCardText>
                                                             <MDBTable small>
                                                                 <MDBTableHead>
                                                                     <tr>
@@ -292,7 +304,7 @@ const TransferSystemPage = () => {
                                                                             data.product.map((prod) => {
                                                                                 orden++;
                                                                                 return (
-                                                                                    <tr>
+                                                                                    <tr key={prod._id}>
                                                                                         <td>{orden}</td>
                                                                                         <td>{prod.upc}</td>
                                                                                         <td>{prod.alu}</td>
@@ -305,37 +317,42 @@ const TransferSystemPage = () => {
                                                                     }
                                                                 </MDBTableBody>
                                                             </MDBTable>
-                                                        </MDBCardText>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    } else {
-                                        return (data.store_created)
-                                    }
+                                    }else{ return '' }
                                 })
                             )
-                                :
-                                <MDBCol md='12'>
-                                    <MDBCard color='grey' text='white' className='text-center'>
-                                        <MDBCardBody>
-                                            NO HAY DATOS
+                                : (
+                                    <MDBCol md='12'>
+                                        <MDBCard color='grey' text='white' className='text-center'>
+                                            <MDBCardBody>
+                                                NO HAY DATOS
                                         </MDBCardBody>
-                                    </MDBCard>
-                                </MDBCol>
+                                        </MDBCard>
+                                    </MDBCol>)
                         }
 
+                    </MDBRow>
+                    <MDBRow className="center-element">
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataTicketsCreated.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
                     </MDBRow>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <MDBRow>
                         {
                             dataTicketsAssigned.length > 0 ? (
-                                dataTicketsAssigned.map((data) => {
-                                    if (data.store_asigned == my_store) {
+                                currentPosts2.map((data) => {
+                                    if (data.store_asigned === my_store) {
                                         let orden = 0;
                                         return (
-                                            <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                            <MDBCol key={data._id} md="6" style={{ marginBottom: "15px" }}>
                                                 <MDBCard>
                                                     <MDBCardBody>
                                                         <MDBCardTitle><span><FaStoreAlt /> {data.store_created}</span>
@@ -343,7 +360,6 @@ const TransferSystemPage = () => {
                                                                 <FaRegPaperPlane style={{ fontSize: '15px' }} />
                                                             </MDBBtn>
                                                         </MDBCardTitle>
-                                                        <MDBCardText>
                                                             <MDBTable small>
                                                                 <MDBTableHead>
                                                                     <tr>
@@ -354,30 +370,29 @@ const TransferSystemPage = () => {
                                                                         <th>FACTURA</th>
                                                                     </tr>
                                                                 </MDBTableHead>
+                                                                                <MDBTableBody>
                                                                 {
                                                                     data.product.length > 0 && (
                                                                         data.product.map((prod) => {
                                                                             orden++;
                                                                             return (
-                                                                                <MDBTableBody>
-                                                                                    <tr>
+                                                                                    <tr key={prod._id}>
                                                                                         <td>{orden}</td>
                                                                                         <td>{prod.upc}</td>
                                                                                         <td>{prod.alu}</td>
                                                                                         <td>{prod.siz || prod.size}</td>
                                                                                         <td>{data.fact || prod.bill}</td>
                                                                                     </tr>
-                                                                                </MDBTableBody>
                                                                             )
                                                                         })
                                                                     )}
+                                                                                </MDBTableBody>
                                                             </MDBTable>
-                                                        </MDBCardText>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }
+                                    }else{ return '' }
                                 })
                             )
                                 :
@@ -389,6 +404,14 @@ const TransferSystemPage = () => {
                                     </MDBCard>
                                 </MDBCol>
                         }
+                    </MDBRow>
+                    <MDBRow className="center-element">
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataTicketsAssigned.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
                     </MDBRow>
                 </TabPanel>
 

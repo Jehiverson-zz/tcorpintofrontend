@@ -7,6 +7,7 @@ import {
     inactivatePhotoRetreats,
     completePhotoRetreats
 } from '../../../functions/ticketFunction';
+import Pagination from '../../../components/pagination';
 import {
     MDBRow,
     MDBCol,
@@ -17,12 +18,11 @@ import {
     MDBCard,
     MDBCardBody,
     MDBCardTitle,
-    MDBCardText,
-    MDBAlert,
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
+import Button from '@material-ui/core/Button';
 import { FaCheck, FaTimes, FaStoreAlt } from 'react-icons/fa'
 import Select from 'react-select';
 import Swal from 'sweetalert2'
@@ -43,6 +43,8 @@ const TicketsPhotoRetreats = () => {
     const my_store = localStorage.getItem("store");
     const [fields, setFields] = useState([{ upc: null, alu: null, size: null, caurier: null, store_created: my_store }]);
     const [photoRetreats, setphotoRetreats] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(6);
     let caurierList = [
         { value: 'Lourdes(Mensajeros)', label: 'Lourdes(Mensajeros)' },
         { value: 'Ricardo Herrera', label: 'Ricardo Herrera' },
@@ -52,11 +54,10 @@ const TicketsPhotoRetreats = () => {
 
     useEffect(() => {
         get_photo_retreats();
-    }, []);
+    }, [0]);
 
     function get_photo_retreats() {
         getPhotoRetreats().then((res) => setphotoRetreats(res));
-        console.log(photoRetreats)
     }
 
     function result_function(icon, text) {
@@ -68,9 +69,9 @@ const TicketsPhotoRetreats = () => {
     //created input
     function handleChange(i, event, name) {
         const values = [...fields];
-        if (name == "caurier") {
+        if (name === "caurier") {
             values[i][name] = event.value;
-        } else if (event.target.value == "") {
+        } else if (event.target.value.length === 0) {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -93,20 +94,21 @@ const TicketsPhotoRetreats = () => {
                 result_function('error', 'Debes ingresar la TALLA');
                 cont++;
                 return true;
+            }else{
+                return false;
             }
         })
 
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            if (cont == 0) {
+            if (cont === 0) {
                 storeTicketPhotoRetrats(fields)
                     .then(response => {
                         get_photo_retreats();
                         result_function('success', response.data.message);
                     })
                     .catch(error => {
-                        console.log(error)
                         result_function('error', "Error al crear el ticket");
                     })
             }
@@ -119,7 +121,6 @@ const TicketsPhotoRetreats = () => {
             result_function('success', response.data.message);
         })
             .catch(error => {
-                console.log(error);
                 result_function('error', 'Error al eliminar el ticket');
             })
     }
@@ -130,7 +131,6 @@ const TicketsPhotoRetreats = () => {
             result_function('success', response.data.message);
         })
             .catch(error => {
-                console.log(error);
                 result_function('error', 'Error al completar el ticket');
             })
     }
@@ -154,7 +154,11 @@ const TicketsPhotoRetreats = () => {
     }
 
     const value2 = { value: 'Quién lo retira', label: 'Quién lo retira' };
-
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = photoRetreats.slice(indexOfFirstPost, indexOfLastPost);
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
     return (
         <Layaout>
             <br></br>
@@ -163,15 +167,15 @@ const TicketsPhotoRetreats = () => {
                     return (
                         <MDBRow id={idx} className="center-element" key={`${field}-${idx}`}>
                             <MDBCol md='2'>
-                                <MDBInput label='Upc' type='text' validate onChange={e => handleChange(idx, e, "upc")} />
+                                <MDBInput label='UPC' type='text' validate onChange={e => handleChange(idx, e, "upc")} />
                             </MDBCol>
                             <MDBCol md='2'>
-                                <MDBInput label='Alu' type='text' validate onChange={e => handleChange(idx, e, "alu")} />
+                                <MDBInput label='ALU' type='text' validate onChange={e => handleChange(idx, e, "alu")} />
                             </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Talla' type='text' validate onChange={e => handleChange(idx, e, "size")} />
                             </MDBCol>
-                            {idx == 0 && (
+                            {idx === 0 && (
                                 <MDBCol md='3'>
                                     <label>Persona que lo retira</label>
                                     <Select
@@ -189,8 +193,8 @@ const TicketsPhotoRetreats = () => {
                     )
                 })}
                 <MDBRow className="center-element">
-                    <MDBBtn color='light-blue' onClick={() => handleAdd()}><MDBIcon icon="plus" /> Agregar</MDBBtn>
-                    <MDBBtn color='light-green' onClick={() => crearTicket()}><MDBIcon icon='ticket-alt' />  Crear Ticket</MDBBtn>
+                    <Button variant="outlined" color='primary' onClick={(e) => handleAdd(e)}><span><MDBIcon icon="plus" /> Agregar</span></Button>
+                    <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={(e) => crearTicket(e)}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
                 </MDBRow>
             </CardHeader>
             <br></br>
@@ -198,18 +202,17 @@ const TicketsPhotoRetreats = () => {
                 <MDBRow>
                     {
                         photoRetreats.length > 0 ? (
-                            photoRetreats.map((data) => {
-                                if (data.store_created == my_store) {
+                            currentPosts.map((data) => {
+                                if (data.store_created === my_store) {
                                     let orden = 0;
                                     return (
-                                        <MDBCol md="6" style={{ marginBottom: "15px" }}>
+                                        <MDBCol key={data._id} md="6" style={{ marginBottom: "15px" }}>
                                             <MDBCard>
                                                 <MDBCardBody style={{ Height: "300px" }}>
                                                     <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span>
                                                         <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}><FaTimes style={{ fontSize: '15px' }} /></MDBBtn>
                                                         <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completarTicket(data._id)}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
                                                     </MDBCardTitle>
-                                                    <MDBCardText>
                                                         <MDBTable small>
                                                             <MDBTableHead>
                                                                 <tr>
@@ -224,7 +227,7 @@ const TicketsPhotoRetreats = () => {
                                                                     data.product.map((prod) => {
                                                                         orden++;
                                                                         return (
-                                                                            <tr>
+                                                                            <tr key={prod._id}>
                                                                                 <td>{orden}</td>
                                                                                 <td>{prod.upc}</td>
                                                                                 <td>{prod.alu}</td>
@@ -236,12 +239,11 @@ const TicketsPhotoRetreats = () => {
                                                                 }
                                                             </MDBTableBody>
                                                         </MDBTable>
-                                                    </MDBCardText>
                                                 </MDBCardBody>
                                             </MDBCard>
                                         </MDBCol>
                                     )
-                                }
+                                }else{ return '' }
                             })
                         )
                             :
@@ -254,6 +256,14 @@ const TicketsPhotoRetreats = () => {
                             </MDBCol>
                     }
                 </MDBRow>
+                <MDBRow className="center-element">
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={photoRetreats.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
+                    </MDBRow>
             </MDBContainer>
         </Layaout>)
 }

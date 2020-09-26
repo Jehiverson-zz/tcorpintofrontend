@@ -247,9 +247,9 @@ export const inactivateExternalRetreats = (id) =>{
 }
 
 /* Cambia el estado de un ticket de traslado de sistema a 'Completado' */
-export const completeTicket = (id) =>{
+export const completeTicket = (id,retailn) =>{
     return axios
-    .put(`${url}/ticket/complete/${id}`)
+    .put(`${url}/ticket/complete/${id}`, retailn)
     .then((response) => {
         return response
     })

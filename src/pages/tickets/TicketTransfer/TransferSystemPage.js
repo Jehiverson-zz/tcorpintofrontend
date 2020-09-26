@@ -28,9 +28,13 @@ import {
     MDBCardTitle,
     MDBTable,
     MDBTableBody,
-    MDBTableHead
+    MDBTableHead,
+    MDBModal,
+    MDBModalBody,
+    MDBModalHeader,
+    MDBModalFooter
 } from 'mdbreact';
-import { FaRegPaperPlane, FaStoreAlt } from 'react-icons/fa'
+import { FaRegPaperPlane, FaStoreAlt, FaCheckDouble,FaBan } from 'react-icons/fa'
 import Select from 'react-select';
 import Swal from 'sweetalert2'
 
@@ -80,6 +84,9 @@ const TransferSystemPage = () => {
     const [dataTicketsCreated, setdataTicketsCreated] = useState([]);
     const [dataTicketsAssigned, setdataTicketsAssigned] = useState([]);
     const [fields, setFields] = useState([{ upc: null, alu: null, size: null, bill: null, store_asigned: null, store_created: my_store }]);
+    const [retailn, setRetailn] = useState([{ reatiln: null }]);
+    const [idticket, setidticket] = useState(0);
+    const [showModal, setshowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
     let storesList = [];
@@ -161,16 +168,16 @@ const TransferSystemPage = () => {
     }
 
     function completarTicket(id) {
-        completeTicket(id).then((res) => {
+        completeTicket(id,retailn[0]).then((res) => {
             tickets_created();
             tickets_asigned();
             result_function('success', res.data.message);
+            setshowModal(false);
         }).catch((err) => {
             result_function('error','Error al completar el ticket');
         })
     }
 
-    //created input
     function handleChange(i, event, name) {
         const values = [...fields];
         if (name === "store_asigned") {
@@ -181,6 +188,10 @@ const TransferSystemPage = () => {
             values[i][name] = event.target.value;
         }
         setFields(values);
+    }
+
+    function handleChangeRetailn(e){
+        setRetailn([{retailn: e.target.value}]);
     }
 
     function handleAdd() {
@@ -214,6 +225,13 @@ const TransferSystemPage = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    function toggle(id=0) {
+        let mostrar = !showModal;
+        setidticket(id)
+        console.log(mostrar, idticket);
+        setshowModal(mostrar);
+      }
 
     return (
         <Layaout>
@@ -356,7 +374,7 @@ const TransferSystemPage = () => {
                                                 <MDBCard>
                                                     <MDBCardBody>
                                                         <MDBCardTitle><span><FaStoreAlt /> {data.store_created}</span>
-                                                            <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completarTicket(data._id)}>
+                                                            <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => toggle(data._id)}>{/*completarTicket(data._id) */}
                                                                 <FaRegPaperPlane style={{ fontSize: '15px' }} />
                                                             </MDBBtn>
                                                         </MDBCardTitle>
@@ -414,8 +432,18 @@ const TransferSystemPage = () => {
                         />
                     </MDBRow>
                 </TabPanel>
-
-
+                <MDBModal isOpen={showModal} toggle={toggle}>
+                    <MDBModalHeader toggle={toggle}>Ingresar Retailn</MDBModalHeader>
+                    <MDBModalBody>
+                        <MDBCol md='12'>
+                            <MDBInput label='Retailn' type='text' validate onChange={e => handleChangeRetailn(e)} />
+                        </MDBCol>
+                    </MDBModalBody>
+                    <MDBModalFooter>
+                        <Button variant="outlined" color='secondary' onClick={() => toggle()}><span><FaBan />  Cancelar</span></Button>
+                        <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={() => completarTicket(idticket)}><span><FaCheckDouble />  Completar</span></Button>
+                    </MDBModalFooter>
+                </MDBModal>
             </MDBContainer>
             <br></br>
         </Layaout>

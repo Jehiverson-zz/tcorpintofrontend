@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader';
 import {
@@ -76,7 +77,10 @@ function a11yProps(index) {
 
 const ImmediateDelivery = () => {
     const my_store = localStorage.getItem("store");
+    const my_email = localStorage.getItem("email");
+    const history = useHistory();
     const [value, setValue] = useState(0);
+    const [dataStores, setdataStores] = useState([]);
     const [dataTicketsImmediatesCreated, setdataTicketsImmeditaesCreated] = useState([]);
     const [dataTicketsImmediatesAssigned, setdataTicketsImmeditaesAssigned] = useState([]);
     const [fields, setFields] = useState([
@@ -94,14 +98,14 @@ const ImmediateDelivery = () => {
             image: null,
             upc: null,
             alu: null,
-            size: null
+            size: null,
+            email: my_email,
         }]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
-    const storesList = [];
 
-    getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
     useEffect(() => {
+        stores();
         getTicketsAssigned();
         getTicketsCreated();
     }, [0]);
@@ -111,6 +115,14 @@ const ImmediateDelivery = () => {
             icon: icon,
             title: text
         })
+    }
+
+    function stores() {
+        let storesList = [];
+        getStore().then((resp) => resp.map(x => {
+            storesList.push({ value: x.name, label: x.name })
+            setdataStores(storesList)
+        }));
     }
 
     function getTicketsCreated() {
@@ -176,9 +188,10 @@ const ImmediateDelivery = () => {
             if (cont === 0) {
                 storeTicketInmediates(fields)
                     .then((response) => {
-                        getTicketsCreated();
-                        getTicketsAssigned();
                         result_function('success', response.data.message);
+                        setTimeout(() => {
+                            history.go(0);
+                        }, 2000);
                     }).catch(err => {
                         result_function('error', 'Error al crear el ticket');
                     })
@@ -278,7 +291,7 @@ const ImmediateDelivery = () => {
                             <Select
                                 onChange={e => handleChange1(e, "store_asigned")}
                                 defaultValue={default_store}
-                                options={storesList}
+                                options={dataStores}
                             />
                         </MDBCol>
                         <MDBCol md='3'>

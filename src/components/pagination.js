@@ -4,7 +4,6 @@ import { MDBPagination, MDBPageItem, MDBPageNav, MDBCol, MDBRow, MDBContainer } 
 const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
 
-  console.log(postsPerPage, totalPosts, paginate);
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);

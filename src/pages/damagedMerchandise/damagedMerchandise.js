@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../parcials/Layaout';
 import CardHeader from '../../components/CardHeader';
 import {
@@ -35,8 +36,10 @@ const Toast = Swal.mixin({
 
 const DamagedMerchandise = () => {
     const my_store = localStorage.getItem("store");
+    const my_email = localStorage.getItem("email");
+    const history = useHistory();
     const [dataDamaged, setdataDamaged] = useState([]);
-    const [fields, setFields] = useState([{ upc: null, alu: null, size: null, price: null, damaged: null, store_created: my_store }]);
+    const [fields, setFields] = useState([{ upc: null, alu: null, size: null, price: null, damaged: null, store_created: my_store, email: my_email }]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -92,8 +95,10 @@ const DamagedMerchandise = () => {
         if (cont === 0) {
             storeDamagedMerchandise(fields)
                 .then(response => {
-                    result_function('success', response.message)
-                    damaged_merchandise()
+                    result_function('success', 'Registro almecenado exitosamente')
+                    setTimeout(() => {
+                        history.go(0);
+                    }, 2000);
                 }).catch(error => {
                     result_function('error', 'Algo salio mal')
                     console.log(error)
@@ -125,19 +130,19 @@ const DamagedMerchandise = () => {
             <CardHeader title="MERCADERIA DAÑADA" icon="ticket-alt">
                 <MDBRow className="center-element">
                     <MDBCol md='3'>
-                        <MDBInput label='UPC' type='text' id='text' validate onChange={e => handleChange(e, "upc")} />
+                        <MDBInput label='UPC' type='text' value={fields[0].upc} validate onChange={e => handleChange(e, "upc")} />
                     </MDBCol>
                     <MDBCol md='3'>
-                        <MDBInput label='ALU' type='text' validate onChange={e => handleChange(e, "alu")} />
+                        <MDBInput label='ALU' type='text' value={fields[0].alu} validate onChange={e => handleChange(e, "alu")} />
                     </MDBCol>
                     <MDBCol md='3'>
-                        <MDBInput label='Talla' type='text' validate onChange={e => handleChange(e, "size")} />
+                        <MDBInput label='Talla' type='text' value={fields[0].size} validate onChange={e => handleChange(e, "size")} />
                     </MDBCol>
                     <MDBCol md='3'>
-                        <MDBInput label='Precio' type='text' validate onChange={e => handleChange(e, "price")} />
+                        <MDBInput label='Precio' type='text' value={fields[0].price} validate onChange={e => handleChange(e, "price")} />
                     </MDBCol>
                     <MDBCol md='12' style={{ marginTop: "26px" }}>
-                        <MDBInput label='Daño de la prenda' type='text' validate onChange={e => handleChange(e, "damaged")} />
+                        <MDBInput label='Daño de la prenda' type='text' value={fields[0].damaged} validate onChange={e => handleChange(e, "damaged")} />
                     </MDBCol>
 
                 </MDBRow>

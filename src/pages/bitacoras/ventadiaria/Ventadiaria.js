@@ -140,6 +140,7 @@ const history = useHistory();
                     <>
                         {localStorage.getItem('change_date') === 'true'? (
                             <MDBRow style={{ justifyContent: "center", display: "flex" }}>
+
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
                                     onChange={e => setStore(e.label)}

@@ -43,6 +43,13 @@ const Login = () => {
         })
     }
 
+    const initLogin = e =>{
+        const key = e.key;
+        if(key === 'Enter'){
+            _Login();
+        }
+    }
+
     const onChangeUser = e => {
         setUser(e.target.value);
     }
@@ -100,6 +107,7 @@ const Login = () => {
                                             group
                                             type='password'
                                             name='password'
+                                            onKeyDown={initLogin}
                                             onChange={onChangePassword}
                                             validate
                                         />

@@ -11,7 +11,7 @@ export default function CardHeader(props) {
         <React.Fragment>
             <MDBContainer>
                 <MDBCard>
-                    <MDBCardTitle style={{paddingTop: "10px"}}><h1 className="center-element"><b>{props.title}</b></h1></MDBCardTitle>
+                    <MDBCardTitle className="center-element" style={{paddingTop: "10px"}}><b>{props.title}</b></MDBCardTitle>
                     <MDBCardBody className="center">
                         {props.children}
                     </MDBCardBody>

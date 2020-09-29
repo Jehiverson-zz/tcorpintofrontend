@@ -81,6 +81,8 @@ import ImmediateDelivery from './pages/tickets/ImmediateDelivery/ImmediateDelive
 import TicketsPhotoRetreats from './pages/tickets/TicketsPhoto/TiketsPhotoRetreats';
 import ExternalRetreats from './pages/tickets/ExternalRetreats/ExternalRetreats';
 import HistoryTickets from './pages/tickets/HistoryTickets/HistoryTickets';
+//DamagedMerchandise
+import DamagedMerchandise from './pages/damagedMerchandise/damagedMerchandise';
 
 
 class Routes extends React.Component {
@@ -100,6 +102,8 @@ class Routes extends React.Component {
         <Route exact path='/tickets/photo_retreats' component={TicketsPhotoRetreats} />
         <Route exact path='/tickets/external_retreats' component={ExternalRetreats} />
         <Route exact path='/tickets/history' component={HistoryTickets} />
+
+        <Route exact path='/damaged_merchandise' component={DamagedMerchandise} />
 
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />

@@ -94,7 +94,6 @@ const ImmediateDelivery = () => {
             alu: null,
             size: null
         }]);
-        const [fileInfos, setFileInfos] = useState([]);
     const storesList = [];
 
     getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
@@ -170,7 +169,7 @@ const ImmediateDelivery = () => {
         } else if (fields[0]["image"] === null) {
             result_function('error', 'Selecciona una imagen');
         } else {
-            if (cont == 0) {
+            if (cont === 0) {
                 storeTicketInmediates(fields)
                     .then((response) => {
                         getTicketsCreated();
@@ -209,9 +208,9 @@ const ImmediateDelivery = () => {
 
     function handleChange1(event, name) {
         const values = [...fields];
-        if (name == "store_asigned") {
+        if (name === "store_asigned") {
             values[0][name] = event.value;
-        } else if (name == "image") {
+        } else if (name === "image") {
             values[0][name] = event.target.files[0];
         } else {
             values[0][name] = event.target.value;
@@ -219,13 +218,11 @@ const ImmediateDelivery = () => {
         setFields(values);
     }
 
-    const selectFile = (event) => {
-        setFileInfos(event.target.files);
-      };
+
 
     function handleChange2(i, event, name) {
         const values = [...fields];
-        if (event.target.value == "") {
+        if (event.target.value === "") {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -346,7 +343,7 @@ const ImmediateDelivery = () => {
                         {
                             dataTicketsImmediatesCreated.length > 0 ? (
                                 dataTicketsImmediatesCreated.map((data) => {
-                                    if (data.store_created == my_store) {
+                                    if (data.store_created === my_store) {
                                         let orden = 0;
                                         return (
                                             <MDBCol md="6" style={{ marginBottom: "15px" }}>
@@ -414,7 +411,7 @@ const ImmediateDelivery = () => {
                         {
                             dataTicketsImmediatesAssigned.length > 0 ? (
                                 dataTicketsImmediatesAssigned.map((data) => {
-                                    if (data.store_asigned == my_store) {
+                                    if (data.store_asigned === my_store) {
                                         let orden = 0;
                                         return (
                                             <MDBCol md="6" style={{ marginBottom: "15px" }}>

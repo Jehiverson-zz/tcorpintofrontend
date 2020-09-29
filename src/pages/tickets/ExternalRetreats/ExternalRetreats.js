@@ -91,7 +91,7 @@ const ExternalRetreats = () => {
         if (fields[0]["store_asigned"] === null) {
             result_function('error', 'Debes seleccionar alguna tienda');
         } else {
-            if (cont == 0) {
+            if (cont === 0) {
                 storeTicketExternalRetrats(fields)
                     .then(response => {
                         get_external_retreats();
@@ -119,9 +119,9 @@ const ExternalRetreats = () => {
     /* OBTIENE LOS VALORES DE LOS INPUTS */
     function handleChange(i, event, name, type) {
         const values = [...fields];
-        if (name == "store_asigned") {
+        if (name === "store_asigned") {
             values[i][name] = event.value;
-        } else if (event.target.value == "") {
+        } else if (event.target.value === "") {
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -223,7 +223,7 @@ const ExternalRetreats = () => {
                     {
                         externalRetreats.length > 0 ? (
                             externalRetreats.map((data) => {
-                                if (data.store_created == my_store) {
+                                if (data.store_created === my_store) {
                                     let orden = 0;
                                     return (
                                         <MDBCol md="6" style={{ marginBottom: "15px" }}>

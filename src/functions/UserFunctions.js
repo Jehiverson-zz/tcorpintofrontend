@@ -6,6 +6,7 @@ export const login = (user) => {
   return axios
     .post(url,data)
     .then(response => {
+      console.log(response);
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
       localStorage.setItem('name', response.data.user.name);
@@ -13,6 +14,7 @@ export const login = (user) => {
       localStorage.setItem('type', response.data.user.type);
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('change_date', response.data.user.change_date);
 
       let data = { error: 0, message: "Exito", response };
       return data;
@@ -31,6 +33,7 @@ export const login_google = user => {
   return axios
     .post(url,data)
     .then(response => {
+      console.log(response);
       localStorage.setItem('usertoken', response.data);
       localStorage.setItem('session',true);
       localStorage.setItem('name', response.data.user.name);
@@ -38,7 +41,7 @@ export const login_google = user => {
       localStorage.setItem('type', response.data.user.type);
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
-
+      localStorage.setItem('change_date', response.data.user.change_date);
       let data = { error: 0, message: "Exito" };
       return data;
     })

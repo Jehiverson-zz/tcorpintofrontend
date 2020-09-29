@@ -61,6 +61,7 @@ const DatosdeVenta = () => {
                         <MDBTableBody>
                             <Tablebinnacle posts={currentPosts} loading={loading} />
                         </MDBTableBody>
+                        {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
                         <Pagination
                             postsPerPage={postsPerPage}
                             totalPosts={dataSales.length}

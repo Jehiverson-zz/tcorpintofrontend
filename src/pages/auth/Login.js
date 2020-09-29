@@ -118,8 +118,8 @@ const Login = () => {
                                             className="btn-google"
                                             clientId={clientId}
                                             buttonText="Ingresar"
-                                            onSuccess={responseGoogle}
-                                            onFailure={responseGoogle}
+                                            onSuccess={() => responseGoogle}
+                                            onFailure={() => responseGoogle}
                                             cookiePolicy={'single_host_origin'}
                                         />
                                     </div>

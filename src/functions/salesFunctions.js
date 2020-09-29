@@ -215,7 +215,7 @@ export const createBinacleEjection = async(dataBi) => {
     return axios
         .post(`${url}/binnacles_dailies/created`, data)
         .then((response) => {
-            return response.data
+            return response
         })
         .catch((error) => {
             console.error(error);

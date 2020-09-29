@@ -59,6 +59,7 @@ const Login = () => {
     }
 
     const responseGoogle = (response) => {
+        
         if(typeof response.profileObj !== "undefined"){
             const userData = {
                 email: response.profileObj.email,
@@ -113,13 +114,13 @@ const Login = () => {
                                         />
                                     </div>
                                     <div className='text-center'>
-                                        <MDBBtn color="info" onClick={_Login}>Ingresar</MDBBtn>
+                                        <MDBBtn color="info" onClick={() => _Login()}>Ingresar</MDBBtn>
                                         <GoogleLogin
                                             className="btn-google"
                                             clientId={clientId}
                                             buttonText="Ingresar"
-                                            onSuccess={() => responseGoogle}
-                                            onFailure={() => responseGoogle}
+                                            onSuccess={(e) => responseGoogle(e)}
+                                            onFailure={(e) => responseGoogle(e)}
                                             cookiePolicy={'single_host_origin'}
                                         />
                                     </div>

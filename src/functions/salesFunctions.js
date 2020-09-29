@@ -205,6 +205,22 @@ export const binacleEjectionShow = (store) => {
     })
 
 }
+
+//Crea Bitacora de Ejecucion
+export const createBinacleEjection = async(dataBi) => {
+   
+    let store = localStorage.getItem('store')
+    let data = {dataBi, store}
+
+    return axios
+        .post(`${url}/binnacles_dailies/created`, data)
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
 //Eliminar bitacora
 export const deletebinacleEjection = async(id) => {
     let data = {"id": id}

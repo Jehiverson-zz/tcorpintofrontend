@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
-import { binacleEjectionShow } from '../../../functions/salesFunctions'
+import { binacleEjectionShow, createBinacleEjection } from '../../../functions/salesFunctions'
 import Tablebinnacle from './Tablebinnacle';
 import Pagination from '../../../components/pagination';
 import Loading from './img/loading.gif'
@@ -41,6 +41,11 @@ const DatosEjecucion = () => {
         .catch(err => {})
     }, [])
 
+    const handleCreated = () =>{
+        createBinacleEjection(dataBinacle).then((res) =>
+        console.log(res)
+        ).catch((err) => console.log('No!'))
+    }
     function handleChangeData(event, name, type) {
         const values = [...dataBinacle];
         if(type === 1){
@@ -154,7 +159,7 @@ const DatosEjecucion = () => {
                                     <MDBInput label='Cantidad de vendedores' type='text' onChange ={(e) => handleChangeData(e,"vendorsCount")}/>
                                 </MDBCol>
                             </MDBRow>
-                            <Button variant="contained" color="primary" >
+                            <Button variant="contained" color="primary" onClick={() => handleCreated()}>
                                 Ingresar
                             </Button>
                         </CardHeader>

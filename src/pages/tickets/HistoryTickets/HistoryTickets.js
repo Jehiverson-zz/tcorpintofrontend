@@ -63,7 +63,7 @@ const HistoryTickets = () => {
     const [status, setStatus] = useState({ status: 'Pendiente' });
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(15);
+    const [postsPerPage] = useState(51);
     const filter_values = [
         { value: 'Pendiente', label: 'Pendiente' },
         { value: 'Completado', label: 'Completado' },
@@ -90,6 +90,7 @@ const HistoryTickets = () => {
 
     const handleClickTab = (type) => {
         setLoading(true);
+        setCurrentPage(1);
         if (type === 'Traslado') {
             getTicketsTransfer('Pendiente');
         } else if (type === 'Inmediates') {

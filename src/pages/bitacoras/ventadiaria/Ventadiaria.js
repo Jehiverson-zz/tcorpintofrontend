@@ -133,7 +133,7 @@ const history = useHistory();
                 const valueStore = { value: storeManger, label: storeManger };
                 return (
                     <>
-                        
+
                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
@@ -146,8 +146,7 @@ const history = useHistory();
                             <DatePicker selected={startDate} onChange={date => setStartDate(date)} dateFormat="dd/MM/yyyy"/>
                             </MDBCol>
                         </MDBRow>
-                            :""}
-                        
+
                         {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>

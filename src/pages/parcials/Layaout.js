@@ -89,6 +89,15 @@ class Navbar extends Component {
                 </MDBNavLink>
               </MDBNavItem>
               <MDBNavItem>
+                <MDBNavLink
+                  exact
+                  to='/damaged_merchandise'
+                  onClick={this.closeCollapse('mainNavbarCollapse')}
+                >
+                  <strong>Mercadería Dañada</strong>
+                </MDBNavLink>
+              </MDBNavItem>
+              <MDBNavItem>
                 <MDBDropdown>
                   <MDBDropdownToggle nav caret>
                     <MDBIcon icon='user' className='mr-1' />

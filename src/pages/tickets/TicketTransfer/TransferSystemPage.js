@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader';
 import {
@@ -80,20 +81,21 @@ function a11yProps(index) {
 
 const TransferSystemPage = () => {
     const my_store = localStorage.getItem("store");
+    const my_email = localStorage.getItem("email");
+    const history = useHistory();
     const [value, setValue] = useState(0);
     const [dataTicketsCreated, setdataTicketsCreated] = useState([]);
     const [dataTicketsAssigned, setdataTicketsAssigned] = useState([]);
-    const [fields, setFields] = useState([{ upc: null, alu: null, size: null, bill: null, store_asigned: null, store_created: my_store }]);
-    const [retailn, setRetailn] = useState([{ reatiln: null }]);
+    const [dataStores, setdataStores] = useState([]);
+    const [fields, setFields] = useState([{ upc: null, alu: null, size: null, bill: null, store_asigned: null, store_created: my_store, email: my_email }]);
+    const [retailn, setRetailn] = useState([{ reatiln: null, email: my_email }]);
     const [idticket, setidticket] = useState(0);
     const [showModal, setshowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
-    let storesList = [];
-
-    getStore().then((resp) => { resp.map((x) => storesList.push({ value: x.name, label: x.name })) });
 
     useEffect(() => {
+        stores();
         tickets_created();
         tickets_asigned();
     }, [0])
@@ -103,6 +105,14 @@ const TransferSystemPage = () => {
             icon: icon,
             title: text
         })
+    }
+
+    function stores() {
+        let storesList = [];
+        getStore().then((resp) => resp.map(x => {
+            storesList.push({ value: x.name, label: x.name })
+            setdataStores(storesList)
+        }));
     }
 
     function tickets_created() {
@@ -147,9 +157,10 @@ const TransferSystemPage = () => {
             if (cont === 0) {
                 storeTicketsSystemTransfer(fields)
                     .then((response) => {
-                        tickets_created();
-                        tickets_asigned();
                         result_function('success', response.data.message);
+                        setTimeout(() => {
+                            history.go(0);
+                        }, 2000);
                     }).catch(err => {
                         alert("Error")
                     })
@@ -259,7 +270,7 @@ const TransferSystemPage = () => {
                                     <Select
                                         onChange={e => handleChange(idx, e, "store_asigned")}
                                         defaultValue={value2}
-                                        options={storesList}
+                                        options={dataStores}
                                     />
                                 </MDBCol>
                             )}

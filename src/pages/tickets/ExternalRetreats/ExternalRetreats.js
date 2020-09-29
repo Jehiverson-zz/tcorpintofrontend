@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader';
 import {
@@ -40,7 +41,9 @@ const Toast = Swal.mixin({
 
 const ExternalRetreats = () => {
     const my_store = localStorage.getItem("store");
-    const [fields, setFields] = useState([{ person_retreats: null, person_authorizing: null, bill: null, upc: null, alu: null, size: null, store_created: my_store }]);
+    const my_email = localStorage.getItem("email");
+    const history = useHistory();
+    const [fields, setFields] = useState([{ person_retreats: null, person_authorizing: null, bill: null, upc: null, alu: null, size: null, email: my_email }]);
     const [externalRetreats, setExternalRetreats] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
@@ -98,8 +101,10 @@ const ExternalRetreats = () => {
             if (cont === 0) {
                 storeTicketExternalRetrats(fields)
                     .then(response => {
-                        get_external_retreats();
                         result_function('success', response.data.message)
+                        setTimeout(() => {
+                            history.go(0);
+                        }, 2000);
                     })
                     .catch(error => {
                         result_function('error', 'Algo salió mal')

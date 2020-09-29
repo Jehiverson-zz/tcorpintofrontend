@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader';
 import {
@@ -41,7 +42,9 @@ const Toast = Swal.mixin({
 
 const TicketsPhotoRetreats = () => {
     const my_store = localStorage.getItem("store");
-    const [fields, setFields] = useState([{ upc: null, alu: null, size: null, caurier: null, store_created: my_store }]);
+    const my_email = localStorage.getItem("email");
+    const history = useHistory();
+    const [fields, setFields] = useState([{ upc: null, alu: null, size: null, caurier: null, store_created: my_store, email: my_email }]);
     const [photoRetreats, setphotoRetreats] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
@@ -105,8 +108,10 @@ const TicketsPhotoRetreats = () => {
             if (cont === 0) {
                 storeTicketPhotoRetrats(fields)
                     .then(response => {
-                        get_photo_retreats();
                         result_function('success', response.data.message);
+                        setTimeout(() => {
+                            history.go(0);
+                        }, 2000);
                     })
                     .catch(error => {
                         result_function('error', "Error al crear el ticket");

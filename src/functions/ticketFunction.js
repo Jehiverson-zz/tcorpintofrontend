@@ -200,8 +200,9 @@ export const getStore = () => {
 
 /* Inactiva un ticket de traslado de sistema*/
 export const inactivateTicket = (id) =>{
+    let email = localStorage.getItem("email")
     return axios
-    .put(`${url}/ticket/inactive/${id}`)
+    .put(`${url}/ticket/inactive/${id}`, {email: email})
     .then((response) => {
         return response
     })
@@ -212,8 +213,9 @@ export const inactivateTicket = (id) =>{
 
 /* Inactiva un ticket de entregas inmeditas */
 export const inactivateTicketInmediates = (id) =>{
+    let email = localStorage.getItem("email")
     return axios
-    .put(`${url}/ticket/immediate_deliveries/inactive/${id}`)
+    .put(`${url}/ticket/immediate_deliveries/inactive/${id}`,{email: email})
     .then((response) => {
         return response
     })
@@ -224,8 +226,9 @@ export const inactivateTicketInmediates = (id) =>{
 
 /* Inactiva un ticket de fotos retiradas*/
 export const inactivatePhotoRetreats = (id) =>{
+    let email = localStorage.getItem("email")
     return axios
-    .put(`${url}/ticket/photo_retreats/inactive/${id}`)
+    .put(`${url}/ticket/photo_retreats/inactive/${id}`, {email: email})
     .then((response) => {
         return response
     })
@@ -248,8 +251,9 @@ export const inactivateExternalRetreats = (id) =>{
 
 /* Cambia el estado de un ticket de traslado de sistema a 'Completado' */
 export const completeTicket = (id,retailn) =>{
+    let email = localStorage.getItem("email")
     return axios
-    .put(`${url}/ticket/complete/${id}`, retailn)
+    .put(`${url}/ticket/complete/${id}`, {retailn,email:email})
     .then((response) => {
         return response
     })

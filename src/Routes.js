@@ -72,6 +72,7 @@ import PageNotFound from './pages/404/PageNotFound';
 import Landing_Bitacoras from './pages/bitacoras/Landing';
 import BitacoraVenta from './pages/bitacoras/ventadiaria/Ventadiaria'
 import Datosdeventa from './pages/bitacoras/ventadiaria/Datosdeventa'
+import Datosdeejecucion from './pages/bitacoras/ejecucion/bitacoraEjecucion'
 
 //Tickets
 import TicketsPage from './pages/tickets/TicketsPage';
@@ -93,6 +94,7 @@ class Routes extends React.Component {
         <Route exact path='/bitacoras' component={Landing_Bitacoras} />
         <Route exact path='/bitacora_ventas_diarias' component={BitacoraVenta} />
         <Route exact path='/bitacora_ventas_show' component={Datosdeventa} />
+        <Route exact path='/bitacora_ejecucion' component={Datosdeejecucion} />
 
         <Route exact path='/tickets' component={TicketsPage} />
         <Route exact path='/tickets/system_transfer' component={TransferSystemPage} />

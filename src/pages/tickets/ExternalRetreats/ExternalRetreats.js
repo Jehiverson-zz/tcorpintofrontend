@@ -124,6 +124,7 @@ const ExternalRetreats = () => {
         if (name === "store_asigned") {
             values[i][name] = event.value;
         } else if (event.target.value.length === 0) {
+
             values[i][name] = null;
         } else {
             values[i][name] = event.target.value;
@@ -230,6 +231,7 @@ const ExternalRetreats = () => {
                     {
                         externalRetreats.length > 0 ? (
                             currentPosts.map((data) => {
+
                                 if (data.store_created === my_store) {
                                     let orden = 0;
                                     return (

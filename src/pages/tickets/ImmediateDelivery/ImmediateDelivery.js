@@ -222,6 +222,7 @@ const ImmediateDelivery = () => {
         setFields(values);
     }
 
+
     function handleChange2(i, event, name) {
         const values = [...fields];
         if (event.target.value.length === 0) {

@@ -121,6 +121,11 @@ const history = useHistory();
     const datosTiendas = [];
     getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
     
+    useEffect(() => {
+        if(localStorage.getItem('change_date') === 'true'){
+            setStartDate(new Date())
+        }
+    },[]);
     
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
@@ -133,8 +138,9 @@ const history = useHistory();
                 const valueStore = { value: storeManger, label: storeManger };
                 return (
                     <>
+                        {localStorage.getItem('change_date') === 'true'? (
+                            <MDBRow style={{ justifyContent: "center", display: "flex" }}>
 
-                        <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
                                     onChange={e => setStore(e.label)}
@@ -143,10 +149,15 @@ const history = useHistory();
                                 />
                             </MDBCol>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
-                            <DatePicker selected={startDate} onChange={date => setStartDate(date)} dateFormat="dd/MM/yyyy"/>
+                            <DatePicker 
+                                className="form-control"
+                                selected={startDate} 
+                                onChange={date => setStartDate(date)} 
+                                dateFormat="dd/MM/yyyy"/>
                             </MDBCol>
                         </MDBRow>
-
+                        ):''}
+                                                    
                         {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>
@@ -803,15 +814,18 @@ const history = useHistory();
                     Swal.fire('Error', 'Tienes que seleccionar un encargado para la tienda.', 'error');
                     pagNext = 0;
                 } else {
-                    await validDataSales()
+                    await validDataSales(startDate,store,dataSales[0].encargado)
                     .then((res) => {
+
                       if(res.salesNew.length > 0){
                         setStepper(0)
                         setStepperMessage("Ya tienes ingresado un dato de venta, no puedes ingresar otro.")
                         pagNext = 0;
                       }else{
+
                         setStepper(null)
                         pagNext = 1;
+
                       }
                     })
                     .catch((err)=>{
@@ -829,6 +843,18 @@ const history = useHistory();
                 if (parseFloat(dataSales[0].venta_diaria) === null ) {
                     Swal.fire('Error', 'No puedes dejar vacio el dato de venta diaria', 'info');
                     pagNext = 0;
+                }
+
+                if(localStorage.getItem('change_date') === 'true'){
+                    if (startDate === null ) {
+                        Swal.fire('Error', 'No puedes dejar vacio el campo de fecha', 'info');
+                        pagNext = 0;
+                    } 
+
+                    if (store === null ) {
+                        Swal.fire('Error', 'No puedes dejar vacio la tienda', 'info');
+                        pagNext = 0;
+                    } 
                 }
 
                 break;
@@ -888,7 +914,7 @@ const history = useHistory();
                 }
                 break;
             case 4:
-            createDataSales(dataSales[0],vendor,vendorDescount,localStorage.getItem('email'))
+            createDataSales(dataSales[0],vendor,vendorDescount,localStorage.getItem('email'),store,startDate)
                 .then((response) => {
                     setDataResult(response)
                     if (response.status === true) {
@@ -896,6 +922,8 @@ const history = useHistory();
                         Swal.fire('Felicitaciones!', response.message, 'success');
                         setStepper(null)
                         pagNext = 0;
+                        history.push(`/bitacora_ventas_show`);
+                        
                     }
     
                     if (response.status === false){
@@ -912,7 +940,6 @@ const history = useHistory();
 
             break;
             default:
-
         }
         setActiveStep((prevActiveStep) => prevActiveStep + pagNext);
     };

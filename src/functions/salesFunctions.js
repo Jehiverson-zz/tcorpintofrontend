@@ -15,12 +15,18 @@ export const salesShow = (store) => {
 
 }
 //Valida si tiene un dato de venta ingresado este dia
-export const validDataSales = async() => {
+export const validDataSales = async(dateStart,storeStart,manager) => {
    
-    let store = localStorage.getItem('name')
+    let StoreDefault
+    if(storeStart){
+        StoreDefault = storeStart;
+    }else{
+        StoreDefault  = localStorage.getItem('store');
+    }
     
+    let data = {dateStart,StoreDefault,manager}
     return axios
-        .post(`${url}/sales/validationDataSale`, store)
+        .post(`${url}/sales/validationDataSale`, data)
         .then((response) => {
             return response.data
         })
@@ -136,11 +142,28 @@ var totalDay = 0
  
 }
 //Crea el dato de venta del dia
-export const createDataSales = async(sales,vendors,vendorsDescount,email) => {
+export const createDataSales = async(sales,vendors,vendorsDescount,email,dataStore,dateStore) => {
    
-    let store = localStorage.getItem('name')
-    let data = {sales, vendors, vendorsDescount,store,email }
+    let store = localStorage.getItem('store')
+    var storeDefault,dateStoreDefault;
     
+    if(dataStore){
+        storeDefault = dataStore;
+    }else{
+        storeDefault = store;
+    }
+    console.log(storeDefault)
+    if(dateStore){
+        
+        dateStoreDefault = dateStore;
+    }else{
+        dateStoreDefault = null;
+        
+    }
+
+    let data = {sales, vendors, vendorsDescount, email, storeDefault, dateStoreDefault}
+    
+    console.log(data);
     return axios
         .post(`${url}/sales/create`, data)
         .then((response) => {
@@ -150,8 +173,49 @@ export const createDataSales = async(sales,vendors,vendorsDescount,email) => {
         .catch((error) => {
             console.error(error);
         })
-    
+}
+//Elimina dato
+export const deleteDataSales = async(id) => {
+    let data = {"id": id}
+    return axios
+        .post(`${url}/sales/delete`, data)
+        .then((response) => {
+           return response.data
+        })
+        .catch((error) => {
+            console.error(error);
+        })
 }
 
+
+/*
+Bitacora de Ejecucion
+*/
+export const binacleEjectionShow = (store) => { 
+
+    let data = {"store": store}
+    return axios
+    .post(url + '/binnacles_dailies/show',data)
+    .then((response) => {
+        console.log(response.data.binnacleDailies);
+        return response.data.binnacleDailies;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+
+}
+//Eliminar bitacora
+export const deletebinacleEjection = async(id) => {
+    let data = {"id": id}
+    return axios
+        .post(`${url}/binnacles_dailies/delete`, data)
+        .then((response) => {
+           return response.data
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
 
 

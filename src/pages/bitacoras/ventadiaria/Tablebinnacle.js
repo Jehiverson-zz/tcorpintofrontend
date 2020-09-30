@@ -55,8 +55,11 @@ const Tablebinnacle = ({ posts, loading }) => {
         <td><CurrencyFormat value={post.ventas} displayType={'text'} prefix={'Q'} /></td>
         <td><CurrencyFormat value={post.metas} displayType={'text'} prefix={'Q'} /></td>
         <td>{post.manager}</td>
+        <td>{post.tienda}</td>
         <td>{dateFormat(post.fechaCreacion, 'dd/mm/yyyy')}</td>
-        {localStorage.getItem('change_date') === 'true' ? (<td><Button variant="contained" color="primary" onClick={() => handleNext(post.id)}>x</Button></td>) : ''}
+        {localStorage.getItem('type') === 'admin' ? (
+        <td><Button variant="contained" color="primary" onClick={() => handleNext(post.id)}>x</Button></td>
+        ) : ''}
       </tr>
     ))
   );

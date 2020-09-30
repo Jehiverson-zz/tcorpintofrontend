@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2'
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
-import { binacleEjectionShow } from '../../../functions/salesFunctions'
+import { binacleEjectionShow, createBinacleEjection } from '../../../functions/salesFunctions'
 import Tablebinnacle from './Tablebinnacle';
 import Pagination from '../../../components/pagination';
 import Loading from './img/loading.gif'
@@ -18,6 +20,7 @@ import {
 
 
 const DatosEjecucion = () => {
+    const history = useHistory();
     const [dataDailies, setdataDailies] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -34,13 +37,32 @@ const DatosEjecucion = () => {
     }]);
 
     useEffect(() => {
+        dataShow()
+    }, [])
+
+    const dataShow = () =>{
         binacleEjectionShow(localStorage.getItem('store'))
         .then(res => 
             setdataDailies(res)    
         )
         .catch(err => {})
-    }, [])
+    }
 
+    const handleCreated = () =>{
+        if(dataBinacle[0].hamachi === null || dataBinacle[0].recepTrans === null || dataBinacle[0].processIn === null || dataBinacle[0].processOut === null ||
+            dataBinacle[0].sendReceived === null ||dataBinacle[0].meta === null ||dataBinacle[0].beforesales === null ||dataBinacle[0].vendorsCount === null ){
+
+                Swal.fire('Error', 'No puedes dejar vacio ningun campo', 'error');
+
+        }else{
+            createBinacleEjection(dataBinacle).then((res) =>
+            dataShow(),
+            history.go(0)
+            ).catch((err) => {
+            Swal.fire('Error', 'No se pudo crear bitacora', 'error');
+        })
+        }
+    }
     function handleChangeData(event, name, type) {
         const values = [...dataBinacle];
         if(type === 1){
@@ -48,7 +70,6 @@ const DatosEjecucion = () => {
         }else{
             values[0][name] = event.target.value
         }
-        console.log(dataBinacle)
         setdataBinacle(values);
         
     }
@@ -154,7 +175,7 @@ const DatosEjecucion = () => {
                                     <MDBInput label='Cantidad de vendedores' type='text' onChange ={(e) => handleChangeData(e,"vendorsCount")}/>
                                 </MDBCol>
                             </MDBRow>
-                            <Button variant="contained" color="primary" >
+                            <Button variant="contained" color="primary" onClick={() => handleCreated()}>
                                 Ingresar
                             </Button>
                         </CardHeader>

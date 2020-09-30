@@ -19,7 +19,7 @@ const DatosdeVenta = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let data = {store: localStorage.getItem('store')}
+        let data = {store: localStorage.getItem('store'), type: localStorage.getItem('type')}
         salesShow(data)
             .then((res) =>
             setdataSales(res),
@@ -55,6 +55,7 @@ const DatosdeVenta = () => {
                                 <th>Venta</th>
                                 <th>Meta</th>
                                 <th>Encargado</th>
+                                <th>Tienda</th>
                                 <th>Fecha</th>
                             </tr>
                         </MDBTableHead>

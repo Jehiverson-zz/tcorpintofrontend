@@ -306,10 +306,10 @@ const ImmediateDelivery = () => {
                     </MDBRow>
                     <MDBRow>
                         <MDBCol md='2'>
-                            <MDBInput label='Calular 1' type="text" validate onChange={e => handleChange1(e, "phone1")} />
+                            <MDBInput label='Celular 1' type="text" validate onChange={e => handleChange1(e, "phone1")} />
                         </MDBCol>
                         <MDBCol md='2'>
-                            <MDBInput label='Calular 2' type="text" validate onChange={e => handleChange1(e, "phone2")} />
+                            <MDBInput label='Celular 2' type="text" validate onChange={e => handleChange1(e, "phone2")} />
                         </MDBCol>
                         <MDBCol md='2'>
                             <MDBInput label='Horario' type="text" validate onChange={e => handleChange1(e, "hours")} />

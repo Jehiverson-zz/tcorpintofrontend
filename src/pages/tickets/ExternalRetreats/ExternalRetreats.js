@@ -43,7 +43,7 @@ const ExternalRetreats = () => {
     const my_store = localStorage.getItem("store");
     const my_email = localStorage.getItem("email");
     const history = useHistory();
-    const [fields, setFields] = useState([{ person_retreats: null, person_authorizing: null, bill: null, upc: null, alu: null, size: null, email: my_email }]);
+    const [fields, setFields] = useState([{ person_retreats: null, person_authorizing: null, bill: null, upc: null, alu: null, size: null, store_created: my_store,email: my_email }]);
     const [externalRetreats, setExternalRetreats] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
@@ -62,6 +62,7 @@ const ExternalRetreats = () => {
     function get_external_retreats() {
         getExternalRetreats().then((res) => setExternalRetreats(res));
     }
+    console.log(externalRetreats);
     /* CREAT UN NUEVO TICKET */
     function crearTicket() {
         let cont = 0;

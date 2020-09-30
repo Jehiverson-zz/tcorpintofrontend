@@ -62,7 +62,7 @@ const ExternalRetreats = () => {
     function get_external_retreats() {
         getExternalRetreats().then((res) => setExternalRetreats(res));
     }
-    console.log(externalRetreats);
+
     /* CREAT UN NUEVO TICKET */
     function crearTicket() {
         let cont = 0;

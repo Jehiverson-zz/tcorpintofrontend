@@ -120,7 +120,6 @@ const Login = () => {
                                             clientId={clientId}
                                             buttonText="Ingresar"
                                             onSuccess={(e) => responseGoogle(e)}
-                                            onFailure={(e) => responseGoogle(e)}
                                             cookiePolicy={'single_host_origin'}
                                         />
                                     </div>

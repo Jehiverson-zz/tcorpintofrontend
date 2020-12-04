@@ -5,10 +5,21 @@ const url = process.env.REACT_APP_URL_BASE;
 /*Muestra los datos de retiros*/
 export const statesShow = (store) => {
     return axios
-    .post(url + '/showStates')
+    .post(url + '/statusShow')
     .then((response) => {
-        console.log(response.data.showRetreatsInfo);
-        return response.data.showRetreatsInfo;
+        return response.data.showStatusInfo;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const statesCreate = (data) => {
+    return axios
+    .post(url + '/statusCreate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
     })
     .catch((error) => {
         console.log(error);
@@ -18,10 +29,10 @@ export const statesShow = (store) => {
 /*Muestra los datos de retiros*/
 export const CollaboratorShow = (store) => {
     return axios
-    .post(url + '/showCollaborator')
+    .post(url + '/collaboratorShow')
     .then((response) => {
-        console.log(response.data.showRetreatsInfo);
-        return response.data.showRetreatsInfo;
+        console.log(response.data.showCollaboratorInfo);
+        return response.data.showCollaboratorInfo;
     })
     .catch((error) => {
         console.log(error);
@@ -31,10 +42,10 @@ export const CollaboratorShow = (store) => {
 /*Muestra los datos de retiros*/
 export const UserShow = (store) => {
     return axios
-    .post(url + '/showUser')
+    .post(url + '/userShow')
     .then((response) => {
-        console.log(response.data.showRetreatsInfo);
-        return response.data.showRetreatsInfo;
+        console.log(response.data.showUserInfo);
+        return response.data.showUserInfo;
     })
     .catch((error) => {
         console.log(error);

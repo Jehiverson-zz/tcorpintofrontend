@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { useHistory } from "react-router-dom";
 //Funciones
 import { deleteDataSales } from '../../../../functions/salesFunctions'
-const Tablebinnacle = ({ posts, loading }) => {
+const Tablebinnacle = ({ posts, loading, toggleModal }) => {
   const history = useHistory();
   if (loading) {
     return <h2>Cargando Datos...</h2>;
@@ -52,15 +52,17 @@ const Tablebinnacle = ({ posts, loading }) => {
   return (
     posts.map((post, i) => (
       <tr key={i}>
-        <td><CurrencyFormat value={post.ventas} displayType={'text'} prefix={'Q'} /></td>
-        <td><CurrencyFormat value={post.metas} displayType={'text'} prefix={'Q'} /></td>
-        <td>{post.manager}</td>
-        <td>{post.tienda}</td>
-        <td>{dateFormat(post.fechaCreacion, 'dd/mm/yyyy')}</td>
-        {localStorage.getItem('type') === 'admin' ? (
-        <td><Button variant="contained" color="primary" onClick={() => handleNext(post.id)}>x</Button></td>
-        ) : ''}
-      </tr>
+        <td>{post.name}</td>
+        <td>{post.status}</td>
+        <td>{dateFormat(post.timestamp, 'dd/mm/yyyy')}</td>
+        <td>
+        <Button variant="contained" color="primary" onClick={() => toggleModal(
+          post.name,
+          {value: post.status, label: post.status}
+        )}>Editar</Button>&nbsp;
+        <Button variant="contained" color="primary" onClick={() => handleNext(post.id)}>Eliminar</Button>
+        </td>
+       </tr>
     ))
   );
 };

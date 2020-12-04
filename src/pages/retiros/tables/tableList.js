@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
-import { salesShow } from '../../../functions/salesFunctions'
+import { retreatShowList } from '../../../functions/retreatsFunction'
 import Loading from './img/loading.gif'
 import {
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
-import Tablebinnacle from './Tablebinnacle';
+import Tablebinnacle from './listDebt';
 
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
-    const [dataSales, setdataSales] = useState([]);
+    const [dataRetreats, setdataRetreats] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let data = {store: localStorage.getItem('store'), type: localStorage.getItem('type')}
-        salesShow(data)
+        retreatShowList()
             .then((res) =>
-            console.log(res),
+            setdataRetreats(res),
+            setLoading(false)
             )
             .catch(err =>
                 setLoading(true)
@@ -31,7 +31,7 @@ const DatosdeVenta = () => {
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = dataSales.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = dataRetreats.slice(indexOfFirstPost, indexOfLastPost);
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -46,24 +46,24 @@ const DatosdeVenta = () => {
                 : 
                 <>
                 <br></br>
-                <CardHeader title="Tickets" icon="ticket-alt">
+                <CardHeader title="Debitos Retiros" icon="ticket-alt">
                     <MDBTable>
                         <MDBTableHead>
                             <tr>
-                                <th>Venta</th>
-                                <th>Meta</th>
-                                <th>Encargado</th>
-                                <th>Tienda</th>
-                                <th>Fecha</th>
+                                <th>Nombre</th>
+                                <th>Deuda</th>
+                                <th>Fecha de Creació</th>
+                                <th>Fecha de Actualización</th>
+                                <th>Acciones</th>
                             </tr>
                         </MDBTableHead>
                         <MDBTableBody>
                             <Tablebinnacle posts={currentPosts} loading={loading} />
                         </MDBTableBody>
-                        {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
+                        {dataRetreats.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
                         <Pagination
                             postsPerPage={postsPerPage}
-                            totalPosts={dataSales.length}
+                            totalPosts={dataRetreats.length}
                             paginate={paginate}
                             currentPage={currentPage}
                         />

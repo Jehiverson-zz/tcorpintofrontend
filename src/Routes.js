@@ -84,6 +84,18 @@ import HistoryTickets from './pages/tickets/HistoryTickets/HistoryTickets';
 //DamagedMerchandise
 import DamagedMerchandise from './pages/damagedMerchandise/damagedMerchandise';
 
+//Retiros
+import Retreats from './pages/retiros/retiros';
+import RetreatsForm from './pages/retiros/form/retiros_form';
+import RetreatsBitacora from './pages/retiros/tables/form_bitacora';
+import RetreatsBitacoraList from './pages/retiros/tables/tableList';
+import RetreatsHistory from './pages/retiros/historial/tableList';
+
+//Settings
+import Settings from './pages/setting/Settings';
+import StatesList from './pages/setting/catalogos/states/Datos';
+import Collaboration from './pages/setting/catalogos/collaboration/Datos';
+import Users from './pages/setting/catalogos/users/Datos';
 
 class Routes extends React.Component {
 
@@ -105,6 +117,19 @@ class Routes extends React.Component {
 
         <Route exact path='/damaged_merchandise' component={DamagedMerchandise} />
 
+        <Route exact path='/retreats' component={Retreats} />
+        <Route exact path='/retreats_form' component={RetreatsForm} />
+        <Route exact path='/retreats_bitacoras' component={RetreatsBitacora} />
+        <Route exact path='/retreats_bitacoras_list' component={RetreatsBitacoraList} />
+        <Route exact path='/retreats_history' component={RetreatsHistory} />
+
+        <Route exact path='/settingsList' component={Settings} />
+        <Route exact path='/stateList' component={StatesList} />
+        <Route exact path='/collaborationList' component={Collaboration} />
+        <Route exact path='/usersList' component={Users} />
+
+
+      
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />
         <Route exact path='/components' component={ComponentsNavPage} />

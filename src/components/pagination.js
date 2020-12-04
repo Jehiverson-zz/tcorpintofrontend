@@ -5,9 +5,9 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
-  }
+  } 
 
-  return (
+  return ( 
     <MDBContainer className="center-element">
       <MDBPagination circle>
         {pageNumbers.map(number => (

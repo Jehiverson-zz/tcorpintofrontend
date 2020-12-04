@@ -97,6 +97,27 @@ class Navbar extends Component {
                   <strong>Mercadería Dañada</strong>
                 </MDBNavLink>
               </MDBNavItem>
+
+              <MDBNavItem>
+                <MDBNavLink
+                  exact
+                  to='/retreats'
+                  onClick={this.closeCollapse('mainNavbarCollapse')}
+                >
+                  <strong>Retiros</strong>
+                </MDBNavLink>
+              </MDBNavItem>
+
+              <MDBNavItem>
+                <MDBNavLink
+                  exact
+                  to='/settingsList'
+                  onClick={this.closeCollapse('mainNavbarCollapse')}
+                >
+                  <strong>Configuraciones</strong>
+                </MDBNavLink>
+              </MDBNavItem>
+
               <MDBNavItem>
                 <MDBDropdown>
                   <MDBDropdownToggle nav caret>

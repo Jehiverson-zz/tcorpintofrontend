@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Layaout from '../../parcials/Layaout';
-import CardHeader from '../../../components/CardHeader'
-import { salesShow } from '../../../functions/salesFunctions'
-import Loading from './img/loading.gif'
+import Layaout from '../../../parcials/Layaout';
+import CardHeader from '../../../../components/CardHeader'
+import { salesShow } from '../../../../functions/salesFunctions'
+import Loading from '../img/loading.gif'
 import {
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
-import Tablebinnacle from './Tablebinnacle';
+import Tablebinnacle from './Table';
 
-import Pagination from '../../../components/pagination';
+import Pagination from '../../../../components/pagination';
 const DatosdeVenta = () => {
     const [dataSales, setdataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);

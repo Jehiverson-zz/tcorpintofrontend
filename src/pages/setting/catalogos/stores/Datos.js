@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
-import { statesShow, statesCreate } from '../../../../functions/settingsFunction'
+import { SubsidiariasShow, storeCreate, storeUpdate } from '../../../../functions/settingsFunction'
+import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
 import {
     MDBBtn,
@@ -16,24 +17,32 @@ import {
 } from 'mdbreact';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
-import Tablebinnacle from './Table';
+import TableStores from './Table';
 import Pagination from '../../../../components/pagination';
-const DatosdeVenta = () => {
-    const [dataSales, setdataSales] = useState([]);
+
+const StoreList = () => {
+    const [dataStore, setdataStore] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
     const [modal, setModal] = useState(false);
     const [modalCreate, setModalCreate] = useState(false);
 
+
     const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
+    const [subsidiaria, setSubsidiaria] = useState(false);
     const [status, setStatus] = useState(false);
+    const [id, setId] = useState(false);
 
     const [] = useState(false)
-    const toggleModal = (name, status) => {
+    const [subsidiarias, setSubsidiarias] = useState([]);
+
+    const toggleModal = (id, name, subsidiaria, status) => {
+        setId(id);
         setName(name);
-        setStatus(status);
+        setSubsidiaria({ value: subsidiaria, label: subsidiaria });
+        setStatus({ value: status, label: status });
         setModal(!modal);
     };
 
@@ -41,28 +50,51 @@ const DatosdeVenta = () => {
         setModalCreate(!modalCreate);
     };
 
-    const createEstatus = () => {
+    const createStore = () => {
 
         if (name === false) {
-            Swal.fire('Error', 'Falto ingresar nombre', 'error');
+            return Swal.fire('Error', 'Falto ingresar nombre', 'error');
+        }
+
+        if (subsidiaria === false) {
+            return Swal.fire('Error', 'Falto ingresar la subsidiaria', 'error');
         }
 
         if (status === false) {
-            Swal.fire('Error', 'Falto ingresar estatus', 'error');
+            return Swal.fire('Error', 'Falto ingresar estatus', 'error');
         }
 
         const createItem = {
             name: name,
+            sbs: subsidiaria,
             status: status
         };
 
-        statesCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Estado Ingresado', 'success');
+        storeCreate(createItem).then(res => {
+            Swal.fire('Éxito', 'Tienda Ingresada', 'success');
             ReloadData();
             toggleModalCreate();
             falseData();
         }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar estados', 'error');
+            Swal.fire('Error', 'Error al ingresar tienda', 'error');
+        })
+    };
+
+    const updateStore = () => {
+        const createItem = {
+            id: id,
+            name: name,
+            sbs: subsidiaria.value,
+            status: status.value
+        };
+
+        storeUpdate(createItem).then(res => {
+            Swal.fire('Éxito', 'Tienda Actualizada', 'success');
+            ReloadData();
+            toggleModal();
+            falseData();
+        }).catch(err => {
+            Swal.fire('Error', 'Error al actualizar la tienda', 'error');
         })
     };
 
@@ -82,32 +114,44 @@ const DatosdeVenta = () => {
     }, [0])
 
     const ReloadData = () => {
-        statesShow()
-            .then((res) => {
-                console.log(res)
-                setdataSales(res);
-                setLoading(false);
+        getSubsidiarias();
+        getStore().then((res) => {
+            setdataStore(res)
+            setLoading(false);
+        })
+            .catch(error => console.log(error))
+    };
+
+    const getSubsidiarias = () => {
+        SubsidiariasShow()
+            .then((response) => {
+                let data = []
+                response.map(sub => {
+                    data.push({ value: sub.name, label: sub.name })
+                })
+                setSubsidiarias(data);
             }
             )
             .catch(err =>
                 setLoading(true)
             )
-    };
+    }
 
-    const falseData = () =>{
+    const falseData = () => {
         setItem(false);
+        setId(false);
         setName(false);
+        setSubsidiaria(false);
         setStatus(false);
     };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = dataSales.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = dataStore.slice(indexOfFirstPost, indexOfLastPost);
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
-    const valueStatus = { value: status, label: status };
 
     return (
         <Layaout>
@@ -120,7 +164,7 @@ const DatosdeVenta = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Tickets" icon="ticket-alt">
+                    <CardHeader title="Tiendas" icon="ticket-alt">
                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
                             +
                     </MDBBtn>
@@ -128,22 +172,23 @@ const DatosdeVenta = () => {
                             <MDBTableHead>
                                 <tr>
                                     <th>Nombre</th>
+                                    <th>Subsidiaria</th>
                                     <th>Estado</th>
                                     <th>Fecha</th>
                                     <th>Acciones</th>
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
-                                <Tablebinnacle posts={currentPosts} loading={loading} toggleModal={toggleModal} />
+                                <TableStores posts={currentPosts} loading={loading} toggleModal={toggleModal} />
                             </MDBTableBody>
-                            {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
-                            <Pagination
-                                postsPerPage={postsPerPage}
-                                totalPosts={dataSales.length}
-                                paginate={paginate}
-                                currentPage={currentPage}
-                            />
+                            {dataStore.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
                         </MDBTable>
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataStore.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
                     </CardHeader>
                 </>}
 
@@ -156,7 +201,7 @@ const DatosdeVenta = () => {
             >
                 <div className='modal-header primary-color white-text'>
                     <h4 className='title'>
-                        <MDBIcon icon='pencil-alt' /> Crear Estado
+                        <MDBIcon icon='pencil-alt' /> Crear Tienda
               </h4>
                     <button type='button' className='close' onClick={() => toggleModalCreate()}>
                         <span aria-hidden='true'>×</span>
@@ -172,13 +217,18 @@ const DatosdeVenta = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                     <Select
+                        onChange={e => setSubsidiaria(e.label)}
+                        defaultValue={{ value: false, label: 'Selecciona una subsidiaria' }}
+                        options={subsidiarias}
+                    /><br />
+                    <Select
                         onChange={e => setStatus(e.label)}
-                        defaultValue={valueStatus}
+                        defaultValue={{ value: false, label: 'Selecciona el estado' }}
                         options={state}
                     />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='primary' onClick={() => createEstatus()}>Crear</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => createStore()}>Crear</MDBBtn>
                     <MDBBtn color='secondary' onClick={() => toggleModalCreate()}>Cerrar</MDBBtn>
 
                 </MDBModalFooter>
@@ -198,7 +248,7 @@ const DatosdeVenta = () => {
                     </button>
                 </div>
                 <MDBModalBody>
-                <MDBInput
+                    <MDBInput
                         label='Nombre'
                         icon='user'
                         type='text'
@@ -208,16 +258,19 @@ const DatosdeVenta = () => {
                         value={name}
                     />
                     <Select
-                        onChange={e => setStatus(e.label)}
+                        onChange={e => setSubsidiaria({ value: e.label })}
+                        defaultValue={subsidiaria}
+                        options={subsidiarias}
+                    /><br />
+                    <Select
+                        onChange={e => setStatus({ value: e.label })}
                         defaultValue={status}
                         options={state}
                     />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='secondary' onClick={() => toggleModal()}>
-                        Close
-              </MDBBtn>
-                    <MDBBtn color='primary'>Actualizar</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => updateStore()}>Actualizar</MDBBtn>
+                    <MDBBtn color='secondary' onClick={() => toggleModal()}>Close</MDBBtn>
                 </MDBModalFooter>
             </MDBModal>
 
@@ -226,4 +279,4 @@ const DatosdeVenta = () => {
     )
 
 }
-export default DatosdeVenta;
+export default StoreList;

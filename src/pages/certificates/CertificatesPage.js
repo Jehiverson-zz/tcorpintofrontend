@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import {
     MDBEdgeHeader,
     MDBContainer,
@@ -10,16 +9,9 @@ import {
     MDBAnimation
 } from 'mdbreact';
 import MenuLink from '../../components/menuLink';
+import Layaout from '../parcials/Layaout'
 
-import Layaout from '../parcials/Layaout';
-
-
-const Landing = () => {
-    const history = useHistory();
-
-    if (localStorage.getItem('session') != "true") {
-        history.push(`/`);
-    }
+const CertificatesPage = () => {
 
     return (
         <Layaout>
@@ -31,14 +23,16 @@ const Landing = () => {
                             <MDBJumbotron>
                                 <h1 className='text-center'>
                                     <MDBIcon icon='window-restore' className='mr-2 indigo-text' />
-                                    Configuraciones
+                                    Certificados
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
-                                    <MenuLink to='/stateList' title='Estados' />
-                                    <MenuLink to='/collaborationList' title='Colaboradores' />
-                                    <MenuLink to='/usersList' title='Usuario' />
-                                    <MenuLink to='/subsidiarias' title='Subsidiarias' />
-                                    <MenuLink to='/stores' title='Tiendas' />
+                                {
+                                    localStorage.getItem('type') == 'admin' &&(
+                                        <MenuLink to='/certificate/new_certificate' title='Nuevo Certificado' />
+                                    )
+                                }
+                                    <MenuLink to='/certificate/redeem_certificate' title='Canjear Certificado' />
+                                    <MenuLink to='/certificate/history' title='Historico de Certificado' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>
@@ -49,4 +43,4 @@ const Landing = () => {
     )
 }
 
-export default Landing
+export default CertificatesPage

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
-import { statesShow, statesCreate } from '../../../../functions/settingsFunction'
+import { SubsidiariasShow, subsidiariaCreate, subsidiariaUpdate } from '../../../../functions/settingsFunction'
 import Loading from '../img/loading.gif'
 import {
     MDBBtn,
@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import Select from 'react-select';
 import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
-const DatosdeVenta = () => {
+const SubsidiariasList = () => {
     const [dataSales, setdataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
@@ -26,14 +26,18 @@ const DatosdeVenta = () => {
     const [modal, setModal] = useState(false);
     const [modalCreate, setModalCreate] = useState(false);
 
+
     const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
     const [status, setStatus] = useState(false);
+    const [id, setId] = useState(false);
 
     const [] = useState(false)
-    const toggleModal = (name, status) => {
+    const toggleModal = (name, id,status) => {
+        console.log(status)
+        setId(id);
         setName(name);
-        setStatus(status);
+        setStatus({value:status, label:status});
         setModal(!modal);
     };
 
@@ -41,7 +45,7 @@ const DatosdeVenta = () => {
         setModalCreate(!modalCreate);
     };
 
-    const createEstatus = () => {
+    const createSubsidiaria = () => {
 
         if (name === false) {
             Swal.fire('Error', 'Falto ingresar nombre', 'error');
@@ -56,10 +60,27 @@ const DatosdeVenta = () => {
             status: status
         };
 
-        statesCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Estado Ingresado', 'success');
+        subsidiariaCreate(createItem).then(res => {
+            Swal.fire('Éxito', 'Subsidiaria Ingresada', 'success');
             ReloadData();
             toggleModalCreate();
+            falseData();
+        }).catch(err => {
+            Swal.fire('Error', 'Error al ingresar estados', 'error');
+        })
+    };
+
+    const updateSubsidiaria = () => {
+        const createItem = {
+            id: id,
+            name: name,
+            status: status.value
+        };
+
+        subsidiariaUpdate(createItem).then(res => {
+            Swal.fire('Éxito', 'Subsidiaria Actualizada', 'success');
+            ReloadData();
+            toggleModal();
             falseData();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
@@ -82,7 +103,7 @@ const DatosdeVenta = () => {
     }, [0])
 
     const ReloadData = () => {
-        statesShow()
+        SubsidiariasShow()
             .then((res) => {
                 console.log(res)
                 setdataSales(res);
@@ -96,6 +117,7 @@ const DatosdeVenta = () => {
 
     const falseData = () =>{
         setItem(false);
+        setId(false);
         setName(false);
         setStatus(false);
     };
@@ -107,7 +129,6 @@ const DatosdeVenta = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
-    const valueStatus = { value: status, label: status };
 
     return (
         <Layaout>
@@ -120,7 +141,7 @@ const DatosdeVenta = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Tickets" icon="ticket-alt">
+                    <CardHeader title="Subsidiarias" icon="ticket-alt">
                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
                             +
                     </MDBBtn>
@@ -137,13 +158,13 @@ const DatosdeVenta = () => {
                                 <Tablebinnacle posts={currentPosts} loading={loading} toggleModal={toggleModal} />
                             </MDBTableBody>
                             {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
+                        </MDBTable>
                             <Pagination
                                 postsPerPage={postsPerPage}
                                 totalPosts={dataSales.length}
                                 paginate={paginate}
                                 currentPage={currentPage}
                             />
-                        </MDBTable>
                     </CardHeader>
                 </>}
 
@@ -173,12 +194,12 @@ const DatosdeVenta = () => {
                     />
                     <Select
                         onChange={e => setStatus(e.label)}
-                        defaultValue={valueStatus}
+                        defaultValue={{value: '', label: 'Selecciona el estado'}}
                         options={state}
                     />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='primary' onClick={() => createEstatus()}>Crear</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => createSubsidiaria()}>Crear</MDBBtn>
                     <MDBBtn color='secondary' onClick={() => toggleModalCreate()}>Cerrar</MDBBtn>
 
                 </MDBModalFooter>
@@ -208,16 +229,14 @@ const DatosdeVenta = () => {
                         value={name}
                     />
                     <Select
-                        onChange={e => setStatus(e.label)}
+                        onChange={e => setStatus({value: e.label})}
                         defaultValue={status}
                         options={state}
                     />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='secondary' onClick={() => toggleModal()}>
-                        Close
-              </MDBBtn>
-                    <MDBBtn color='primary'>Actualizar</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => updateSubsidiaria()}>Actualizar</MDBBtn>
+                    <MDBBtn color='secondary' onClick={() => toggleModal()}>Close</MDBBtn>
                 </MDBModalFooter>
             </MDBModal>
 
@@ -226,4 +245,4 @@ const DatosdeVenta = () => {
     )
 
 }
-export default DatosdeVenta;
+export default SubsidiariasList;

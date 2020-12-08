@@ -13,10 +13,35 @@ export const statesShow = (store) => {
         console.log(error);
     })
 };
-
+ 
 export const statesCreate = (data) => {
     return axios
     .post(url + '/statusCreate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const statesUpdate = (data) => {
+    return axios
+    .post(url + '/statusUpdate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const statesDelete = (data) => {
+    console.log(data);
+    return axios
+    .post(url + '/statusDelete',data)
     .then((response) => {
         console.log(response.data)
         return response.data;
@@ -64,7 +89,7 @@ export const collaboratorUpdate = (data) => {
 };
 
 /*Muestra los datos de retiros*/
-export const UserShow = (store) => {
+export const userShow = (store) => {
     return axios
     .post(url + '/userShow')
     .then((response) => {

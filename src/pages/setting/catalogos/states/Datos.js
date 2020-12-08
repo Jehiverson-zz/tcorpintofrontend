@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
-import { statesShow, statesCreate } from '../../../../functions/settingsFunction'
+import { statesShow, statesCreate, statesUpdate } from '../../../../functions/settingsFunction'
 import Loading from '../img/loading.gif'
 import {
     MDBBtn,
@@ -31,7 +31,8 @@ const DatosdeVenta = () => {
     const [status, setStatus] = useState(false);
 
     const [] = useState(false)
-    const toggleModal = (name, status) => {
+    const toggleModal = (name, status, item) => {
+        setItem(item);
         setName(name);
         setStatus(status);
         setModal(!modal);
@@ -55,7 +56,7 @@ const DatosdeVenta = () => {
             name: name,
             status: status
         };
-
+        if (status !== false && name !== false) {
         statesCreate(createItem).then(res => {
             Swal.fire('Éxito', 'Estado Ingresado', 'success');
             ReloadData();
@@ -64,6 +65,35 @@ const DatosdeVenta = () => {
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
         })
+    }
+    };
+
+    const updateEstatus = () => {
+
+        if (name === false) {
+            Swal.fire('Error', 'Falto ingresar nombre', 'error');
+        }
+
+        if (status === false) {
+            Swal.fire('Error', 'Falto ingresar estatus', 'error');
+        }
+
+        const updateItem = {
+            id:item,
+            name: name,
+            status: status
+        };
+        if (status !== false && name !== false) {
+        statesUpdate(updateItem).then(res => {
+            Swal.fire('Éxito', 'Estado Actualizado', 'success');
+            ReloadData();
+            toggleModal();
+            falseData();
+        }).catch(err => {
+            Swal.fire('Error', 'Error al ingresar estados', 'error');
+        });
+    }
+
     };
 
     const state = [
@@ -120,10 +150,10 @@ const DatosdeVenta = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Tickets" icon="ticket-alt">
-                        <MDBBtn color='info' onClick={() => toggleModalCreate()}>
-                            +
-                    </MDBBtn>
+                    <CardHeader title="Estados" icon="ticket-alt">
+                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
+                            Agregar Estado
+                        </MDBBtn>
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>
@@ -215,9 +245,9 @@ const DatosdeVenta = () => {
                 </MDBModalBody>
                 <MDBModalFooter>
                     <MDBBtn color='secondary' onClick={() => toggleModal()}>
-                        Close
+                        x
               </MDBBtn>
-                    <MDBBtn color='primary'>Actualizar</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => updateEstatus()} >Actualizar</MDBBtn>
                 </MDBModalFooter>
             </MDBModal>
 

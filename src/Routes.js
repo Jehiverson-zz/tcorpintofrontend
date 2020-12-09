@@ -84,6 +84,12 @@ import HistoryTickets from './pages/tickets/HistoryTickets/HistoryTickets';
 //DamagedMerchandise
 import DamagedMerchandise from './pages/damagedMerchandise/damagedMerchandise';
 
+//Certificates
+import CertificatesPage from './pages/certificates/CertificatesPage';
+import NewCertificate from './pages/certificates/NewCertificates';
+import RedeemCertificate from './pages/certificates/RedeemCertificate';
+import HistoryCertificate from './pages/certificates/CertificadoHistory';
+
 //Retiros
 import Retreats from './pages/retiros/retiros';
 import RetreatsForm from './pages/retiros/form/retiros_form';
@@ -94,8 +100,10 @@ import RetreatsHistory from './pages/retiros/historial/tableList';
 //Settings
 import Settings from './pages/setting/Settings';
 import StatesList from './pages/setting/catalogos/states/Datos';
-import Collaboration from './pages/setting/catalogos/collaboration/Datos';
+import CollaboratosList from './pages/setting/catalogos/collaboration/Datos';
 import Users from './pages/setting/catalogos/users/Datos';
+import SubsidiariasList from './pages/setting/catalogos/subsidiarias/Datos';
+import StoreList from './pages/setting/catalogos/stores/Datos';
 
 class Routes extends React.Component {
 
@@ -117,6 +125,11 @@ class Routes extends React.Component {
 
         <Route exact path='/damaged_merchandise' component={DamagedMerchandise} />
 
+        <Route exact path='/certificates' component={CertificatesPage} />
+        <Route exact path='/certificate/new_certificate' component={NewCertificate} />
+        <Route exact path='/certificate/redeem_certificate' component={RedeemCertificate} />
+        <Route exact path='/certificate/history' component={HistoryCertificate} />
+
         <Route exact path='/retreats' component={Retreats} />
         <Route exact path='/retreats_form' component={RetreatsForm} />
         <Route exact path='/retreats_bitacoras' component={RetreatsBitacora} />
@@ -125,11 +138,11 @@ class Routes extends React.Component {
 
         <Route exact path='/settingsList' component={Settings} />
         <Route exact path='/stateList' component={StatesList} />
-        <Route exact path='/collaborationList' component={Collaboration} />
+        <Route exact path='/collaborationList' component={CollaboratosList} />
         <Route exact path='/usersList' component={Users} />
+        <Route exact path='/subsidiarias' component={SubsidiariasList} />
+        <Route exact path='/stores' component={StoreList} />
 
-
-      
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />
         <Route exact path='/components' component={ComponentsNavPage} />

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
-import { CollaboratorShow, collaboratorCreate, collaboratorUpdate } from '../../../../functions/settingsFunction'
+import { SubsidiariasShow, storeCreate, storeUpdate } from '../../../../functions/settingsFunction'
+import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
-
 import {
     MDBBtn,
     MDBIcon,
@@ -15,26 +15,89 @@ import {
     MDBModalFooter,
     MDBInput
 } from 'mdbreact';
-import TableCollaborators from './Table';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
+import TableStores from './Table';
 import Pagination from '../../../../components/pagination';
-import { getStore } from '../../../../functions/ticketFunction';
 
-const CollaboratosList = () => {
-    const [dataCollaborator, setDataCollaborator] = useState([]);
+const StoreList = () => {
+    const [dataStore, setdataStore] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
     const [modal, setModal] = useState(false);
     const [modalCreate, setModalCreate] = useState(false);
 
-    const [stores, setStores] = useState(false);
+
     const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
-    const [store, setStore] = useState(false);
+    const [subsidiaria, setSubsidiaria] = useState(false);
     const [status, setStatus] = useState(false);
     const [id, setId] = useState(false);
+
+    const [] = useState(false)
+    const [subsidiarias, setSubsidiarias] = useState([]);
+
+    const toggleModal = (id, name, subsidiaria, status) => {
+        setId(id);
+        setName(name);
+        setSubsidiaria({ value: subsidiaria, label: subsidiaria });
+        setStatus({ value: status, label: status });
+        setModal(!modal);
+    };
+
+    const toggleModalCreate = () => {
+        setModalCreate(!modalCreate);
+    };
+
+    const createStore = () => {
+
+        if (name === false) {
+            return Swal.fire('Error', 'Falto ingresar nombre', 'error');
+        }
+
+        if (subsidiaria === false) {
+            return Swal.fire('Error', 'Falto ingresar la subsidiaria', 'error');
+        }
+
+        if (status === false) {
+            return Swal.fire('Error', 'Falto ingresar estatus', 'error');
+        }
+
+        const createItem = {
+            name: name,
+            sbs: subsidiaria,
+            status: status
+        };
+
+        storeCreate(createItem).then(res => {
+            Swal.fire('Éxito', 'Tienda Ingresada', 'success');
+            ReloadData();
+            toggleModalCreate();
+            falseData();
+        }).catch(err => {
+            Swal.fire('Error', 'Error al ingresar tienda', 'error');
+        })
+    };
+
+    const updateStore = () => {
+        const createItem = {
+            id: id,
+            name: name,
+            sbs: subsidiaria.value,
+            status: status.value
+        };
+
+        storeUpdate(createItem).then(res => {
+            Swal.fire('Éxito', 'Tienda Actualizada', 'success');
+            ReloadData();
+            toggleModal();
+            falseData();
+        }).catch(err => {
+            Swal.fire('Error', 'Error al actualizar la tienda', 'error');
+        })
+    };
+
     const state = [
         {
             label: "Activo",
@@ -46,117 +109,54 @@ const CollaboratosList = () => {
         }
     ];
 
-    const toggleModal = (id, name, store, status) => {
-        setId(id);
-        setName(name);
-        setStore({ value: store, label: store });
-        setStatus({ value: status, label: status });
-        setModal(!modal);
-    };
-
-    const toggleModalCreate = () => {
-        setModalCreate(!modalCreate);
-    };
-
-    const createCollaborator = () => {
-
-        if (name === false) {
-            return Swal.fire('Error', 'Falto ingresar nombre', 'error');
-        }
-
-        if (store === false) {
-            return Swal.fire('Error', 'Falto ingresar la tienda', 'error');
-        }
-
-        if (status === false) {
-            return Swal.fire('Error', 'Falto ingresar estatus', 'error');
-        }
-
-        const createItem = {
-            name: name,
-            store: store,
-            status: status
-        };
-
-        console.log("CREATE", createItem)
-
-        collaboratorCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Colaborador Ingresada', 'success');
-            ReloadData();
-            toggleModalCreate();
-            falseData();
-        }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar colaborador', 'error');
-        })
-    };
-
-    const updateCollaborator = () => {
-        const createItem = {
-            id: id,
-            name: name,
-            store: store.value,
-            status: status.value
-        };
-        console.log("UPDATE", createItem)
-        collaboratorUpdate(createItem).then(res => {
-            Swal.fire('Éxito', 'Colaborador Actualizada', 'success');
-            ReloadData();
-            toggleModal();
-            falseData();
-        }).catch(err => {
-            Swal.fire('Error', 'Error al actualizar al colaborador', 'error');
-        })
-    };
-
     useEffect(() => {
         ReloadData();
     }, [0])
 
     const ReloadData = () => {
-        getStores();
-        CollaboratorShow()
-            .then((res) =>
-                setDataCollaborator(res),
-                setLoading(false)
-            )
-            .catch(err =>
-                setLoading(true)
-            )
+        getSubsidiarias();
+        getStore().then((res) => {
+            setdataStore(res)
+            setLoading(false);
+        })
+            .catch(error => console.log(error))
     };
 
-    const getStores = () => {
-        getStore()
+    const getSubsidiarias = () => {
+        SubsidiariasShow()
             .then((response) => {
                 let data = []
                 response.map(sub => {
                     data.push({ value: sub.name, label: sub.name })
                 })
-                setStores(data);
+                setSubsidiarias(data);
             }
             )
             .catch(err =>
                 setLoading(true)
             )
     }
+
     const falseData = () => {
         setItem(false);
         setId(false);
         setName(false);
-        setStores(false);
+        setSubsidiaria(false);
         setStatus(false);
     };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = dataCollaborator.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = dataStore.slice(indexOfFirstPost, indexOfLastPost);
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+
     return (
         <Layaout>
             { loading ?
-                (<center> <img
+                (<center><img
                     alt='Preload'
                     className='img-fluid'
                     src={Loading}
@@ -164,7 +164,7 @@ const CollaboratosList = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Colaboradores" icon="ticket-alt">
+                    <CardHeader title="Tiendas" icon="ticket-alt">
                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
                             +
                     </MDBBtn>
@@ -172,25 +172,27 @@ const CollaboratosList = () => {
                             <MDBTableHead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Tienda</th>
+                                    <th>Subsidiaria</th>
                                     <th>Estado</th>
                                     <th>Fecha</th>
-                                    <th>Acción</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
-                                <TableCollaborators posts={currentPosts} loading={loading} toggleModal={toggleModal} />
+                                <TableStores posts={currentPosts} loading={loading} toggleModal={toggleModal} />
                             </MDBTableBody>
-                            {dataCollaborator.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
+                            {dataStore.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
                         </MDBTable>
                         <Pagination
                             postsPerPage={postsPerPage}
-                            totalPosts={dataCollaborator.length}
+                            totalPosts={dataStore.length}
                             paginate={paginate}
                             currentPage={currentPage}
                         />
                     </CardHeader>
                 </>}
+
+
             {/*-----Nuevo---------*/}
             <MDBModal
                 isOpen={modalCreate}
@@ -199,7 +201,7 @@ const CollaboratosList = () => {
             >
                 <div className='modal-header primary-color white-text'>
                     <h4 className='title'>
-                        <MDBIcon icon='pencil-alt' /> Crear Colaborador
+                        <MDBIcon icon='pencil-alt' /> Crear Tienda
               </h4>
                     <button type='button' className='close' onClick={() => toggleModalCreate()}>
                         <span aria-hidden='true'>×</span>
@@ -215,9 +217,9 @@ const CollaboratosList = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                     <Select
-                        onChange={e => setStore(e.label)}
-                        defaultValue={{ value: false, label: 'Selecciona una tienda' }}
-                        options={stores}
+                        onChange={e => setSubsidiaria(e.label)}
+                        defaultValue={{ value: false, label: 'Selecciona una subsidiaria' }}
+                        options={subsidiarias}
                     /><br />
                     <Select
                         onChange={e => setStatus(e.label)}
@@ -226,7 +228,7 @@ const CollaboratosList = () => {
                     />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='primary' onClick={() => createCollaborator()}>Crear</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => createStore()}>Crear</MDBBtn>
                     <MDBBtn color='secondary' onClick={() => toggleModalCreate()}>Cerrar</MDBBtn>
 
                 </MDBModalFooter>
@@ -239,7 +241,7 @@ const CollaboratosList = () => {
             >
                 <div className='modal-header primary-color white-text'>
                     <h4 className='title'>
-                        <MDBIcon icon='pencil-alt' /> Editar Colaborador
+                        <MDBIcon icon='pencil-alt' /> Editar Estado
               </h4>
                     <button type='button' className='close' onClick={() => toggleModal()}>
                         <span aria-hidden='true'>×</span>
@@ -256,9 +258,9 @@ const CollaboratosList = () => {
                         value={name}
                     />
                     <Select
-                        onChange={e => setStore({ value: e.label })}
-                        defaultValue={store}
-                        options={stores}
+                        onChange={e => setSubsidiaria({ value: e.label })}
+                        defaultValue={subsidiaria}
+                        options={subsidiarias}
                     /><br />
                     <Select
                         onChange={e => setStatus({ value: e.label })}
@@ -267,12 +269,14 @@ const CollaboratosList = () => {
                     />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='primary' onClick={() => updateCollaborator()}>Actualizar</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => updateStore()}>Actualizar</MDBBtn>
                     <MDBBtn color='secondary' onClick={() => toggleModal()}>Close</MDBBtn>
                 </MDBModalFooter>
             </MDBModal>
+
+
         </Layaout>
     )
 
 }
-export default CollaboratosList;
+export default StoreList;

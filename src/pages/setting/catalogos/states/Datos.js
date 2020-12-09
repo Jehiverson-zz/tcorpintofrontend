@@ -114,6 +114,7 @@ const DatosdeVenta = () => {
     const ReloadData = () => {
         statesShow()
             .then((res) => {
+                console.log(res)
                 setdataSales(res);
                 setLoading(false);
             }
@@ -128,6 +129,7 @@ const DatosdeVenta = () => {
         setName(false);
         setStatus(false);
     };
+
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;

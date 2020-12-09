@@ -97,7 +97,15 @@ class Navbar extends Component {
                   <strong>Mercadería Dañada</strong>
                 </MDBNavLink>
               </MDBNavItem>
-
+              <MDBNavItem>
+                <MDBNavLink
+                  exact
+                  to='/certificates'
+                  onClick={this.closeCollapse('mainNavbarCollapse')}
+                >
+                  <strong>Certificados</strong>
+                </MDBNavLink>
+              </MDBNavItem>
               <MDBNavItem>
                 <MDBNavLink
                   exact

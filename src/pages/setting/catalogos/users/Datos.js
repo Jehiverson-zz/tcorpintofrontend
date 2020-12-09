@@ -150,23 +150,25 @@ const DatosdeVenta = () => {
                     <br></br>
                     <CardHeader title="Usuarios" icon="ticket-alt">
                          <MDBBtn color='info' onClick={() => toggleModalCreate()}>
-                            Agregar Estado
+                            Agregar Usuario
                         </MDBBtn>
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>
-                                    <th>Nombre</th>
                                     <th>Email</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo Usuario</th>
+                                    <th>Fecha variable</th>
                                     <th>Tienda</th>
-                                    <th>Tipo</th>
                                     <th>Estatus</th>
+                                    <th>Fecha Creacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
                                 <Tablebinnacle posts={currentPosts} loading={loading} toggleModal={toggleModal} />
                             </MDBTableBody>
-                            {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
+                            {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos</center></td></tr>) : ""}
                             <Pagination
                                 postsPerPage={postsPerPage}
                                 totalPosts={dataSales.length}

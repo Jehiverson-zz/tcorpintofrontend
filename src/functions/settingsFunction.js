@@ -77,3 +77,29 @@ export const userShow = (store) => {
     })
 };
 
+/*Muestra los datos de retiros*/
+export const userCreate = (store) => {
+    return axios
+    .post(url + '/userCreate')
+    .then((response) => {
+        console.log(response.data.showUserInfo);
+        return response.data.showUserInfo;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+/*Muestra los datos de retiros*/
+export const userUpdate = (store) => {
+    return axios
+    .post(url + '/userUpdate')
+    .then((response) => {
+        console.log(response.data.showUserInfo);
+        return response.data.showUserInfo;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+

@@ -17,7 +17,7 @@ import Layaout from '../parcials/Layaout';
 const Landing = () => {
     const history = useHistory();
 
-    if (localStorage.getItem('session') != "true") {
+    if (localStorage.getItem('session') !== "true") {
         history.push(`/`);
     }
 

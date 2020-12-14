@@ -30,7 +30,6 @@ const DatosdeVenta = () => {
     const [name, setName] = useState(false);
     const [status, setStatus] = useState(false);
 
-    const [] = useState(false)
     const toggleModal = (name, status, item) => {
         setItem(item);
         setName(name);

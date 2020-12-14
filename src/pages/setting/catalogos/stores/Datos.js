@@ -29,13 +29,12 @@ const StoreList = () => {
     const [modalCreate, setModalCreate] = useState(false);
 
 
-    const [item, setItem] = useState(false);
+    const [setItem] = useState(false);
     const [name, setName] = useState(false);
     const [subsidiaria, setSubsidiaria] = useState(false);
     const [status, setStatus] = useState(false);
     const [id, setId] = useState(false);
 
-    const [] = useState(false)
     const [subsidiarias, setSubsidiarias] = useState([]);
 
     const toggleModal = (id, name, subsidiaria, status) => {

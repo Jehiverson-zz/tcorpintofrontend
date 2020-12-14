@@ -19,7 +19,6 @@ import {
     MDBTableHead,
     MDBTableBody
 } from 'mdbreact';
-import { FaRegPaperPlane, FaStoreAlt, FaCheckDouble, FaBan } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 
 const Toast = Swal.mixin({
@@ -46,7 +45,7 @@ const DamagedMerchandise = () => {
 
     useEffect(() => {
         damaged_merchandise();
-    }, [0])
+    }, [])
 
     function result_function(icon, text) {
         Toast.fire({

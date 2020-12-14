@@ -27,12 +27,11 @@ const SubsidiariasList = () => {
     const [modalCreate, setModalCreate] = useState(false);
 
 
-    const [item, setItem] = useState(false);
+    const [setItem] = useState(false);
     const [name, setName] = useState(false);
     const [status, setStatus] = useState(false);
     const [id, setId] = useState(false);
 
-    const [] = useState(false)
     const toggleModal = (name, id,status) => {
         console.log(status)
         setId(id);

@@ -27,7 +27,7 @@ const CertificatesPage = () => {
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
                                 {
-                                    localStorage.getItem('type') == 'admin' &&(
+                                    localStorage.getItem('type') === 'admin' &&(
                                         <MenuLink to='/certificate/new_certificate' title='Nuevo Certificado' />
                                     )
                                 }

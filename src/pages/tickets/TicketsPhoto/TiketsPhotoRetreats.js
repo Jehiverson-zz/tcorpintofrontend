@@ -57,7 +57,7 @@ const TicketsPhotoRetreats = () => {
 
     useEffect(() => {
         get_photo_retreats();
-    }, [0]);
+    }, []);
 
     function get_photo_retreats() {
         getPhotoRetreats().then((res) => setphotoRetreats(res));

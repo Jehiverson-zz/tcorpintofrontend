@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
 import {
     getAllCertificates,
     exchangeCertificate
@@ -17,21 +16,12 @@ import {
     MDBRow,
     MDBCol,
     MDBInput,
-    MDBBtn,
     MDBIcon,
     MDBContainer,
-    MDBCard,
-    MDBCardBody,
-    MDBCardTitle,
     MDBTable,
     MDBTableBody,
-    MDBTableHead,
-    MDBModal,
-    MDBModalBody,
-    MDBModalHeader,
-    MDBModalFooter
+    MDBTableHead
 } from 'mdbreact';
-import { FaRegPaperPlane, FaStoreAlt, FaCheckDouble, FaBan } from 'react-icons/fa'
 import Select from 'react-select';
 import Swal from 'sweetalert2'
 
@@ -76,8 +66,6 @@ function a11yProps(index) {
 
 
 const RedeemCertificate = () => {
-    const my_store = localStorage.getItem("store");
-    const my_email = localStorage.getItem("email");
     const [loading, setLoading] = useState(0);
     const [dataCertificatesActives, setDataCertificatesActives] = useState([]);
     const [dataCertificatesInactives, setDataCertificatesInactives] = useState([]);
@@ -90,8 +78,6 @@ const RedeemCertificate = () => {
     const [value, setValue] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
-    const history = useHistory();
-    //let selectData = [];
 
     useEffect(() => {
         getAllData();
@@ -103,7 +89,7 @@ const RedeemCertificate = () => {
             .then((response) => {
                 let data = []
                 response.data.activos.map(certif => {
-                    data.push({ value: `${certif._id}|${certif.val_cer}`, label: `${certif.no_cer}-${certif.name_cer}-Q${certif.val_cer}` })
+                    return data.push({ value: `${certif._id}|${certif.val_cer}`, label: `${certif.no_cer}-${certif.name_cer}-Q${certif.val_cer}` })
                 })
                 setSelectData(data);
                 setDataCertificatesActives(response.data.activos);
@@ -124,11 +110,11 @@ const RedeemCertificate = () => {
 
     const handleChange = (e, name) => {
         const values = [...dataCertificate];
-        if(name == 'store'){
+        if(name === 'store'){
             values[0]['id'] = e.value;
-        }else if(name == 'num_fact'){
+        }else if(name === 'num_fact'){
             values[0][name] = e.target.value;
-        }else if(name == 'val_fact'){
+        }else if(name === 'val_fact'){
             values[0][name] = e.target.value;
         }
 
@@ -144,13 +130,13 @@ const RedeemCertificate = () => {
         let array_data = value.split("|");
         let id = array_data[0];
         let valor_factura = array_data[1];
-        if(dataCertificate[0].val_fact == 0){
+        if(dataCertificate[0].val_fact === 0){
             result_function('error','El valor de la factura no puede ser "0"')
-        } else if(dataCertificate[0].num_fact == null){
+        } else if(dataCertificate[0].num_fact === null){
             result_function('error','Ingrese un número de factura')
-        } else if(dataCertificate[0].id == null){
+        } else if(dataCertificate[0].id === null){
             result_function('error','Debe seleccionar un certificado')
-        } else if(dataCertificate[0].val_fact == null){
+        } else if(dataCertificate[0].val_fact === null){
             result_function('error','Debe ingresar el valor de la factura')
         } else if(parseFloat(dataCertificate[0].val_fact) > parseFloat(valor_factura)){
             result_function('error','El valor de la factura es mayor al valor del certificado')

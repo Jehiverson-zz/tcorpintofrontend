@@ -75,7 +75,7 @@ const DatosdeVenta = () => {
             .catch(err =>
                 setLoading(true)
             )
-    }, [0])
+    }, [])
 
     const dataAsigned = (data) => {
         console.log(data);

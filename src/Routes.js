@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch,Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import NavigationNavPage from './pages/NavigationNavPage';
 import FormsNavPage from './pages/FormsNavPage';
@@ -12,7 +12,6 @@ import ComponentsNavPage from './pages/ComponentsNavPage';
 // FREE
 import AnimationPage from './pages/AnimationPage';
 import AlertPage from './pages/AlertPage';
-import HomePage from './pages/HomePage';
 import ButtonPage from './pages/ButtonPage';
 import CSSNavPage from './pages/CSSNavPage';
 import TablePage from './pages/TablePage';

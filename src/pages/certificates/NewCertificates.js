@@ -55,31 +55,27 @@ const NewCertificate = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
 
-    useEffect(() => {
-        certificates_actives();
-    }, [0])
-
     function result_function(icon, text) {
         Toast.fire({
             icon: icon,
             title: text
         })
     }
+    
+  
 
     function certificates_actives() {
         getCertificates().then((response) => {
-            console.log("CONTROLLER:", response.data);
             if(response.data){
                 setDataCertificates(response.data.certificados)
-                setTimeout(() => {
-                    setLoading(false)
-                }, 1000);
+                setLoading(false)
             }else{
                 result_function('error', 'No se puedo obtener una respuesta del servidor')
             }
         }).catch(err => console.log(err));
     }
-
+    
+   
     function crearCertificate() {
         let cont = 0;
         fields.some(function (x, i) {
@@ -140,12 +136,14 @@ const NewCertificate = () => {
         setFields(values);
     }
     let array_null = [];
-    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = dataCertificates?dataCertificates.slice(indexOfFirstPost, indexOfLastPost):array_null.slice(indexOfFirstPost, indexOfLastPost);
 
+    useEffect(() => {
+        certificates_actives()
+        }, [])
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
@@ -312,7 +310,7 @@ const NewCertificate = () => {
                 </MDBTable>
                 <Pagination
                     postsPerPage={postsPerPage}
-                    totalPosts={dataCertificates != undefined?dataCertificates.length:0}
+                    totalPosts={dataCertificates !== undefined?dataCertificates.length:0}
                     paginate={paginate}
                     currentPage={currentPage}
                 />

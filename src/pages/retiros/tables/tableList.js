@@ -26,7 +26,7 @@ const DatosdeVenta = () => {
             .catch(err =>
                 setLoading(true)
             )
-    }, [0])
+    }, [])
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;

@@ -13,7 +13,7 @@ export const statesShow = (store) => {
         console.log(error);
     })
 };
- 
+
 export const statesCreate = (data) => {
     return axios
     .post(url + '/statusCreate',data)
@@ -51,6 +51,7 @@ export const statesDelete = (data) => {
     })
 };
 
+/* COLABORADORES */
 /*Muestra los datos de retiros*/
 export const CollaboratorShow = (store) => {
     return axios
@@ -88,6 +89,7 @@ export const collaboratorUpdate = (data) => {
     })
 };
 
+/* USUARIOS */
 /*Muestra los datos de retiros*/
 export const userShow = (store) => {
     return axios
@@ -139,6 +141,8 @@ export const subsidiariaUpdate = (data) => {
         console.log(error);
     })
 };
+
+/* TIENDAS */
 
 export const storeCreate = (data) => {
     return axios

@@ -9,7 +9,7 @@ const TableCertificates = ({ posts, loading }) => {
   const history = useHistory();
   if (loading) {
     return (
-        <h4>Cargando Datos...</h4>
+        <tr><td colSpan="12"><center>Cargando Datos...</center></td></tr>
     )
   }
 

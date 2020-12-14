@@ -1,9 +1,8 @@
 import React from 'react';
 import dateFormat from 'dateformat';
 import Button from '@material-ui/core/Button';
-import { useHistory } from "react-router-dom";
 const Tablebinnacle = ({ posts, loading, toggleModal }) => {
-  const history = useHistory();
+  
   if (loading) {
     return <h2>Cargando Datos...</h2>;
   }

@@ -64,6 +64,30 @@ export const CollaboratorShow = (store) => {
     })
 };
 
+export const collaboratorCreate = (data) => {
+    return axios
+    .post(url + '/collaboratorCreate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const collaboratorUpdate = (data) => {
+    return axios
+    .put(url + '/collaboratorUpdate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
 /*Muestra los datos de retiros*/
 export const userShow = (store) => {
     return axios
@@ -78,28 +102,88 @@ export const userShow = (store) => {
 };
 
 /*Muestra los datos de retiros*/
-export const userCreate = (store) => {
+export const userCreate = (data) => {
     return axios
-    .post(url + '/userCreate')
+    .post(url + '/userCreate', data)
     .then((response) => {
         console.log(response.data.showUserInfo);
         return response.data.showUserInfo;
-    })
-    .catch((error) => {
+    }).catch((error) => {
         console.log(error);
-    })
+    });
 };
 
 /*Muestra los datos de retiros*/
-export const userUpdate = (store) => {
+export const userUpdate = (data) => {
     return axios
-    .post(url + '/userUpdate')
+    .post(url + '/userUpdate', data)
     .then((response) => {
         console.log(response.data.showUserInfo);
         return response.data.showUserInfo;
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
+/* SUBSIDIARIAS */
+
+/*Muestra los datos de subsidiarias*/
+export const SubsidiariasShow = (store) => {
+    return axios
+    .post(url + '/subsidiariaShow')
+    .then((response) => {
+        console.log(response.data.subsidiarias);
+        return response.data.subsidiarias;
     })
     .catch((error) => {
         console.log(error);
     })
 };
 
+export const subsidiariaCreate = (data) => {
+    return axios
+    .post(url + '/subsidiariaCreate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const subsidiariaUpdate = (data) => {
+    return axios
+    .put(url + '/subsidiariaUpdate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const storeCreate = (data) => {
+    return axios
+    .post(url + '/storeCreate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+export const storeUpdate = (data) => {
+    return axios
+    .put(url + '/storeUpdate',data)
+    .then((response) => {
+        console.log(response.data)
+        return response.data;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import {
     MDBEdgeHeader,
     MDBContainer,
@@ -10,16 +9,9 @@ import {
     MDBAnimation
 } from 'mdbreact';
 import MenuLink from '../../components/menuLink';
+import Layaout from '../parcials/Layaout'
 
-import Layaout from '../parcials/Layaout';
-
-
-const Landing = () => {
-    const history = useHistory();
-
-    if (localStorage.getItem('session') !== "true") {
-        history.push(`/`);
-    }
+const CertificatesPage = () => {
 
     return (
         <Layaout>
@@ -31,12 +23,16 @@ const Landing = () => {
                             <MDBJumbotron>
                                 <h1 className='text-center'>
                                     <MDBIcon icon='window-restore' className='mr-2 indigo-text' />
-                                    Retiro
+                                    Certificados
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
-                                    <MenuLink to='/retreats_form' title='Nuevo Retiro' />
-                                    <MenuLink to='/retreats_bitacoras_list' title='Total de retiro' />
-                                    <MenuLink to='/retreats_history' title='Historial Retiros' />
+                                {
+                                    localStorage.getItem('type') === 'admin' &&(
+                                        <MenuLink to='/certificate/new_certificate' title='Nuevo Certificado' />
+                                    )
+                                }
+                                    <MenuLink to='/certificate/redeem_certificate' title='Canjear Certificado' />
+                                    <MenuLink to='/certificate/history' title='Historico de Certificado' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>
@@ -47,4 +43,4 @@ const Landing = () => {
     )
 }
 
-export default Landing
+export default CertificatesPage

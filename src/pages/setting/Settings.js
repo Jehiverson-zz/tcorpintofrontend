@@ -17,7 +17,7 @@ import Layaout from '../parcials/Layaout';
 const Landing = () => {
     const history = useHistory();
 
-    if (localStorage.getItem('session') != "true") {
+    if (localStorage.getItem('session') !== "true") {
         history.push(`/`);
     }
 
@@ -37,6 +37,8 @@ const Landing = () => {
                                     <MenuLink to='/stateList' title='Estados' />
                                     <MenuLink to='/collaborationList' title='Colaboradores' />
                                     <MenuLink to='/usersList' title='Usuario' />
+                                    <MenuLink to='/subsidiarias' title='Subsidiarias' />
+                                    <MenuLink to='/stores' title='Tiendas' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>

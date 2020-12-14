@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import dateFormat from 'dateformat'
 import CurrencyFormat from 'react-currency-format';
 import Button from '@material-ui/core/Button';
-import Swal from 'sweetalert2';
 import { useHistory } from "react-router-dom";
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
-//Funciones
-import { deleteDataSales } from '../../../functions/salesFunctions'
 
 const Tablebinnacle = ({ posts, loading }) => {
 

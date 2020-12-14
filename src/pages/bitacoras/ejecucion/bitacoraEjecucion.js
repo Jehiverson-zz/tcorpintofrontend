@@ -24,7 +24,7 @@ const DatosEjecucion = () => {
     const [dataDailies, setdataDailies] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
     const [dataBinacle, setdataBinacle] = useState([{
      hamachi: null,
      recepTrans: null,
@@ -80,6 +80,9 @@ const DatosEjecucion = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
     return (
         <Layaout>
             { loading ?

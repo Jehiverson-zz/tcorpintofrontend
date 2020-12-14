@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
-import CardHeader from '../../../../components/CardHeader'
-import { userShow, statesCreate, statesUpdate } from '../../../../functions/settingsFunction'
+import CardHeader from '../../../../components/CardHeader';
+import { userShow, userCreate, userUpdate } from '../../../../functions/settingsFunction';
+import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
 import {
     MDBBtn,
@@ -19,6 +20,7 @@ import Select from 'react-select';
 import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
 const DatosdeVenta = () => {
+    const [dataStore, setdataStore] = useState([]);
     const [dataSales, setdataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -28,13 +30,27 @@ const DatosdeVenta = () => {
 
     const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
+    const [email, setEmail] = useState(false);
     const [status, setStatus] = useState(false);
+    const [store, setStore] = useState(false);
+    const [typeUser, setTypeUser] = useState(false);
+    const [fvariable, setFVariable] = useState(false);
+    const [password, setPassword] = useState(false);
+    const [passwordC, setPasswordC] = useState(false);
+    const [checkVal, setCheck] = useState(false);
 
-    const [] = useState(false)
-    const toggleModal = (name, status, item) => {
+    const toggleModal = (email, name, type, change_date, store, status,item, password) => {
         setItem(item);
         setName(name);
         setStatus(status);
+        setEmail(email);
+        setStore(store);
+        setTypeUser(type);
+        setPassword(password);
+        setFVariable(change_date);
+        setPasswordC(password);
+        change_date?setCheck("checked"):setCheck(false);
+        console.log(checkVal);
         setModal(!modal);
     };
 
@@ -42,7 +58,7 @@ const DatosdeVenta = () => {
         setModalCreate(!modalCreate);
     };
 
-    const createEstatus = () => {
+    const createUser = () => {
 
         if (name === false) {
             Swal.fire('Error', 'Falto ingresar nombre', 'error');
@@ -50,25 +66,49 @@ const DatosdeVenta = () => {
 
         if (status === false) {
             Swal.fire('Error', 'Falto ingresar estatus', 'error');
+        }
+
+        if (store === false) {
+            Swal.fire('Error', 'Falto ingresar tienda', 'error');
+        }
+
+        if (typeUser === false) {
+            Swal.fire('Error', 'Falto ingresar tipo', 'error');
+        }
+
+        if (email === false) {
+            Swal.fire('Error', 'Falto ingresar email', 'error');
+        }
+
+        if (password === false) {
+            Swal.fire('Error', 'Falto ingresar contraseña', 'error');
         }
 
         const createItem = {
             name: name,
-            status: status
+            status: status,
+            email:email,
+            store: store,
+            typeUser: typeUser,
+            change_date: fvariable,
+            password: password
         };
-        if (status !== false && name !== false) {
-        statesCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Estado Ingresado', 'success');
+        
+        if (name !== false && status !== false && email !== false && store !== false && typeUser !== false) {
+            console.log(createItem)
+            userCreate(createItem).then(res => {
+            Swal.fire('Éxito', 'Usuario Ingresado', 'success');
             ReloadData();
             toggleModalCreate();
             falseData();
         }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar estados', 'error');
-        })
+            Swal.fire('Error', 'Error al ingresar usuario', 'error');
+        }) 
     }
+    falseData();
     };
 
-    const updateEstatus = () => {
+    const updateUser = () => {
 
         if (name === false) {
             Swal.fire('Error', 'Falto ingresar nombre', 'error');
@@ -76,21 +116,45 @@ const DatosdeVenta = () => {
 
         if (status === false) {
             Swal.fire('Error', 'Falto ingresar estatus', 'error');
+        }
+
+        if (store === false) {
+            Swal.fire('Error', 'Falto ingresar tienda', 'error');
+        }
+
+        if (typeUser === false) {
+            Swal.fire('Error', 'Falto ingresar tipo', 'error');
+        }
+
+        if (email === false) {
+            Swal.fire('Error', 'Falto ingresar email', 'error');
+        }
+
+        if (password === false) {
+            Swal.fire('Error', 'Falto ingresar contraseña', 'error');
         }
 
         const updateItem = {
             id:item,
             name: name,
-            status: status
+            status: status,
+            email:email,
+            store: store,
+            typeUser: typeUser,
+            change_date: fvariable,
+            password: password,
+            passwordC: passwordC
         };
-        if (status !== false && name !== false) {
-        statesUpdate(updateItem).then(res => {
-            Swal.fire('Éxito', 'Estado Actualizado', 'success');
+        
+        if (name !== false && status !== false && email !== false && store !== false && typeUser !== false) {
+        console.log(updateItem);
+        userUpdate(updateItem).then(res => {
+            Swal.fire('Éxito', 'Usuario Actualizado', 'success');
             ReloadData();
             toggleModal();
             falseData();
         }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar estados', 'error');
+            Swal.fire('Error', 'Error al ingresar usuario', 'error');
         });
     }
 
@@ -107,9 +171,21 @@ const DatosdeVenta = () => {
         }
     ];
 
+    const typeUserList = [
+        {
+            label: "Administrador",
+            name: "admin"
+        },
+        {
+            label: "Usuario",
+            name: "user"
+        }
+    ];
+
+    
     useEffect(() => {
         ReloadData();
-    }, [0])
+    }, [])
 
     const ReloadData = () => {
         userShow()
@@ -121,12 +197,29 @@ const DatosdeVenta = () => {
             .catch(err =>
                 setLoading(true)
             )
+            
+        getStore().then((res) => {
+            console.log(res);
+            var storeData = [];
+            res.map(store =>{
+                return storeData.push({label: store.name, name: store.name});
+            });
+            setdataStore(storeData);
+            setLoading(false);
+        })
+            .catch(error => console.log(error))
     };
 
     const falseData = () =>{
         setItem(false);
         setName(false);
         setStatus(false);
+        setEmail(false);
+        setStore(false);
+        setTypeUser(false);
+        setPassword(false);
+        setFVariable(false);
+        setPasswordC(false);
     };
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -135,8 +228,6 @@ const DatosdeVenta = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
-    const valueStatus = { value: status, label: status };
-
     return (
         <Layaout>
             { loading ?
@@ -160,7 +251,7 @@ const DatosdeVenta = () => {
                                     <th>Tipo Usuario</th>
                                     <th>Fecha variable</th>
                                     <th>Tienda</th>
-                                    <th>Estatus</th>
+                                    <th>User</th>
                                     <th>Fecha Creacion</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -188,7 +279,7 @@ const DatosdeVenta = () => {
             >
                 <div className='modal-header primary-color white-text'>
                     <h4 className='title'>
-                        <MDBIcon icon='pencil-alt' /> Crear Estado
+                        <MDBIcon icon='pencil-alt' /> Crear Usuario
               </h4>
                     <button type='button' className='close' onClick={() => toggleModalCreate()}>
                         <span aria-hidden='true'>×</span>
@@ -203,14 +294,51 @@ const DatosdeVenta = () => {
                         success='right'
                         onChange={(e) => setName(e.target.value)}
                     />
+
+                    <MDBInput
+                        label='Correo'
+                        icon='address-book'
+                        type='email'
+                        error='wrong'
+                        success='right'
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+<MDBInput
+                        label='Contraseña'
+                        icon='user'
+                        type='password'
+                        error='wrong'
+                        success='right'
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                     <label>Tiendas</label>
+                    <Select
+                        onChange={e => setStore(e.label)}
+                        options={dataStore}
+                    />
+                     <label> Tipo</label>
+                    <Select
+                        onChange={e => setTypeUser(e.label)}
+                        options={typeUserList}
+                    />
+                    <label> Estados</label>
                     <Select
                         onChange={e => setStatus(e.label)}
-                        defaultValue={valueStatus}
                         options={state}
                     />
+                    <br />
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked" onClick={() => setFVariable(!fvariable)}/>
+                        <label class="custom-control-label" for="defaultUnchecked">Fecha Variable</label>
+                    </div>
+
+                    <br />
+                    <br />
+                    <br />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='primary' onClick={() => createEstatus()}>Crear</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => createUser()}>Crear</MDBBtn>
                     <MDBBtn color='secondary' onClick={() => toggleModalCreate()}>Cerrar</MDBBtn>
 
                 </MDBModalFooter>
@@ -230,26 +358,64 @@ const DatosdeVenta = () => {
                     </button>
                 </div>
                 <MDBModalBody>
-                <MDBInput
+                    <MDBInput
                         label='Nombre'
                         icon='user'
                         type='text'
                         error='wrong'
                         success='right'
-                        onChange={(e) => setName(e.target.value)}
                         value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
+
+                    <MDBInput
+                        label='Correo'
+                        icon='address-book'
+                        type='email'
+                        error='wrong'
+                        success='right'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+<MDBInput
+                        label='Contraseña'
+                        icon='user'
+                        type='password'
+                        error='wrong'
+                        success='right'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                     <label>Tiendas</label>
+                    <Select
+                        onChange={e => setStore(e.label)}
+                        defaultValue={store}
+                        options={dataStore}
+                    />
+                     <label> Tipo</label>
+                    <Select
+                        onChange={e => setTypeUser(e.label)}
+                        defaultValue={typeUser}
+                        options={typeUserList}
+                    />
+                    <label> Estados</label>
                     <Select
                         onChange={e => setStatus(e.label)}
                         defaultValue={status}
                         options={state}
                     />
+                    <br />
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked" onClick={() => setFVariable(!fvariable)} checked={checkVal}/>
+                        <label class="custom-control-label">Fecha Variable</label>
+                    </div>
                 </MDBModalBody>
                 <MDBModalFooter>
                     <MDBBtn color='secondary' onClick={() => toggleModal()}>
                         x
               </MDBBtn>
-                    <MDBBtn color='primary' onClick={() => updateEstatus()} >Actualizar</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => updateUser()} >Actualizar</MDBBtn>
                 </MDBModalFooter>
             </MDBModal>
 

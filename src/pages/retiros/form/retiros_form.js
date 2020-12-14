@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader';
 import { retreatShow, retreatCreated, retreatUpdate } from '../../../functions/retreatsFunction';
@@ -15,10 +14,7 @@ import {
     MDBCard,
     MDBCardBody,
     MDBCardTitle,
-    MDBCardText,
-    MDBTable,
-    MDBTableBody,
-    MDBTableHead
+    MDBCardText
 } from 'mdbreact';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -43,8 +39,6 @@ const Toast = Swal.mixin({
 const ImmediateDelivery = () => {
     const my_store = localStorage.getItem("store");
     const my_type = localStorage.getItem("type");
-    const history = useHistory();
-    const [value, setValue] = useState(0);
     const [dataRetreats, setDataRetreats] = useState([]);
     const [vendor, setVendor] = useState(null);
     const [fields, setFields] = useState([
@@ -62,10 +56,6 @@ const ImmediateDelivery = () => {
         }]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
-
-    useEffect(() => {
-        getRetreats();
-    }, [0] );
 
     function result_function(icon, text) {
         Toast.fire({
@@ -179,6 +169,10 @@ const ImmediateDelivery = () => {
         }
     }
 
+    useEffect(() => {
+        getRetreats();
+    }, [] );
+    
     const changeValueCalcule = () =>{
         const values = [...fields];
         let price = fields[0].precio !== null ? fields[0].precio : 1 ;

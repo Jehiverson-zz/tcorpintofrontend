@@ -55,7 +55,7 @@ const history = useHistory();
 
     //Stepper
     const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set());
+    const [skipped] = useState(new Set());
     const [stepper, setStepper] = useState(null);
     const [stepperMessage, setStepperMessage] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -113,7 +113,7 @@ const history = useHistory();
     const [startDate, setStartDate] = useState(null);
     const [store, setStore] = useState(null);
     //Datos devueltos de la creación
-    const[dataResult, setDataResult] = useState({});
+    const[setDataResult] = useState({});
     //ApiRest datos de colaboradores
     const datos = [];
     getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
@@ -862,14 +862,16 @@ const history = useHistory();
                 var validateVendorsempty = 0;
                 vendor.map((res) => {
                     if (res.nombre === null) {
-                        validateVendorsempty += 1
+                         validateVendorsempty += 1
                     }
+                    return validateVendorsempty;
                 })
 
                 vendorDescount.map((res) => {
                     if (res.nombre === null) {
-                        validateVendorsempty += 1
+                         validateVendorsempty += 1
                     }
+                    return validateVendorsempty;
                 })
 
                 if (validateVendorsempty < 1) {
@@ -1059,6 +1061,10 @@ const history = useHistory();
     const isStepOptional = (step) => {
         return step === stepper;
     };
+
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
 
     return (
         <Layaout>

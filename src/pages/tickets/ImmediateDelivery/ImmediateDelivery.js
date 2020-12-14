@@ -108,7 +108,7 @@ const ImmediateDelivery = () => {
         stores();
         getTicketsAssigned();
         getTicketsCreated();
-    }, [0]);
+    }, []);
 
     function result_function(icon, text) {
         Toast.fire({

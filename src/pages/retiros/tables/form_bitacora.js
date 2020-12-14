@@ -37,7 +37,7 @@ const TableBitacoraList = () => {
         
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
-
+ 
     function getRetreats() {
         if (localStorage.getItem('collaborator') !== null) {
             retreatShowBinacleList(localStorage.getItem('collaborator'))
@@ -98,7 +98,7 @@ const TableBitacoraList = () => {
     let collaborator = [];
     getCollaboration().then((res) => { res.map(resdata => collaborator.push({ name: resdata.name, label: resdata.name })) });
 
-    if (localStorage.getItem('id') === null) {
+    if (localStorage.getItem('collaborator') === null){
         history.push('/retreats_bitacoras_list')
     }
 
@@ -140,7 +140,7 @@ const TableBitacoraList = () => {
             <MDBContainer>
 
 
-                <CardHeader title="Tickets" icon="ticket-alt">
+                <CardHeader title="Bitacora de cobro" icon="ticket-alt">
                     <MDBTable>
                         <MDBTableHead>
                             <tr>

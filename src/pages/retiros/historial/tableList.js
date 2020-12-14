@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -45,7 +46,7 @@ function TabPanel(props) {
 }
 
 const DatosdeVenta = () => {
-    
+    const history = useHistory();
     const [dataRetreatsAccepted, setdataRetreatsAccepted] = useState([]);
     const [dataRetreatsCancel, setdataRetreatsCancel] = useState([]);
     const [dataRetreatsDeneged, setdataRetreatsDeneged] = useState([]);
@@ -65,9 +66,9 @@ const DatosdeVenta = () => {
     const handleChangeSteps = (event, newValue) => {
         setStep(newValue);
     };
-
+ 
     useEffect(() => {
-        retreatShowListHistory()
+        retreatShowListHistory(localStorage.getItem("store"),localStorage.getItem('type'))
             .then((res) =>{
             dataAsigned(res)
             setLoading(false)
@@ -78,7 +79,6 @@ const DatosdeVenta = () => {
     }, [])
 
     const dataAsigned = (data) => {
-        console.log(data);
          setdataRetreatsAccepted(data.acepted)
          setdataRetreatsCancel(data.cancel)
          setdataRetreatsDeneged(data.deneged)
@@ -102,7 +102,9 @@ const DatosdeVenta = () => {
     const indexOfFirstPostDeneged = indexOfLastPostDeneged - postsPerPageDeneged;
     const currentPostsDeneged = dataRetreatsDeneged.slice(indexOfFirstPostDeneged, indexOfLastPostDeneged);
     const paginateDeneged = pageNumber => setCurrentPageDeneged(pageNumber);
-
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
 
     return (
         <Layaout>
@@ -137,10 +139,11 @@ const DatosdeVenta = () => {
                             <MDBTableHead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Deuda</th>
+                                    <th>Precio</th>
+                                    <th>Descuento</th>
+                                    <th>Prefio final</th>
                                     <th>Fecha de Creación</th>
                                     <th>Fecha de Actualización</th>
-                                    <th>Acciones</th>
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
@@ -162,35 +165,11 @@ const DatosdeVenta = () => {
                             <MDBTableHead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Deuda</th>
+                                    <th>Precio</th>
+                                    <th>Descuento</th>
+                                    <th>Prefio final</th>
                                     <th>Fecha de Creación</th>
                                     <th>Fecha de Actualización</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </MDBTableHead>
-                            <MDBTableBody>
-                                <Tablebinnacle posts={currentPostsCancel} loading={loading} />
-                            </MDBTableBody>
-                            {dataRetreatsCancel.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
-                            <Pagination
-                                postsPerPage={postsPerPageCancel}
-                                totalPosts={dataRetreatsCancel.length}
-                                paginate={paginateCancel}
-                                currentPage={currentPageCancel}
-                            />
-                        </MDBTable>
-                    </CardHeader>
-                </TabPanel>
-                <TabPanel value={step} index={2}>
-                    <CardHeader title="Historial Cancelados" icon="ticket-alt">
-                        <MDBTable>
-                            <MDBTableHead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Deuda</th>
-                                    <th>Fecha de Creación</th>
-                                    <th>Fecha de Actualización</th>
-                                    <th>Acciones</th>
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
@@ -202,6 +181,32 @@ const DatosdeVenta = () => {
                                 totalPosts={dataRetreatsDeneged.length}
                                 paginate={paginateDeneged}
                                 currentPage={currentPageDeneged}
+                            />
+                        </MDBTable>
+                    </CardHeader>
+                </TabPanel>
+                <TabPanel value={step} index={2}>
+                    <CardHeader title="Historial Cancelados" icon="ticket-alt">
+                        <MDBTable>
+                            <MDBTableHead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Precio</th>
+                                    <th>Descuento</th>
+                                    <th>Prefio final</th>
+                                    <th>Fecha de Creación</th>
+                                    <th>Fecha de Actualización</th>
+                                </tr>
+                            </MDBTableHead>
+                            <MDBTableBody>
+                                <Tablebinnacle posts={currentPostsCancel} loading={loading} />
+                            </MDBTableBody>
+                            {dataRetreatsCancel.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
+                            <Pagination
+                                postsPerPage={postsPerPageCancel}
+                                totalPosts={dataRetreatsCancel.length}
+                                paginate={paginateCancel}
+                                currentPage={currentPageCancel}
                             />
                         </MDBTable>
                     </CardHeader>

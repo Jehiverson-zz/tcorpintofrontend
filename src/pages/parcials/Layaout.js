@@ -111,7 +111,7 @@ class Navbar extends Component {
                   <strong>Retiros</strong>
                 </MDBNavLink>
               </MDBNavItem>
-
+              {localStorage.getItem('type') === "admin"? (
               <MDBNavItem>
                 <MDBNavLink
                   exact
@@ -121,7 +121,7 @@ class Navbar extends Component {
                   <strong>Configuraciones</strong>
                 </MDBNavLink>
               </MDBNavItem>
-
+              ):""}
               <MDBNavItem>
                 <MDBDropdown>
                   <MDBDropdownToggle nav caret>

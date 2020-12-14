@@ -3,7 +3,7 @@ import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
 import { CollaboratorShow, collaboratorCreate, collaboratorUpdate } from '../../../../functions/settingsFunction'
 import Loading from '../img/loading.gif'
-
+import { useHistory } from "react-router-dom";
 import {
     MDBBtn,
     MDBIcon,
@@ -22,6 +22,7 @@ import Pagination from '../../../../components/pagination';
 import { getStore } from '../../../../functions/ticketFunction';
 
 const CollaboratosList = () => {
+    const history = useHistory();
     const [dataCollaborator, setDataCollaborator] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
@@ -30,7 +31,7 @@ const CollaboratosList = () => {
     const [modalCreate, setModalCreate] = useState(false);
 
     const [stores, setStores] = useState(false);
-    const [setItem] = useState(false);
+    const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
     const [store, setStore] = useState(false);
     const [status, setStatus] = useState(false);
@@ -104,6 +105,7 @@ const CollaboratosList = () => {
             toggleModal();
             falseData();
         }).catch(err => {
+            console.log(err)
             Swal.fire('Error', 'Error al actualizar al colaborador', 'error');
         })
     };
@@ -154,6 +156,11 @@ const CollaboratosList = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
+
     return (
         <Layaout>
             { loading ?

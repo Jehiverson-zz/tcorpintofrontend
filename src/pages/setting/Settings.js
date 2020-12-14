@@ -20,6 +20,10 @@ const Landing = () => {
     if (localStorage.getItem('session') !== "true") {
         history.push(`/`);
     }
+	
+	  if (localStorage.getItem('type') !== "admin") {
+        history.push(`/retreats`);
+    }
 
     return (
         <Layaout>

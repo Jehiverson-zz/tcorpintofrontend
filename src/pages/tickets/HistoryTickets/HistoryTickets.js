@@ -13,7 +13,6 @@ import {
 import {
     MDBRow,
     MDBCol,
-    MDBTypography,
     MDBCard,
     MDBCardBody,
     MDBCardTitle,

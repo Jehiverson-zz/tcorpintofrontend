@@ -101,6 +101,30 @@ export const userShow = (store) => {
     })
 };
 
+/*Muestra los datos de retiros*/
+export const userCreate = (data) => {
+    return axios
+    .post(url + '/userCreate', data)
+    .then((response) => {
+        console.log(response.data.showUserInfo);
+        return response.data.showUserInfo;
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
+/*Muestra los datos de retiros*/
+export const userUpdate = (data) => {
+    return axios
+    .post(url + '/userUpdate', data)
+    .then((response) => {
+        console.log(response.data.showUserInfo);
+        return response.data.showUserInfo;
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
 /* SUBSIDIARIAS */
 
 /*Muestra los datos de subsidiarias*/

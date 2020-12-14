@@ -1,12 +1,8 @@
 import React from 'react';
 import dateFormat from 'dateformat'
-import Button from '@material-ui/core/Button';
-import Swal from 'sweetalert2';
-import { useHistory } from "react-router-dom";
 //Funciones
 //import { deleteDataSales } from '../../../functions/salesFunctions'
 const TableCertificates = ({ posts, loading }) => {
-  const history = useHistory();
   if (loading) {
     return (
         <h4>Cargando Datos...</h4>

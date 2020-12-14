@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBPagination, MDBPageItem, MDBPageNav, MDBCol, MDBRow, MDBContainer } from "mdbreact";
+import { MDBPagination, MDBPageItem, MDBPageNav, MDBContainer } from "mdbreact";
 
 const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
@@ -12,7 +12,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
       <MDBPagination circle>
         {pageNumbers.map(number => (
           <MDBPageItem key={number}>
-            <MDBPageNav onClick={() => paginate(number)} style={{ backgroundColor: number == currentPage ? "#007bff" : "", color: number == currentPage ? "white" : "" }}>
+            <MDBPageNav onClick={() => paginate(number)} style={{ backgroundColor: number === currentPage ? "#007bff" : "", color: number === currentPage ? "white" : "" }}>
               {number}
             </MDBPageNav>
           </MDBPageItem>

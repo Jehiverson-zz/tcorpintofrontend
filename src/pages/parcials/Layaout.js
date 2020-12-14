@@ -1,7 +1,5 @@
-import React, { useState, Component, Children } from 'react'
-import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import React, { Component } from 'react'
 import { ReactComponent as Logo } from '../../assets/corpinto.svg';
-import MenuLink from '../../components/menuLink';
 import './Layaout.css'
 import {
   MDBNavbar,
@@ -10,9 +8,7 @@ import {
   MDBNavbarToggler,
   MDBCollapse,
   MDBNavItem,
-  MDBFooter,
   MDBNavLink,
-  MDBLink,
   MDBIcon,
   MDBDropdown,
   MDBDropdownToggle,

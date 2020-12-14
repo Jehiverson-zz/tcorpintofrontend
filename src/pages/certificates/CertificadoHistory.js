@@ -14,18 +14,11 @@ import {
 import {
     MDBRow,
     MDBCol,
-    MDBTypography,
-    MDBCard,
-    MDBCardBody,
-    MDBCardTitle,
-    MDBCardText,
     MDBTable,
     MDBTableBody,
     MDBTableHead,
     MDBContainer
 } from 'mdbreact';
-import Moment from 'react-moment';
-import { FaBan, FaCheckDouble, FaPersonBooth, FaStoreAlt, FaCheckCircle, FaRegCalendar, FaHandPaper } from 'react-icons/fa';
 import Select from 'react-select';
 import Loading from '../bitacoras/ventadiaria/img/loading.gif'
 import Pagination from '../../components/pagination';
@@ -65,14 +58,7 @@ const HistoryCertificate = () => {
     const [stores, setStores] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(51);
-    const filter_values = [
-        { value: 'Meatpack', label: 'Meatpack' },
-        { value: 'Sperry', label: 'Sperry' },
-        { value: 'Quiksilver', label: 'Quiksilver' },
-        { value: 'Guess', label: 'Guess' },
-        { value: 'Arrital', label: 'Arrital' },
-        { value: 'Diesel', label: 'Diesel' },
-    ];
+    
     const default_store = { value: status.status, label: status.status };
     const handleChange2 = (event, newValue) => {
         setValue(newValue);
@@ -90,17 +76,12 @@ const HistoryCertificate = () => {
         setCurrentPage(1);
     };
 
-    useEffect(() => {
-        getAllData(status.status);
-        getAllStore();
-    }, [0])
-
     const getAllStore = () => {
         getStore()
             .then((response) => {
                 let storeList = []
                 response.map(store => {
-                    storeList.push({ value: store.name, label: store.name })
+                    return storeList.push({ value: store.name, label: store.name })
                 })
                 setStores(storeList);
             })
@@ -118,6 +99,11 @@ const HistoryCertificate = () => {
             })
             .catch(err => console.log(err))
     }
+
+    useEffect(() => {
+        getAllData(status.status);
+        getAllStore();
+    }, [])
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;

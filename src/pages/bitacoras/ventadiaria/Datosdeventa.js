@@ -12,7 +12,7 @@ import Tablebinnacle from './Tablebinnacle';
 
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
-    const [dataSales, setdataSales] = useState([]);
+    const [dataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const DatosdeVenta = () => {
             .catch(err =>
                 setLoading(true)
             )
-    }, [0])
+    }, [])
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;

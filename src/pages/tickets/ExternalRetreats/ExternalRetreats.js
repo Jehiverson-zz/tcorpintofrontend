@@ -57,7 +57,7 @@ const ExternalRetreats = () => {
 
     useEffect(() => {
         get_external_retreats();
-    }, [0]);
+    }, []);
 
     function get_external_retreats() {
         getExternalRetreats().then((res) => setExternalRetreats(res));

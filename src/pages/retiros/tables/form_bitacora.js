@@ -10,13 +10,10 @@ import {
     MDBRow,
     MDBCol,
     MDBInput,
-    MDBBtn,
     MDBIcon,
     MDBContainer,
     MDBCard,
     MDBCardBody,
-    MDBCardTitle,
-    MDBCardText,
     MDBTable,
     MDBTableBody,
     MDBTableHead
@@ -24,27 +21,11 @@ import {
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import NumericInput from 'react-numeric-input';
-import Moment from 'react-moment';
-import { FaStoreAlt, FaCheck, FaTimes, FaRegCalendar } from 'react-icons/fa'
-import Select from 'react-select';
 import Swal from 'sweetalert2'
 import images from './img/load.gif'
 
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    onOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-})
 
 const TableBitacoraList = () => {
-    const my_store = localStorage.getItem("store");
-    const my_type = localStorage.getItem("type");
     const history = useHistory();
 
     const [descount, setDescount] = useState(0);
@@ -56,11 +37,6 @@ const TableBitacoraList = () => {
         
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(6);
-
-    useEffect(() => {
-        console.log(localStorage.getItem('collaborator'));
-        getRetreats();
-    }, [0]);
 
     function getRetreats() {
         if (localStorage.getItem('collaborator') !== null) {
@@ -106,6 +82,11 @@ const TableBitacoraList = () => {
         }
        
     }
+
+    useEffect(() => {
+        console.log(localStorage.getItem('collaborator'));
+        getRetreats();
+    }, []);
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;

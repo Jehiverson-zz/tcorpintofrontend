@@ -1,13 +1,8 @@
 import React from 'react';
 import dateFormat from 'dateformat'
-import CurrencyFormat from 'react-currency-format';
 import Button from '@material-ui/core/Button';
-import Swal from 'sweetalert2';
-import { useHistory } from "react-router-dom";
-//Funciones
-import { deleteDataSales } from '../../../../functions/salesFunctions'
+
 const Tablebinnacle = ({ posts, loading, toggleModal }) => {
-  const history = useHistory();
   if (loading) {
     return <h2>Cargando Datos...</h2>;
   }

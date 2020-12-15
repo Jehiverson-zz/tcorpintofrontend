@@ -5,7 +5,7 @@ import dateFormat from 'dateformat'
 const TableCertificates = ({ posts, loading }) => {
   if (loading) {
     return (
-        <h4>Cargando Datos...</h4>
+        <tr><td colSpan="12"><center>Cargando Datos...</center></td></tr>
     )
   }
 

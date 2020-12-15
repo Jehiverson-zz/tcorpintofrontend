@@ -3,7 +3,7 @@ import dateFormat  from 'dateformat'
 
 const TableDamaged = ({ posts, loading }) => {
   if (loading) {
-    return <h2>Cargando Datos...</h2>;
+    return <tr><td colSpan="12"><center>Cargando Datos...</center></td></tr>;
   }
 
   return (

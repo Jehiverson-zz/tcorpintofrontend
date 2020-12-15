@@ -19,7 +19,7 @@ import TableCollaborators from './Table';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 import Pagination from '../../../../components/pagination';
-import { getStore } from '../../../../functions/ticketFunction';
+import { getStoreActives } from '../../../../functions/ticketFunction';
 
 const CollaboratosList = () => {
     const history = useHistory();
@@ -79,13 +79,11 @@ const CollaboratosList = () => {
             status: status
         };
 
-        console.log("CREATE", createItem)
 
         collaboratorCreate(createItem).then(res => {
             Swal.fire('Éxito', 'Colaborador Ingresada', 'success');
             ReloadData();
             toggleModalCreate();
-            falseData();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar colaborador', 'error');
         })
@@ -103,7 +101,6 @@ const CollaboratosList = () => {
             Swal.fire('Éxito', 'Colaborador Actualizada', 'success');
             ReloadData();
             toggleModal();
-            falseData();
         }).catch(err => {
             console.log(err)
             Swal.fire('Error', 'Error al actualizar al colaborador', 'error');
@@ -128,7 +125,7 @@ const CollaboratosList = () => {
 
 
     const getStores = () => {
-        getStore()
+        getStoreActives()
             .then((response) => {
                 let data = []
                 response.map(sub => {
@@ -137,17 +134,11 @@ const CollaboratosList = () => {
                 setStores(data);
             }
             )
-            .catch(err =>
-                setLoading(true)
-            )
+            .catch(err =>{
+                console.log(err)
+                setLoading(false)
+            })
     }
-    const falseData = () => {
-        setItem(false);
-        setId(false);
-        setName(false);
-        setStores(false);
-        setStatus(false);
-    };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;

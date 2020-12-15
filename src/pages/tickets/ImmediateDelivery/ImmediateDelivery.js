@@ -8,7 +8,7 @@ import {
     getTicketsImmediatesDeliveriesAssigned,
     completeTicketInmediates,
     inactivateTicketInmediates,
-    getStore,
+    getStoreActives,
 } from '../../../functions/ticketFunction';
 import Pagination from '../../../components/pagination';
 import {
@@ -119,7 +119,7 @@ const ImmediateDelivery = () => {
 
     function stores() {
         let storesList = [];
-        getStore().then((resp) => resp.map(x => {
+        getStoreActives().then((resp) => resp.map(x => {
             storesList.push({ value: x.name, label: x.name })
             setdataStores(storesList)
         }));

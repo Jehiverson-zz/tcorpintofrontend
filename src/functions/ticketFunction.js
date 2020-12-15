@@ -198,6 +198,18 @@ export const getStore = () => {
         })
 }
 
+/* Obtiene todas las tiendas Activas */
+export const getStoreActives = () => {
+    return axios
+        .get(`${url}/tickets/stores_actives`)
+        .then((response) => {
+            return response.data.result;
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
 /* Inactiva un ticket de traslado de sistema*/
 export const inactivateTicket = (id) =>{
     let email = localStorage.getItem("email")

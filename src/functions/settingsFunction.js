@@ -13,7 +13,7 @@ export const statesShow = (store) => {
         console.log(error);
     })
 };
- 
+
 export const statesCreate = (data) => {
     return axios
     .post(url + '/statusCreate',data)
@@ -51,6 +51,7 @@ export const statesDelete = (data) => {
     })
 };
 
+/* COLABORADORES */
 /*Muestra los datos de retiros*/
 export const CollaboratorShow = (store) => {
     return axios
@@ -88,6 +89,7 @@ export const collaboratorUpdate = (data) => {
     })
 };
 
+/* USUARIOS */
 /*Muestra los datos de retiros*/
 export const userShow = (store) => {
     return axios
@@ -127,6 +129,19 @@ export const userUpdate = (data) => {
 
 /* SUBSIDIARIAS */
 
+/*Muestra los datos de subsidiarias activas*/
+export const getSubsidiariaActives = (store) => {
+    return axios
+    .get(url + '/subsidiarias_actives')
+    .then((response) => {
+        console.log(response.data.subsidiarias);
+        return response.data.subsidiarias;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
 /*Muestra los datos de subsidiarias*/
 export const SubsidiariasShow = (store) => {
     return axios
@@ -163,6 +178,8 @@ export const subsidiariaUpdate = (data) => {
         console.log(error);
     })
 };
+
+/* TIENDAS */
 
 export const storeCreate = (data) => {
     return axios

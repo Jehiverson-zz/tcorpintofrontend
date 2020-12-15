@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader';
 import { retreatShow, retreatCreated, retreatUpdate } from '../../../functions/retreatsFunction';
@@ -37,6 +38,7 @@ const Toast = Swal.mixin({
 })
 
 const ImmediateDelivery = () => {
+    const history = useHistory();
     const my_store = localStorage.getItem("store");
     const my_type = localStorage.getItem("type");
     const [dataRetreats, setDataRetreats] = useState([]);
@@ -65,7 +67,7 @@ const ImmediateDelivery = () => {
     }
 
     function getRetreats() {
-        retreatShow(my_store)
+        retreatShow(my_store,my_type)
             .then((response) => {
                 setDataRetreats(response)
             })
@@ -103,7 +105,7 @@ const ImmediateDelivery = () => {
                     Swal.fire({
                     title: 'Cargando!',
                     html: 'Estamos creando tu retiro, espera un momento',
-                    timer: 3000,
+                    timer: 10000,
                     timerProgressBar: true,
                         willOpen: () => {
                         },
@@ -119,7 +121,7 @@ const ImmediateDelivery = () => {
                             Swal.fire(res.data[0].type, res.data[0].message, res.data[0].status);
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 1000);
+                            }, 2000);
                             
                         })
                         .catch((error) => {
@@ -198,88 +200,108 @@ const ImmediateDelivery = () => {
 
     let collaborator = [];
     getCollaboration().then((res) => { res.map(resdata => collaborator.push({ name: resdata.name, label: resdata.name })) });
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
     return (
         <Layaout>
-            <br></br>
-            <CardHeader title="Retiros De Mercaderia" icon="ticket-alt">
-                <form>
-                    <MDBRow className="center-element">
-                        <MDBCol md='3' >
-                            <label>Colaboradores</label>
-                            <Select
-                                onChange={e => setVendor(e.label)}
-                                defaultValue={default_store}
-                                options={collaborator}
-                            />
-                        </MDBCol>
-                        <MDBCol md='3'>
-                                <Typography variant="body2">Precio</Typography>
-                                <NumericInput
-                                    className="form-control"
-                                    step={1}
-                                    precision={2}
-                                    size={2}
-                                    min={0} 
-                                    max={100}
-                                    mobile
-                                    onChange={e => handleChangeData(e, "precio", "number")}
+            {   
+                localStorage.getItem('type') !== 'admin'?(
+                <>
+                <br></br>
+                    <CardHeader title="Retiros De Mercaderia" icon="ticket-alt">
+                    <form>
+                        <MDBRow className="center-element">
+                            <MDBCol md='3' >
+                                <label>Colaboradores</label>
+                                {collaborator?(
+                                    <Select
+                                    onChange={e => setVendor(e.label)}
+                                    defaultValue={default_store}
+                                    options={collaborator}
                                 />
-                        </MDBCol>
-                        <MDBCol md='3'>
-                                <Typography variant="body2">Descuento</Typography>
-                                <NumericInput
-                                    className="form-control"
-                                    step={1}
-                                    precision={2}
-                                    size={2}
-                                    min={0} 
-                                    max={100}
-                                    mobile
-                                    onChange={e => handleChangeData(e, "descuento", "number")}
+                                ):(
+                                    <div className='spinner-border text-info' role='status'>
+                                        <span className='sr-only'>Loading...</span>
+                                    </div>
+                                )}
+                                
+
+                            </MDBCol>
+                            <MDBCol md='3'>
+                                    <Typography variant="body2">Precio</Typography>
+                                    <NumericInput
+                                        className="form-control"
+                                        step={1}
+                                        precision={2}
+                                        size={2}
+                                        min={0} 
+                                        max={100}
+                                        mobile
+                                        onChange={e => handleChangeData(e, "precio", "number")}
+                                    />
+                            </MDBCol>
+                            <MDBCol md='3'>
+                                    <Typography variant="body2">Descuento</Typography>
+                                    <NumericInput
+                                        className="form-control"
+                                        step={1}
+                                        precision={2}
+                                        size={2}
+                                        min={0} 
+                                        max={100}
+                                        mobile
+                                        onChange={e => handleChangeData(e, "descuento", "number")}
+                                    />
+                            </MDBCol>
+                            <MDBCol md='3'>
+                                    <Typography variant="body2">Precio Final</Typography>
+                                    <NumericInput
+                                        className="form-control"
+                                        step={1}
+                                        precision={2}
+                                        size={2}
+                                        mobile
+                                        value={fields[0].precioFinal}
+                                        onChange={e => handleChangeData(e, "precioFinal", "number")}
+                                        readOnly
+                                    />
+                            </MDBCol>
+                        </MDBRow>
+                        <MDBRow>
+                            <MDBCol md='3'>
+                                <MDBInput label='UPC' type="text" validate onChange={e => handleChangeData(e, "upc")} />
+                            </MDBCol>
+                            <MDBCol md='3'>
+                                <MDBInput label='ALU' type="text" validate onChange={e => handleChangeData(e, "alu")} />
+                            </MDBCol>
+                            <MDBCol md='3'>
+                                <MDBInput label='TALLA' type="text" validate onChange={e => handleChangeData(e, "talla")} />
+                            </MDBCol>
+                            <MDBCol md='3'>
+                                <MDBInput type="file" accept="image/png, image/jpeg" validate onChange={e => handleChangeData(e, "image")} />
+                            </MDBCol>
+                            <MDBCol md='12'>
+                                <MDBInput
+                                    type='textarea'
+                                    rows='3'
+                                    label='Descripción'
+                                    onChange={e => handleChangeData(e, "descripcion")}
                                 />
-                        </MDBCol>
-                        <MDBCol md='3'>
-                                <Typography variant="body2">Precio Final</Typography>
-                                <NumericInput
-                                    className="form-control"
-                                    step={1}
-                                    precision={2}
-                                    size={2}
-                                    mobile
-                                    value={fields[0].precioFinal}
-                                    onChange={e => handleChangeData(e, "precioFinal", "number")}
-                                    readOnly
-                                />
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBRow>
-                        <MDBCol md='3'>
-                            <MDBInput label='UPC' type="text" validate onChange={e => handleChangeData(e, "upc")} />
-                        </MDBCol>
-                        <MDBCol md='3'>
-                            <MDBInput label='ALU' type="text" validate onChange={e => handleChangeData(e, "alu")} />
-                        </MDBCol>
-                        <MDBCol md='3'>
-                            <MDBInput label='TALLA' type="text" validate onChange={e => handleChangeData(e, "talla")} />
-                        </MDBCol>
-                        <MDBCol md='3'>
-                            <MDBInput type="file" accept="image/png, image/jpeg" validate onChange={e => handleChangeData(e, "image")} />
-                        </MDBCol>
-                        <MDBCol md='12'>
-                            <MDBInput
-                                type='textarea'
-                                rows='3'
-                                label='Descripción'
-                                onChange={e => handleChangeData(e, "descripcion")}
-                            />
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBRow className="center-element">
-                        <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={(e) => crearRetreats(e)}><span><MDBIcon icon='ticket-alt' />  Crear Retiro</span></Button>
-                    </MDBRow>
-                </form>
-            </CardHeader>
-            <br></br>
+                            </MDBCol>
+                        </MDBRow>
+                        <MDBRow className="center-element">
+                            <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={(e) => crearRetreats(e)}><span><MDBIcon icon='ticket-alt' />  Crear Retiro</span></Button>
+                        </MDBRow>
+                    </form>
+                </CardHeader>
+                <br></br>
+                </>
+                ):
+                <center><h1>Solicitud De Retiros</h1></center>   
+            }
+            
+
             <MDBContainer>
         
                     <MDBRow>
@@ -292,7 +314,7 @@ const ImmediateDelivery = () => {
                                                 <MDBCard>
                                                     <MDBCardBody style={{ Height: "300px" }}>
                                                         <MDBCardTitle> <span><FaStoreAlt /> {data.store}</span>
-                                                        {my_type === 'admin' ? 
+                                                        {localStorage.getItem('type') === 'admin' ? 
                                                         <>
                                                             <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => updateRetreats(data._id, "Aprobado")}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
                                                             <MDBBtn className="float-right" size="sm" color='danger' onClick={() => updateRetreats(data._id, "Denegado" )}><FaTimes style={{ fontSize: '15px' }} /></MDBBtn>

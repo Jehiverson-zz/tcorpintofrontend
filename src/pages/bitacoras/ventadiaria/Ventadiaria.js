@@ -112,8 +112,6 @@ const history = useHistory();
     }]);
     const [startDate, setStartDate] = useState(null);
     const [store, setStore] = useState(null);
-    //Datos devueltos de la creación
-    const[setDataResult] = useState({});
     //ApiRest datos de colaboradores
     const datos = [];
     getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
@@ -918,14 +916,12 @@ const history = useHistory();
             case 4:
             createDataSales(dataSales[0],vendor,vendorDescount,localStorage.getItem('email'),store,startDate)
                 .then((response) => {
-                    setDataResult(response)
                     if (response.status === true) {
                         setLoading(false)
                         Swal.fire('Felicitaciones!', response.message, 'success');
                         setStepper(null)
                         pagNext = 0;
                         history.push(`/bitacora_ventas_show`);
-                        
                     }
     
                     if (response.status === false){
@@ -935,6 +931,7 @@ const history = useHistory();
                     }
                 })
                 .catch(err => {
+                    console.log(err)
                     setStepper(4)
                     setStepperMessage("Error, no se pudo crear su registro de dato de venta")
                     pagNext = 0;

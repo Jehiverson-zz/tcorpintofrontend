@@ -134,7 +134,7 @@ class Routes extends React.Component {
         <Route exact path='/retreats_bitacoras' component={RetreatsBitacora} />
         <Route exact path='/retreats_bitacoras_list' component={RetreatsBitacoraList} />
         <Route exact path='/retreats_history' component={RetreatsHistory} />
-
+ 
         <Route exact path='/settingsList' component={Settings} />
         <Route exact path='/stateList' component={StatesList} />
         <Route exact path='/collaborationList' component={CollaboratosList} />

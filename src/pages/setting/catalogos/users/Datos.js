@@ -4,6 +4,7 @@ import CardHeader from '../../../../components/CardHeader';
 import { userShow, userCreate, userUpdate } from '../../../../functions/settingsFunction';
 import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
+import { useHistory } from "react-router-dom";
 import {
     MDBBtn,
     MDBIcon,
@@ -20,6 +21,7 @@ import Select from 'react-select';
 import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
 const DatosdeVenta = () => {
+    const history = useHistory();
     const [dataStore, setdataStore] = useState([]);
     const [dataSales, setdataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -34,12 +36,12 @@ const DatosdeVenta = () => {
     const [status, setStatus] = useState(false);
     const [store, setStore] = useState(false);
     const [typeUser, setTypeUser] = useState(false);
-    const [fvariable, setFVariable] = useState(false);
     const [password, setPassword] = useState(false);
     const [passwordC, setPasswordC] = useState(false);
     const [checkVal, setCheck] = useState(false);
 
-    const toggleModal = (email, name, type, change_date, store, status,item, password) => {
+    const toggleModal = (email, name, type, change_date, store, status, item, password) => {
+        console.log("c1",checkVal);
         setItem(item);
         setName(name);
         setStatus(status);
@@ -47,11 +49,10 @@ const DatosdeVenta = () => {
         setStore(store);
         setTypeUser(type);
         setPassword(password);
-        setFVariable(change_date);
+        setCheck(change_date);
         setPasswordC(password);
-        change_date?setCheck("checked"):setCheck(false);
-        console.log(checkVal);
         setModal(!modal);
+        console.log("c2",checkVal);
     };
 
     const toggleModalCreate = () => {
@@ -87,25 +88,25 @@ const DatosdeVenta = () => {
         const createItem = {
             name: name,
             status: status,
-            email:email,
+            email: email,
             store: store,
             typeUser: typeUser,
-            change_date: fvariable,
+            change_date: checkVal,
             password: password
         };
-        
+
         if (name !== false && status !== false && email !== false && store !== false && typeUser !== false) {
             console.log(createItem)
             userCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Usuario Ingresado', 'success');
-            ReloadData();
-            toggleModalCreate();
-            falseData();
-        }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar usuario', 'error');
-        }) 
-    }
-    falseData();
+                Swal.fire('Éxito', 'Usuario Ingresado', 'success');
+                ReloadData();
+                toggleModalCreate();
+                falseData();
+            }).catch(err => {
+                Swal.fire('Error', 'Error al ingresar usuario', 'error');
+            })
+        }
+        falseData();
     };
 
     const updateUser = () => {
@@ -135,28 +136,28 @@ const DatosdeVenta = () => {
         }
 
         const updateItem = {
-            id:item,
+            id: item,
             name: name,
             status: status,
-            email:email,
+            email: email,
             store: store,
             typeUser: typeUser,
-            change_date: fvariable,
+            change_date: checkVal,
             password: password,
             passwordC: passwordC
         };
-        
+
         if (name !== false && status !== false && email !== false && store !== false && typeUser !== false) {
-        console.log(updateItem);
-        userUpdate(updateItem).then(res => {
-            Swal.fire('Éxito', 'Usuario Actualizado', 'success');
-            ReloadData();
-            toggleModal();
-            falseData();
-        }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar usuario', 'error');
-        });
-    }
+            console.log(updateItem);
+            userUpdate(updateItem).then(res => {
+                Swal.fire('Éxito', 'Usuario Actualizado', 'success');
+                ReloadData();
+                toggleModal();
+                falseData();
+            }).catch(err => {
+                Swal.fire('Error', 'Error al ingresar usuario', 'error');
+            });
+        }
 
     };
 
@@ -182,7 +183,7 @@ const DatosdeVenta = () => {
         }
     ];
 
-    
+
     useEffect(() => {
         ReloadData();
     }, [])
@@ -197,12 +198,12 @@ const DatosdeVenta = () => {
             .catch(err =>
                 setLoading(true)
             )
-            
+
         getStore().then((res) => {
             console.log(res);
             var storeData = [];
-            res.map(store =>{
-                return storeData.push({label: store.name, name: store.name});
+            res.map(store => {
+                return storeData.push({ label: store.name, name: store.name });
             });
             setdataStore(storeData);
             setLoading(false);
@@ -210,7 +211,7 @@ const DatosdeVenta = () => {
             .catch(error => console.log(error))
     };
 
-    const falseData = () =>{
+    const falseData = () => {
         setItem(false);
         setName(false);
         setStatus(false);
@@ -218,7 +219,7 @@ const DatosdeVenta = () => {
         setStore(false);
         setTypeUser(false);
         setPassword(false);
-        setFVariable(false);
+        setCheck(false);
         setPasswordC(false);
     };
     // Get current posts
@@ -228,6 +229,10 @@ const DatosdeVenta = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
     return (
         <Layaout>
             { loading ?
@@ -240,7 +245,7 @@ const DatosdeVenta = () => {
                 <>
                     <br></br>
                     <CardHeader title="Usuarios" icon="ticket-alt">
-                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
+                        <MDBBtn color='info' onClick={() => toggleModalCreate()}>
                             Agregar Usuario
                         </MDBBtn>
                         <MDBTable>
@@ -304,7 +309,7 @@ const DatosdeVenta = () => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
-<MDBInput
+                    <MDBInput
                         label='Contraseña'
                         icon='user'
                         type='password'
@@ -312,12 +317,12 @@ const DatosdeVenta = () => {
                         success='right'
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                     <label>Tiendas</label>
+                    <label>Tiendas</label>
                     <Select
                         onChange={e => setStore(e.label)}
                         options={dataStore}
                     />
-                     <label> Tipo</label>
+                    <label> Tipo</label>
                     <Select
                         onChange={e => setTypeUser(e.label)}
                         options={typeUserList}
@@ -328,9 +333,9 @@ const DatosdeVenta = () => {
                         options={state}
                     />
                     <br />
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked" onClick={() => setFVariable(!fvariable)}/>
-                        <label class="custom-control-label" for="defaultUnchecked">Fecha Variable</label>
+                    <div className="custom-control custom-checkbox">
+                        <input type="checkbox" className="custom-control-input" id="defaultUnchecked" onClick={() => setCheck(!checkVal)} />
+                        <label className="custom-control-label" htmlFor="defaultUnchecked">Fecha por defecto</label>
                     </div>
 
                     <br />
@@ -378,7 +383,7 @@ const DatosdeVenta = () => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
-<MDBInput
+                    <MDBInput
                         label='Contraseña'
                         icon='user'
                         type='password'
@@ -387,13 +392,13 @@ const DatosdeVenta = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                     <label>Tiendas</label>
+                    <label>Tiendas</label>
                     <Select
                         onChange={e => setStore(e.label)}
                         defaultValue={store}
                         options={dataStore}
                     />
-                     <label> Tipo</label>
+                    <label> Tipo</label>
                     <Select
                         onChange={e => setTypeUser(e.label)}
                         defaultValue={typeUser}
@@ -406,9 +411,9 @@ const DatosdeVenta = () => {
                         options={state}
                     />
                     <br />
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked" onClick={() => setFVariable(!fvariable)} checked={checkVal}/>
-                        <label class="custom-control-label">Fecha Variable</label>
+                    <div className="custom-control custom-checkbox">
+                        <input type="checkbox" className="custom-control-input" id="defaultUnchecked" onClick={() => setCheck(!checkVal)} checked={checkVal ? "checked" : ""} />
+                        <label className="custom-control-label" htmlFor="defaultUnchecked">Fecha por defecto</label>
                     </div>
                 </MDBModalBody>
                 <MDBModalFooter>

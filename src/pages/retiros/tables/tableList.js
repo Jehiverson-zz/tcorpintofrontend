@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
 import { retreatShowList } from '../../../functions/retreatsFunction'
@@ -12,11 +13,12 @@ import Tablebinnacle from './listDebt';
 
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
+    const history = useHistory();
     const [dataRetreats, setdataRetreats] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
-
+ 
     useEffect(() => {
         retreatShowList()
             .then((res) =>
@@ -35,6 +37,11 @@ const DatosdeVenta = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    if (localStorage.getItem('type') !== "admin") {
+        history.push(`/retreats`);
+    }
+
     return (
         <Layaout>
             { loading ?
@@ -56,7 +63,7 @@ const DatosdeVenta = () => {
                                 <th>Fecha de Actualización</th>
                                 <th>Acciones</th>
                             </tr>
-                        </MDBTableHead>
+                        </MDBTableHead> 
                         <MDBTableBody>
                             <Tablebinnacle posts={currentPosts} loading={loading} />
                         </MDBTableBody>

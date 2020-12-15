@@ -4,6 +4,7 @@ import CardHeader from '../../../../components/CardHeader'
 import { getSubsidiariaActives, storeCreate, storeUpdate } from '../../../../functions/settingsFunction'
 import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
+import { useHistory } from "react-router-dom";
 import {
     MDBBtn,
     MDBIcon,
@@ -21,6 +22,7 @@ import TableStores from './Table';
 import Pagination from '../../../../components/pagination';
 
 const StoreList = () => {
+    const history = useHistory();
     const [dataStore, setdataStore] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
@@ -149,7 +151,9 @@ const StoreList = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
-
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
     return (
         <Layaout>
             { loading ?

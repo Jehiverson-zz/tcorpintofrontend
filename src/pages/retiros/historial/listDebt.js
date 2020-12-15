@@ -26,10 +26,11 @@ const Tablebinnacle = ({ posts, loading }) => {
     {posts.map((post, i) => (
       <tr key={i}>
         <td>{post.name}</td>
-        <td><CurrencyFormat value={post.total_debt} displayType={'text'} prefix={'Q'} /></td>
+        <td><CurrencyFormat value={post.price} displayType={'text'} prefix={'Q'} /></td>
+        <td>{post.descount}%</td>
+        <td><CurrencyFormat value={post.price_f} displayType={'text'} prefix={'Q'} /></td>
         <td>{dateFormat(post.date_created, 'dd/mm/yyyy')}</td>
         <td>{dateFormat(post.update_created, 'dd/mm/yyyy')}</td>
-        <td><Button variant="contained" color="primary" onClick={() => handleNext(post.name)}>editar</Button></td>
       </tr>
     ))
     }

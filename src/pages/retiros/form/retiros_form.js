@@ -41,6 +41,7 @@ const ImmediateDelivery = () => {
     const history = useHistory();
     const my_store = localStorage.getItem("store");
     const my_type = localStorage.getItem("type");
+    const my_email = localStorage.getItem("email");
     const [dataRetreats, setDataRetreats] = useState([]);
     const [vendor, setVendor] = useState(null);
     const [fields, setFields] = useState([
@@ -67,7 +68,7 @@ const ImmediateDelivery = () => {
     }
 
     function getRetreats() {
-        retreatShow(my_store,my_type)
+        retreatShow(my_store,my_type,my_email)
             .then((response) => {
                 setDataRetreats(response)
             })

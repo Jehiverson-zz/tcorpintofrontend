@@ -22,7 +22,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <>
-        <MDBEdgeHeader color='indigo darken-3' className='sectionPage' />
+        
         <div className='mt-3 mb-5'>
           <MDBFreeBird>
             <MDBRow>

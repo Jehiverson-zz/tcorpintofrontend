@@ -168,9 +168,7 @@ const DamagedMerchandise = () => {
                             currentPosts.length > 0?(
                                 <TableDamaged posts={currentPosts} loading={loading} />
                             ):(
-                                <tr>
-                                    <h3>No Hay Datos...</h3>
-                                </tr>
+                                <tr><td colSpan="12"><center>No hay datos</center></td></tr>
                             )
                         }
                     </MDBTableBody>

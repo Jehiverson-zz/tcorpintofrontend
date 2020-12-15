@@ -6,7 +6,7 @@ import {
     storeTicketsSystemTransfer,
     getTicketsSystemTransferCreated,
     getTicketsSystemTransferAssigned,
-    getStore,
+    getStoreActives,
     inactivateTicket,
     completeTicket
 } from '../../../functions/ticketFunction';
@@ -109,7 +109,7 @@ const TransferSystemPage = () => {
 
     function stores() {
         let storesList = [];
-        getStore().then((resp) => resp.map(x => {
+        getStoreActives().then((resp) => resp.map(x => {
             storesList.push({ value: x.name, label: x.name })
             setdataStores(storesList)
         }));

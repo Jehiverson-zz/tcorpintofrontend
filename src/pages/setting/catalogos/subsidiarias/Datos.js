@@ -32,9 +32,9 @@ const SubsidiariasList = () => {
     const [status, setStatus] = useState(false);
     const [id, setId] = useState(false);
 
-    const toggleModal = (name, id,status) => {
+    const toggleModal = (name = false, xid = false,status = false) => {
         console.log(status)
-        setId(id);
+        setId(xid);
         setName(name);
         setStatus({value:status, label:status});
         setModal(!modal);
@@ -63,7 +63,6 @@ const SubsidiariasList = () => {
             Swal.fire('Éxito', 'Subsidiaria Ingresada', 'success');
             ReloadData();
             toggleModalCreate();
-            falseData();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
         })
@@ -79,8 +78,7 @@ const SubsidiariasList = () => {
         subsidiariaUpdate(createItem).then(res => {
             Swal.fire('Éxito', 'Subsidiaria Actualizada', 'success');
             ReloadData();
-            toggleModal();
-            falseData();
+            toggleModal(false,false,false);
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
         })
@@ -112,13 +110,6 @@ const SubsidiariasList = () => {
             .catch(err =>
                 setLoading(true)
             )
-    };
-
-    const falseData = () =>{
-        setItem(false);
-        setId(false);
-        setName(false);
-        setStatus(false);
     };
 
     // Get current posts

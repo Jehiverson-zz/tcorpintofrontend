@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
-import { SubsidiariasShow, storeCreate, storeUpdate } from '../../../../functions/settingsFunction'
+import { getSubsidiariaActives, storeCreate, storeUpdate } from '../../../../functions/settingsFunction'
 import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
 import {
@@ -73,7 +73,6 @@ const StoreList = () => {
             Swal.fire('Éxito', 'Tienda Ingresada', 'success');
             ReloadData();
             toggleModalCreate();
-            falseData();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar tienda', 'error');
         })
@@ -91,7 +90,6 @@ const StoreList = () => {
             Swal.fire('Éxito', 'Tienda Actualizada', 'success');
             ReloadData();
             toggleModal();
-            falseData();
         }).catch(err => {
             Swal.fire('Error', 'Error al actualizar la tienda', 'error');
         })
@@ -122,7 +120,7 @@ const StoreList = () => {
     };
 
     const getSubsidiarias = () => {
-        SubsidiariasShow()
+        getSubsidiariaActives()
             .then((response) => {
                 let data = []
                 response.map(sub => {

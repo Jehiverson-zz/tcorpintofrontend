@@ -129,6 +129,19 @@ export const userUpdate = (data) => {
 
 /* SUBSIDIARIAS */
 
+/*Muestra los datos de subsidiarias activas*/
+export const getSubsidiariaActives = (store) => {
+    return axios
+    .get(url + '/subsidiarias_actives')
+    .then((response) => {
+        console.log(response.data.subsidiarias);
+        return response.data.subsidiarias;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
 /*Muestra los datos de subsidiarias*/
 export const SubsidiariasShow = (store) => {
     return axios

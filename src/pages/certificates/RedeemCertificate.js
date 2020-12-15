@@ -147,7 +147,7 @@ const RedeemCertificate = () => {
         }
     }
 
-    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
+    const value2 = { value: '', label: 'Selecciona un certificado' };
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -211,7 +211,7 @@ const RedeemCertificate = () => {
                         aria-label="full width tabs example"
                     >
                         <Tab label="Certificados Canjeables" {...a11yProps(0)} />
-                        <Tab label="Certificaos Canjeados" {...a11yProps(1)} />
+                        <Tab label="Certificados Canjeados" {...a11yProps(1)} />
                     </Tabs>
                 </AppBar>
 

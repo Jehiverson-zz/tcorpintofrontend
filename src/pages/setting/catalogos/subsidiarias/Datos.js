@@ -3,6 +3,7 @@ import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
 import { SubsidiariasShow, subsidiariaCreate, subsidiariaUpdate } from '../../../../functions/settingsFunction'
 import Loading from '../img/loading.gif'
+import { useHistory } from "react-router-dom";
 import {
     MDBBtn,
     MDBIcon,
@@ -19,6 +20,7 @@ import Select from 'react-select';
 import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
 const SubsidiariasList = () => {
+    const history = useHistory();
     const [dataSales, setdataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
@@ -128,7 +130,9 @@ const SubsidiariasList = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
-
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
     return (
         <Layaout>
             { loading ?

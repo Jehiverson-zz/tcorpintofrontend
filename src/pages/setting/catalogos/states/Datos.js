@@ -3,6 +3,7 @@ import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader'
 import { statesShow, statesCreate, statesUpdate } from '../../../../functions/settingsFunction'
 import Loading from '../img/loading.gif'
+import { useHistory } from "react-router-dom";
 import {
     MDBBtn,
     MDBIcon,
@@ -19,6 +20,7 @@ import Select from 'react-select';
 import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
 const DatosdeVenta = () => {
+    const history = useHistory();
     const [dataSales, setdataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
@@ -137,7 +139,9 @@ const DatosdeVenta = () => {
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
     const valueStatus = { value: status, label: status };
-
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
     return (
         <Layaout>
             { loading ?

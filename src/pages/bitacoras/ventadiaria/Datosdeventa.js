@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
 import { salesShow } from '../../../functions/salesFunctions'
@@ -12,7 +13,8 @@ import Tablebinnacle from './Tablebinnacle';
 
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
-    const [dataSales] = useState([]);
+    const history = useHistory();
+    const [dataSales, setDataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
@@ -20,10 +22,15 @@ const DatosdeVenta = () => {
     useEffect(() => {
         let data = {store: localStorage.getItem('store'), type: localStorage.getItem('type')}
         salesShow(data)
-            .then((res) =>
-            console.log(res),
+            .then((res) =>{
+            console.log("data",res)
+            
+            setLoading(false)
+            setDataSales(res)
+        }
             )
             .catch(err =>
+                console.log(err),
                 setLoading(true)
             )
     }, [])
@@ -35,6 +42,11 @@ const DatosdeVenta = () => {
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    if (localStorage.getItem('session') !== "true") {
+        history.push(`/`);
+    }
+
     return (
         <Layaout>
             { loading ?
@@ -46,7 +58,7 @@ const DatosdeVenta = () => {
                 : 
                 <>
                 <br></br>
-                <CardHeader title="Tickets" icon="ticket-alt">
+                <CardHeader title="Datos de venta" icon="ticket-alt">
                     <MDBTable>
                         <MDBTableHead>
                             <tr>

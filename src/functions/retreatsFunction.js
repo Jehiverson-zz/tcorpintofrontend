@@ -3,9 +3,9 @@ import axios from 'axios'
 const url = process.env.REACT_APP_URL_BASE;
 
 /*Muestra los datos de retiros*/
-export const retreatShow = (store) => {
+export const retreatShow = (store, my_type) => {
     return axios
-    .post(url + '/retreatsShow', {"store": store})
+    .post(url + '/retreatsShow', {"store": store, "type":my_type})
     .then((response) => {
         console.log(response.data.showRetreatsInfo);
         return response.data.showRetreatsInfo;
@@ -29,10 +29,10 @@ export const retreatShowList = (store) => {
 };
 
 /*Muestra los datos de retiros Lista*/
-export const retreatShowListHistory = (store) => {
+export const retreatShowListHistory = (store,type) => {
     console.log("datos");
     return axios
-    .post(url + '/retreatsDebtShowListHistory', {"store": store})
+    .post(url + '/retreatsDebtShowListHistory', {"store": store, "type": type})
     .then((response) => {
         console.log(response.data);
         return response.data;

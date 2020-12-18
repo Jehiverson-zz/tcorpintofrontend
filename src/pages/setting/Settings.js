@@ -27,7 +27,7 @@ const Landing = () => {
 
     return (
         <Layaout>
-            <MDBEdgeHeader color='indigo darken-3' className='sectionPage' />
+            
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>

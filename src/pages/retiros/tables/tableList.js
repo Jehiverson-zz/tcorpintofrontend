@@ -10,7 +10,7 @@ import {
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './listDebt';
-
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
     const history = useHistory();
@@ -18,6 +18,8 @@ const DatosdeVenta = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
+    const date = new Date();
+    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
  
     useEffect(() => {
         retreatShowList()
@@ -53,13 +55,27 @@ const DatosdeVenta = () => {
                 : 
                 <>
                 <br></br>
+                {
+                    currentPosts.length > 0 && (
+                        <div align="right">
+                            <ReactHTMLTableToExcel
+                                id="exportTableExcel"
+                                className="btn btn-success"
+                                table="TableTotalRetiros"
+                                filename={`Total_Retiros${today}`}
+                                sheet={`Total_Retiros${today}`}
+                                buttonText="Descargar Excel"
+                            />
+                        </div>
+                    )
+                }
                 <CardHeader title="Debitos Retiros" icon="ticket-alt">
-                    <MDBTable>
+                    <MDBTable id="TableTotalRetiros">
                         <MDBTableHead>
                             <tr>
                                 <th>Nombre</th>
                                 <th>Deuda</th>
-                                <th>Fecha de Creació</th>
+                                <th>Fecha de Creación</th>
                                 <th>Fecha de Actualización</th>
                                 <th>Acciones</th>
                             </tr>

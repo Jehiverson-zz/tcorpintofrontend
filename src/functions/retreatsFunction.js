@@ -3,9 +3,9 @@ import axios from 'axios'
 const url = process.env.REACT_APP_URL_BASE;
 
 /*Muestra los datos de retiros*/
-export const retreatShow = (store, my_type) => {
+export const retreatShow = (store, my_type,my_email) => {
     return axios
-    .post(url + '/retreatsShow', {"store": store, "type":my_type})
+    .post(url + '/retreatsShow', {"store": store, "type":my_type, "email": my_email})
     .then((response) => {
         console.log(response.data.showRetreatsInfo);
         return response.data.showRetreatsInfo;

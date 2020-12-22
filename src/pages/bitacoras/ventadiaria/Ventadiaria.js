@@ -18,6 +18,7 @@ import {
     MDBIcon,
     MDBCard,
     MDBCardBody,
+    MDBDatePicker
 } from 'mdbreact';
 
 //componentes
@@ -30,6 +31,7 @@ import Loading from './img/loading.gif'
 //Funciones
 import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales,validDataSales } from '../../../functions/salesFunctions'
 import {getStore} from '../../../functions/ticketFunction'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -147,11 +149,17 @@ const history = useHistory();
                                 />
                             </MDBCol>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
-                            <DatePicker 
+                            {/* <DatePicker 
                                 className="form-control"
                                 selected={startDate} 
                                 onChange={date => setStartDate(date)} 
-                                dateFormat="dd/MM/yyyy"/>
+                                dateFormat="dd/MM/yyyy"
+                                /> */}
+                                <MDBInput
+                                    type='date'
+                                    className="form-control"
+                                    onChange={e => setStartDate(e.target.value)}
+                                />
                             </MDBCol>
                         </MDBRow>
                         ):''}

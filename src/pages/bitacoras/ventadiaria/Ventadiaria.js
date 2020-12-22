@@ -18,6 +18,7 @@ import {
     MDBIcon,
     MDBCard,
     MDBCardBody,
+    MDBDatePicker
 } from 'mdbreact';
 
 //componentes
@@ -30,6 +31,7 @@ import Loading from './img/loading.gif'
 //Funciones
 import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales,validDataSales } from '../../../functions/salesFunctions'
 import {getStore} from '../../../functions/ticketFunction'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -120,9 +122,7 @@ const history = useHistory();
     getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
     
     useEffect(() => {
-        if(localStorage.getItem('change_date') === 'true'){
-            setStartDate(new Date())
-        }
+        
     },[]);
     
     //Pinta datos en el stepper
@@ -137,8 +137,6 @@ const history = useHistory();
                 return (
                     <>
                         {localStorage.getItem('change_date') === 'true'? (
-                            <MDBRow style={{ justifyContent: "center", display: "flex" }}>
-
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
                                     onChange={e => setStore(e.label)}
@@ -146,15 +144,23 @@ const history = useHistory();
                                     options={datosTiendas}
                                 />
                             </MDBCol>
+                            ):''}
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
-                            <DatePicker 
+                            {/* <DatePicker 
                                 className="form-control"
                                 selected={startDate} 
                                 onChange={date => setStartDate(date)} 
-                                dateFormat="dd/MM/yyyy"/>
+                                dateFormat="dd/MM/yyyy"
+                                /> */}
+                                <MDBInput
+                                    type='date'
+                                    className="form-control"
+                                    value={startDate}
+                                    onChange={e => setStartDate(e.target.value)}
+                                />
                             </MDBCol>
-                        </MDBRow>
-                        ):''}
+                        
+                        
                                                     
                         {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
@@ -843,12 +849,12 @@ const history = useHistory();
                     pagNext = 0;
                 }
 
+                if (startDate === null ) {
+                    Swal.fire('Error', 'No puedes dejar vacio el campo de fecha', 'info');
+                    pagNext = 0;
+                }
+                
                 if(localStorage.getItem('change_date') === 'true'){
-                    if (startDate === null ) {
-                        Swal.fire('Error', 'No puedes dejar vacio el campo de fecha', 'info');
-                        pagNext = 0;
-                    } 
-
                     if (store === null ) {
                         Swal.fire('Error', 'No puedes dejar vacio la tienda', 'info');
                         pagNext = 0;

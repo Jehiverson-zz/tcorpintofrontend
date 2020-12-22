@@ -9,6 +9,7 @@ import {
 import Pagination from '../../components/pagination';
 import TableDamaged from './TableDamaged';
 import Button from '@material-ui/core/Button';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import {
     MDBRow,
     MDBCol,
@@ -42,6 +43,8 @@ const DamagedMerchandise = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
+    const date = new Date();
+    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
 
     useEffect(() => {
         damaged_merchandise();
@@ -151,7 +154,21 @@ const DamagedMerchandise = () => {
             </CardHeader>
             <br></br>
             <MDBContainer>
-                <MDBTable>
+                {
+                    currentPosts.length > 0 && (
+                        <div align="right">
+                            <ReactHTMLTableToExcel
+                                id="exportTableExcel"
+                                className="btn btn-success"
+                                table="tableDamagedMerchandise"
+                                filename={`Mercaderia_Dañada${today}`}
+                                sheet={`Mercaderia_Dañada${today}`}
+                                buttonText="Descargar Excel"
+                            />
+                        </div>
+                    )
+                }
+                <MDBTable id="tableDamagedMerchandise">
                     <MDBTableHead>
                         <tr>
                             <th>DAÑO</th>
@@ -165,20 +182,20 @@ const DamagedMerchandise = () => {
                     </MDBTableHead>
                     <MDBTableBody>
                         {
-                            currentPosts.length > 0?(
+                            currentPosts.length > 0 ? (
                                 <TableDamaged posts={currentPosts} loading={loading} />
-                            ):(
-                                <tr><td colSpan="12"><center>No hay datos</center></td></tr>
-                            )
+                            ) : (
+                                    <tr><td colSpan="12"><center>No hay datos</center></td></tr>
+                                )
                         }
                     </MDBTableBody>
                 </MDBTable>
-                    <Pagination
-                        postsPerPage={postsPerPage}
-                        totalPosts={dataDamaged.length}
-                        paginate={paginate}
-                        currentPage={currentPage}
-                    />
+                <Pagination
+                    postsPerPage={postsPerPage}
+                    totalPosts={dataDamaged.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                />
             </MDBContainer>
         </Layaout>
     )

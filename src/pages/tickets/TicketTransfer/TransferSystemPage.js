@@ -10,6 +10,7 @@ import {
     inactivateTicket,
     completeTicket
 } from '../../../functions/ticketFunction';
+import { getOneStore } from '../../../functions/settingsFunction';
 import Pagination from '../../../components/pagination';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -37,7 +38,7 @@ import {
 } from 'mdbreact';
 import { FaRegPaperPlane, FaStoreAlt, FaCheckDouble,FaBan } from 'react-icons/fa'
 import Select from 'react-select';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
     toast: true,
@@ -82,6 +83,7 @@ function a11yProps(index) {
 const TransferSystemPage = () => {
     const my_store = localStorage.getItem("store");
     const my_email = localStorage.getItem("email");
+    const my_subs = localStorage.getItem("subsidiaria");
     const history = useHistory();
     const [value, setValue] = useState(0);
     const [dataTicketsCreated, setdataTicketsCreated] = useState([]);
@@ -110,8 +112,10 @@ const TransferSystemPage = () => {
     function stores() {
         let storesList = [];
         getStoreActives().then((resp) => resp.map(x => {
-            storesList.push({ value: x.name, label: x.name })
-            setdataStores(storesList)
+            if(x.sbs == my_subs){
+                storesList.push({ value: x.name, label: x.name })
+                setdataStores(storesList)
+            }
         }));
     }
 

@@ -72,8 +72,8 @@ const StoreList = () => {
         };
 
         storeCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Tienda Ingresada', 'success');
             ReloadData();
+            Swal.fire('Éxito', 'Tienda Ingresada', 'success');
             toggleModalCreate();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar tienda', 'error');
@@ -89,8 +89,8 @@ const StoreList = () => {
         };
 
         storeUpdate(createItem).then(res => {
-            Swal.fire('Éxito', 'Tienda Actualizada', 'success');
             ReloadData();
+            Swal.fire('Éxito', 'Tienda Actualizada', 'success');
             toggleModal();
         }).catch(err => {
             Swal.fire('Error', 'Error al actualizar la tienda', 'error');

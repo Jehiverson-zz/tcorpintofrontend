@@ -10,8 +10,10 @@ import {
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './listDebt';
+import { JsonToExcel } from 'react-json-excel';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import Pagination from '../../../components/pagination';
+
 const DatosdeVenta = () => {
     const history = useHistory();
     const [dataRetreats, setdataRetreats] = useState([]);
@@ -20,7 +22,14 @@ const DatosdeVenta = () => {
     const [loading, setLoading] = useState(true);
     const date = new Date();
     const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
- 
+    const filename = `DEBITO_RETIROS_${today}`,
+    columns = {
+        "name": "NOMBRE",
+        "total_debt": "DEUDA",
+        "date_created": "FECHA DE CREACIÓN",
+        "update_created": "FECHA DE ACTUALIZACIÓN",
+    }
+
     useEffect(() => {
         retreatShowList()
             .then((res) =>
@@ -58,13 +67,12 @@ const DatosdeVenta = () => {
                 {
                     currentPosts.length > 0 && (
                         <div align="right">
-                            <ReactHTMLTableToExcel
-                                id="exportTableExcel"
+                            <JsonToExcel
+                                data={dataRetreats}
                                 className="btn btn-success"
-                                table="TableTotalRetiros"
-                                filename={`Total_Retiros${today}`}
-                                sheet={`Total_Retiros${today}`}
-                                buttonText="Descargar Excel"
+                                filename={filename}
+                                fields={columns}
+                                text="Descargar Excel"
                             />
                         </div>
                     )

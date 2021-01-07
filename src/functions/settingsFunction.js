@@ -143,7 +143,7 @@ export const getSubsidiariaActives = (store) => {
 };
 
 /*Muestra los datos de subsidiarias*/
-export const SubsidiariasShow = (store) => {
+export const SubsidiariasShow = () => {
     return axios
     .post(url + '/subsidiariaShow')
     .then((response) => {
@@ -180,6 +180,17 @@ export const subsidiariaUpdate = (data) => {
 };
 
 /* TIENDAS */
+
+export const getOneStore = (data) => {
+    return axios
+    .post(url + '/user/store',{store: data})
+    .then((response) => {
+        return response.data.result[0];
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
 
 export const storeCreate = (data) => {
     return axios

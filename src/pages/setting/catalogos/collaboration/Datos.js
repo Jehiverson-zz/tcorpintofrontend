@@ -81,8 +81,8 @@ const CollaboratosList = () => {
 
 
         collaboratorCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Colaborador Ingresada', 'success');
             ReloadData();
+            Swal.fire('Éxito', 'Colaborador Ingresada', 'success');
             toggleModalCreate();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar colaborador', 'error');
@@ -96,10 +96,9 @@ const CollaboratosList = () => {
             store: store.value,
             status: status.value
         };
-        console.log("UPDATE", createItem)
         collaboratorUpdate(createItem).then(res => {
-            Swal.fire('Éxito', 'Colaborador Actualizada', 'success');
             ReloadData();
+            Swal.fire('Éxito', 'Colaborador Actualizada', 'success');
             toggleModal();
         }).catch(err => {
             console.log(err)

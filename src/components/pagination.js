@@ -10,13 +10,17 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   return ( 
     <MDBContainer className="center-element">
       <MDBPagination circle>
-        {pageNumbers.map(number => (
-          <MDBPageItem key={number}>
-            <MDBPageNav onClick={() => paginate(number)} style={{ backgroundColor: number === currentPage ? "#007bff" : "", color: number === currentPage ? "white" : "" }}>
-              {number}
-            </MDBPageNav>
-          </MDBPageItem>
-        ))}
+        {pageNumbers.map((number, i) => {
+          if(i > (currentPage- 6) && i < (currentPage + 4)){
+            return(
+              <MDBPageItem key={number}>
+                <MDBPageNav onClick={() => paginate(number)} style={{ backgroundColor: number === currentPage ? "#007bff" : "", color: number === currentPage ? "white" : "" }}>
+                  {number}
+                </MDBPageNav>
+              </MDBPageItem>
+            )
+          }
+        })}
       </MDBPagination>
     </MDBContainer>
   );

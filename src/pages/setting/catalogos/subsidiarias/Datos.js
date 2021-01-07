@@ -62,8 +62,8 @@ const SubsidiariasList = () => {
         };
 
         subsidiariaCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Subsidiaria Ingresada', 'success');
             ReloadData();
+            Swal.fire('Éxito', 'Subsidiaria Ingresada', 'success');
             toggleModalCreate();
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
@@ -78,8 +78,8 @@ const SubsidiariasList = () => {
         };
 
         subsidiariaUpdate(createItem).then(res => {
-            Swal.fire('Éxito', 'Subsidiaria Actualizada', 'success');
             ReloadData();
+            Swal.fire('Éxito', 'Subsidiaria Actualizada', 'success');
             toggleModal(false,false,false);
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
@@ -104,7 +104,6 @@ const SubsidiariasList = () => {
     const ReloadData = () => {
         SubsidiariasShow()
             .then((res) => {
-                console.log(res)
                 setdataSales(res);
                 setLoading(false);
             }

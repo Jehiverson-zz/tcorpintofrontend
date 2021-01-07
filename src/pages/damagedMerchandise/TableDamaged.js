@@ -17,6 +17,9 @@ const TableDamaged = ({ posts, loading }) => {
                   <td>{post.price}</td>
                   <td>{post.store_created}</td>
                   <td>{dateFormat(post.timestamp,'dd/mm/yyyy')}</td>
+                  <td>
+                    <img src={process.env.REACT_APP_CLOUD_URL+post.image} width="150"></img>
+                  </td>
         </tr>
       ))
   );

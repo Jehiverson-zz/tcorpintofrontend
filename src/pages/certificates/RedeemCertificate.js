@@ -142,7 +142,7 @@ const RedeemCertificate = () => {
             result_function('error','El valor de la factura es mayor al valor del certificado')
         }else{
             exchangeCertificate(id, dataCertificate[0])
-                .then(response => result_function('success',response.data.message))
+                .then(response => { result_function('success',response.data.message); getAllData(); })
                 .catch(error => { result_function('error','Algo salio mal'); console.log(error) })
         }
     }

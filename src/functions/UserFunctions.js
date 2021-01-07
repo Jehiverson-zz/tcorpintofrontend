@@ -42,7 +42,7 @@ export const login_google = user => {
       localStorage.setItem('store', response.data.user.store);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('change_date', response.data.user.change_date);
-      let data = { error: 0, message: "Exito" };
+      let data = { error: 0, message: "Exito", store: response.data.user.store };
       return data;
     })
     .catch(err => {

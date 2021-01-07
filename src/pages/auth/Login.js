@@ -18,7 +18,7 @@ import './Login.css'
 
 //Functions
 import { login,login_google } from '../../functions/UserFunctions';
-
+import { getOneStore } from '../../functions/settingsFunction'
 const Login = () => {
     
     const clientId = process.env.REACT_APP_GOOGLE_ID;
@@ -26,7 +26,7 @@ const Login = () => {
     const history = useHistory();
     const [user, setUser] = useState();
     const [password, setPassword] = useState();
- 
+
     const _Login = () => {
 
         const userData = {
@@ -38,7 +38,10 @@ const Login = () => {
             if (res.error === 1) {
                 Swal.fire('Oops...', res.message, 'error');
             } else {
-                history.push(`/bitacoras`);
+                getOneStore(res.data.user.store).then((resp) => {
+                    localStorage.setItem('subsidiaria', resp.sbs);
+                    history.push(`/bitacoras`);
+                });
             }
         })
     }
@@ -69,7 +72,10 @@ const Login = () => {
                 if (res.error === 1) {
                     Swal.fire('Oops...', res.message, 'error');
                 } else {
-                    history.push(`/bitacoras`);
+                    getOneStore(res.store).then((resp) => {
+                        localStorage.setItem('subsidiaria', resp.sbs);
+                        history.push(`/bitacoras`);
+                    });
                 }
             })
         }else{

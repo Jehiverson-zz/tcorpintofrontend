@@ -114,6 +114,12 @@ const history = useHistory();
     const [store, setStore] = useState(null);
     //ApiRest datos de colaboradores
     const datos = [];
+    const date_ = new Date();
+    const hoy = date_.getDate();
+    const año = date_.getFullYear();
+    const mes = date_.getMonth()+1;
+    const fecha = `${hoy}/${mes}/${año}`;
+
     getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
     //ApiRest datos de tienndas
     const datosTiendas = [];
@@ -147,11 +153,7 @@ const history = useHistory();
                                 />
                             </MDBCol>
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
-                            <DatePicker 
-                                className="form-control"
-                                selected={startDate} 
-                                onChange={date => setStartDate(date)} 
-                                dateFormat="dd/MM/yyyy"/>
+                                <MDBInput type='date' valueDefault={fecha}  placeholder={fecha}  validate onChange={e => { console.log(e) /*setStartDate(e.target.value)*/}} />
                             </MDBCol>
                         </MDBRow>
                         ):''}

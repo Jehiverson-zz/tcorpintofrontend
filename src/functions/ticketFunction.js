@@ -71,7 +71,8 @@ export const getAllTicketsSystemTransfer = (status) => {
 
 /* Obtiene la data de movimientos de tikets entre tiendas (de la tienda registrada)*/
 export const getTicketsSystemTransferCreated = () => {
-    const data = {store : localStorage.getItem("store")}
+    const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
+    console.log(data)
     return axios
         .post(`${url}/tickets/transfer_created`, data)
         .then((response) => {
@@ -84,7 +85,7 @@ export const getTicketsSystemTransferCreated = () => {
 
 /* Obtiene la data de movimientos de tikets entre tiendas (de la tienda registrada)*/
 export const getTicketsSystemTransferAssigned = () => {
-    const data = {store : localStorage.getItem("store")}
+    const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
     return axios
         .post(`${url}/tickets/transfer_assigned`, data)
         .then((response) => {
@@ -110,7 +111,7 @@ export const getAllTicketsImmediatesDeliveries = (status) => {
 
 /* Obtiene la data de tickets de entregas inmediatas creados por el usuario */
 export const getTicketsImmediatesDeliveriesCreated = () => {
-    const data = {store : localStorage.getItem("store")}
+    const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
     return axios
         .post(`${url}/tickets/immediate_deliveries_created`, data)
         .then((response) => {
@@ -123,7 +124,7 @@ export const getTicketsImmediatesDeliveriesCreated = () => {
 
 /* Obtiene la data de tickets de entregas inmediatas asignados al usuario*/
 export const getTicketsImmediatesDeliveriesAssigned = () => {
-    const data = {store : localStorage.getItem("store")}
+    const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
     return axios
         .post(`${url}/tickets/immediate_deliveries_assigned`, data)
         .then((response) => {
@@ -149,7 +150,7 @@ export const getAllPhotoRetreats = (status) => {
 
 /* Obtiene la data de los tickets de retiros fotografía de una tienda */
 export const getPhotoRetreats = () => {
-    const data = {store : localStorage.getItem("store")}
+    const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
     return axios
         .post(`${url}/tickets/photo_retreats`, data)
         .then((response) => {
@@ -175,7 +176,7 @@ export const getAllExternalRetreats = (status) => {
 
 /* Obtiene la data de los tickets retiros externos */
 export const getExternalRetreats = () => {
-    const data = {store : localStorage.getItem("store")}
+    const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
     return axios
         .post(`${url}/tickets/external_retreats`, data)
         .then((response) => {

@@ -16,7 +16,7 @@ const DatosdeVenta = () => {
     const history = useHistory();
     const [dataSales, setDataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(80);
+    const [postsPerPage] = useState(50);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -72,14 +72,14 @@ const DatosdeVenta = () => {
                         <MDBTableBody>
                             <Tablebinnacle posts={currentPosts} loading={loading} />
                         </MDBTableBody>
-                        {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
+                        {dataSales.length < 1 ? (<tr><td colspan="4"><center>No existen datos de venta</center></td></tr>):""}
+                    </MDBTable>
                         <Pagination
                             postsPerPage={postsPerPage}
                             totalPosts={dataSales.length}
                             paginate={paginate}
                             currentPage={currentPage}
                         />
-                    </MDBTable>
                 </CardHeader>
                 </>}
         </Layaout>

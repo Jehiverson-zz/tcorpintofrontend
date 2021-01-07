@@ -78,6 +78,7 @@ function a11yProps(index) {
 const ImmediateDelivery = () => {
     const my_store = localStorage.getItem("store");
     const my_email = localStorage.getItem("email");
+    const my_subs = localStorage.getItem("subsidiaria");
     const history = useHistory();
     const [value, setValue] = useState(0);
     const [dataStores, setdataStores] = useState([]);
@@ -120,8 +121,10 @@ const ImmediateDelivery = () => {
     function stores() {
         let storesList = [];
         getStoreActives().then((resp) => resp.map(x => {
-            storesList.push({ value: x.name, label: x.name })
-            setdataStores(storesList)
+            if(x.sbs == my_subs){
+                storesList.push({ value: x.name, label: x.name })
+                setdataStores(storesList);
+            }
         }));
     }
 

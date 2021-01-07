@@ -9,7 +9,7 @@ import {
 import Pagination from '../../components/pagination';
 import TableDamaged from './TableDamaged';
 import Button from '@material-ui/core/Button';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { JsonToExcel } from 'react-json-excel';
 import {
     MDBRow,
     MDBCol,
@@ -45,6 +45,16 @@ const DamagedMerchandise = () => {
     const [postsPerPage] = useState(10);
     const date = new Date();
     const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
+    const filename = `Mercaderia_Dañada${today}`,
+    columns = {
+        "damage": "DAÑO",
+        "upc": "UPC",
+        "alu": "ALU",
+        "siz": "TALLA",
+        "price": "PRECIO",
+        "store_created": "TIENDA CREADORA",
+        "timestamp": "FECHA DE CREACIÓN",
+    }
 
     useEffect(() => {
         damaged_merchandise();
@@ -95,6 +105,7 @@ const DamagedMerchandise = () => {
             }
         })
         if (cont === 0) {
+            console.log(fields);
             storeDamagedMerchandise(fields)
                 .then(response => {
                     result_function('success', 'Registro almecenado exitosamente')
@@ -112,6 +123,8 @@ const DamagedMerchandise = () => {
         const values = [...fields];
         if (event.target.value.length === 0) {
             values[0][name] = null;
+        } else if (name === "image") {
+            values[0][name] = event.target.files[0];
         } else {
             values[0][name] = event.target.value;
         }
@@ -143,8 +156,11 @@ const DamagedMerchandise = () => {
                     <MDBCol md='3'>
                         <MDBInput label='Precio' type='text' value={fields[0].price} validate onChange={e => handleChange(e, "price")} />
                     </MDBCol>
-                    <MDBCol md='12' style={{ marginTop: "26px" }}>
+                    <MDBCol md='8' style={{ marginTop: "26px" }}>
                         <MDBInput label='Daño de la prenda' type='text' value={fields[0].damaged} validate onChange={e => handleChange(e, "damaged")} />
+                    </MDBCol>
+                    <MDBCol md='4'>
+                        <MDBInput type="file" accept="image/png, image/jpeg" validate onChange={e => handleChange(e, "image")} />
                     </MDBCol>
 
                 </MDBRow>
@@ -157,14 +173,13 @@ const DamagedMerchandise = () => {
                 {
                     currentPosts.length > 0 && (
                         <div align="right">
-                            <ReactHTMLTableToExcel
-                                id="exportTableExcel"
+                            <JsonToExcel
+                                data={dataDamaged}
                                 className="btn btn-success"
-                                table="tableDamagedMerchandise"
-                                filename={`Mercaderia_Dañada${today}`}
-                                sheet={`Mercaderia_Dañada${today}`}
-                                buttonText="Descargar Excel"
-                            />
+                                filename={filename}
+                                fields={columns}
+                                text="Descargar Excel"
+                                />
                         </div>
                     )
                 }
@@ -178,6 +193,7 @@ const DamagedMerchandise = () => {
                             <th>PRECIO</th>
                             <th>TIENDA</th>
                             <th>FECHA DE CREACIÓN</th>
+                            <th>IMAGEN</th>
                         </tr>
                     </MDBTableHead>
                     <MDBTableBody>

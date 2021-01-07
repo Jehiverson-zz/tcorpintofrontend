@@ -22,6 +22,7 @@
     "react-google-login": "^5.1.21",
     "react-html-table-to-excel": "^2.0.0",
     "react-icons": "^3.11.0",
+    "react-json-excel": "^1.1.0",
     "react-moment": "^0.9.7",
     "react-numeric-input": "^2.2.3",
     "react-router-dom": "^5.1.2",

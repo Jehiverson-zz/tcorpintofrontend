@@ -61,7 +61,7 @@ const DatosdeVenta = () => {
                 <>
                 <br></br>
                 <CardHeader title="Datos de venta" icon="ticket-alt">
-                    <MDBRow>
+                    {/* <MDBRow>
                         <MDBCol md='3' style={{ marginTop: "26px" }}>
                             <Select
                                 //onChange={e => handleChange(e, "store_asigned")}
@@ -76,7 +76,7 @@ const DatosdeVenta = () => {
                                 options={value2}
                             />
                         </MDBCol>
-                    </MDBRow>
+                    </MDBRow> */}
                     <MDBTable>
                         <MDBTableHead>
                             <tr>

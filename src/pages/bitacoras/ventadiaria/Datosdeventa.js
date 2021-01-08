@@ -5,26 +5,26 @@ import CardHeader from '../../../components/CardHeader'
 import { salesShow } from '../../../functions/salesFunctions'
 import Loading from './img/loading.gif'
 import {
+    MDBRow,
+    MDBCol,
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './Tablebinnacle';
-
+import Select from 'react-select';
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
     const history = useHistory();
     const [dataSales, setDataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(50);
+    const [postsPerPage] = useState(20);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let data = {store: localStorage.getItem('store'), type: localStorage.getItem('type')}
         salesShow(data)
             .then((res) =>{
-            console.log("data",res)
-            
             setLoading(false)
             setDataSales(res)
         }
@@ -34,6 +34,8 @@ const DatosdeVenta = () => {
                 setLoading(true)
             )
     }, [])
+
+    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -59,6 +61,22 @@ const DatosdeVenta = () => {
                 <>
                 <br></br>
                 <CardHeader title="Datos de venta" icon="ticket-alt">
+                    <MDBRow>
+                        <MDBCol md='3' style={{ marginTop: "26px" }}>
+                            <Select
+                                //onChange={e => handleChange(e, "store_asigned")}
+                                defaultValue={value2}
+                                options={value2}
+                            />
+                        </MDBCol>
+                        <MDBCol md='3' style={{ marginTop: "26px" }}>
+                            <Select
+                                //onChange={e => handleChange(e, "store_asigned")}
+                                defaultValue={value2}
+                                options={value2}
+                            />
+                        </MDBCol>
+                    </MDBRow>
                     <MDBTable>
                         <MDBTableHead>
                             <tr>

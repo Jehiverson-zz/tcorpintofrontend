@@ -192,9 +192,9 @@ const ImmediateDelivery = () => {
                 storeTicketInmediates(fields)
                     .then((response) => {
                         result_function('success', response.data.message);
-                        setTimeout(() => {
-                            history.go(0);
-                        }, 2000);
+                        // setTimeout(() => {
+                        //     history.go(0);
+                        // }, 2000);
                     }).catch(err => {
                         result_function('error', 'Error al crear el ticket');
                     })

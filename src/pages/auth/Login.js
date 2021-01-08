@@ -34,11 +34,12 @@ const Login = () => {
             password: password
         }
 
-        login(userData).then(async res => {
+        login(userData).then(res => {
+            console.log(res)
             if (res.error === 1) {
                 Swal.fire('Oops...', res.message, 'error');
             } else {
-                getOneStore(res.data.user.store).then((resp) => {
+                getOneStore(res.response.data.user.store).then((resp) => {
                     localStorage.setItem('subsidiaria', resp.sbs);
                     history.push(`/bitacoras`);
                 });

@@ -47,7 +47,7 @@ export const confirmdataVendors = (vendors, vendorDescount, sale) => {
     //Descuento que se le hace a los vendedores encaso un cliente devuelva el producto que compro
     vendorDescount.map(resp => totalDesconuntVendors += parseFloat(resp.venta) === ' ' ? 0 : parseFloat(resp.venta))
 
-    totalFinanVendors = totalVendors - totalDesconuntVendors
+    totalFinanVendors = totalVendors.toFixed(2) - totalDesconuntVendors.toFixed(2);
 
     if (parseFloat(totalFinanVendors) === parseFloat(sale)) {
         message = ""
@@ -74,8 +74,8 @@ export const confirmdataInvoice = (sale) => {
     totalInvoice_nota_total += parseFloat(sale.facturas_nota_total) === ' ' ? 0 : parseFloat(sale.facturas_nota_total)
 
 
-    total = (parseFloat(totalInvoice_sis_total) + parseFloat(totalInvoice_man_total) + parseFloat(totalInvoice_cod_total)) - parseFloat(totalInvoice_nota_total)
-    if(parseFloat(total) === parseFloat(sale.venta_diaria)){
+    total = (parseFloat(totalInvoice_sis_total).toFixed(2) + parseFloat(totalInvoice_man_total).toFixed(2) + parseFloat(totalInvoice_cod_total)).toFixed(2) - parseFloat(totalInvoice_nota_total).toFixed(2)
+    if(parseFloat(total).toFixed(2) === parseFloat(sale.venta_diaria).toFixed(2)){
         message =""
         status =true
     }else{

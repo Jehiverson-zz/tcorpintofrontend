@@ -33,12 +33,13 @@ const Login = () => {
             user: user,
             password: password
         }
-
+ 
         login(userData).then(async res => {
             if (res.error === 1) {
                 Swal.fire('Oops...', res.message, 'error');
             } else {
-                getOneStore(res.data.user.store).then((resp) => {
+                console.log(res);
+                getOneStore(res.response.data.user.store).then((resp) => {
                     localStorage.setItem('subsidiaria', resp.sbs);
                     history.push(`/bitacoras`);
                 });

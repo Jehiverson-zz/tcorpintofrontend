@@ -127,7 +127,7 @@ var totalDay = 0
                     parseFloat(sale.diferencia) +
                     parseFloat(sale.notaDeCredito) 
     
-    totalDay = parseFloat(saleTotalDay).toFixed(2) - parseFloat(saleTotalDayDescounst).toFixed(2)
+    totalDay = parseFloat(saleTotalDay) - parseFloat(saleTotalDayDescounst)
 
     if(parseFloat(totalDay) === parseFloat(sale.venta_diaria)){
         message =""

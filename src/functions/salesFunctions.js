@@ -49,7 +49,7 @@ export const confirmdataVendors = (vendors, vendorDescount, sale) => {
 
     totalFinanVendors = totalVendors.toFixed(2) - totalDesconuntVendors.toFixed(2);
 
-    if (parseFloat(totalFinanVendors) === parseFloat(sale)) {
+    if (parseFloat(totalFinanVendors.toFixed(2)) === parseFloat(sale.toFixed(2))) {
         message = ""
         status = true
     } else {
@@ -68,14 +68,14 @@ export const confirmdataInvoice = (sale) => {
     var message = ""
     var status =""
    
-    totalInvoice_sis_total += parseFloat(sale.facturas_sis_total) === ' ' ? 0 : parseFloat(sale.facturas_sis_total)
-    totalInvoice_man_total += parseFloat(sale.facturas_man_total) === ' ' ? 0 : parseFloat(sale.facturas_man_total)
-    totalInvoice_cod_total += parseFloat(sale.facturas_cod_total) === ' ' ? 0 : parseFloat(sale.facturas_cod_total)
-    totalInvoice_nota_total += parseFloat(sale.facturas_nota_total) === ' ' ? 0 : parseFloat(sale.facturas_nota_total)
+    totalInvoice_sis_total += parseFloat(sale.facturas_sis_total.toFixed(2)) === ' ' ? 0 : parseFloat(sale.facturas_sis_total.toFixed(2))
+    totalInvoice_man_total += parseFloat(sale.facturas_man_total.toFixed(2)) === ' ' ? 0 : parseFloat(sale.facturas_man_total.toFixed(2))
+    totalInvoice_cod_total += parseFloat(sale.facturas_cod_total.toFixed(2)) === ' ' ? 0 : parseFloat(sale.facturas_cod_total.toFixed(2))
+    totalInvoice_nota_total += parseFloat(sale.facturas_nota_total.toFixed(2)) === ' ' ? 0 : parseFloat(sale.facturas_nota_total.toFixed(2))
 
 
-    total = (parseFloat(totalInvoice_sis_total) + parseFloat(totalInvoice_man_total) + parseFloat(totalInvoice_cod_total)) - parseFloat(totalInvoice_nota_total)
-    if(parseFloat(total) === parseFloat(sale.venta_diaria)){
+    total = (parseFloat(totalInvoice_sis_total.toFixed(2)) + parseFloat(totalInvoice_man_total.toFixed(2)) + parseFloat(totalInvoice_cod_total.toFixed(2))) - parseFloat(totalInvoice_nota_total.toFixed(2))
+    if(parseFloat(total.toFixed(2)) === parseFloat(sale.venta_diaria.toFixed(2))){
         message =""
         status =true
     }else{
@@ -95,41 +95,41 @@ var saleTotalDayDescounst = 0
 var totalDay = 0
 
                     //efectivo
-    saleTotalDay += parseFloat(sale.efectivoQuetzales) + 
-                    parseFloat(sale.efectivoQuetzalesDolares) +
+    saleTotalDay += parseFloat(sale.efectivoQuetzales.toFixed(2)) + 
+                    parseFloat(sale.efectivoQuetzalesDolares.toFixed(2)) +
                     //Tarjetas
-                    parseFloat(sale.credomatic) +
-                    parseFloat(sale.visa) +
-                    parseFloat(sale.visaOnline) +
-                    parseFloat(sale.visaDolares) +
-                    parseFloat(sale.masterCard) +
+                    parseFloat(sale.credomatic.toFixed(2)) +
+                    parseFloat(sale.visa.toFixed(2)) +
+                    parseFloat(sale.visaOnline.toFixed(2)) +
+                    parseFloat(sale.visaDolares.toFixed(2)) +
+                    parseFloat(sale.masterCard.toFixed(2)) +
                     //Cuotas
-                    parseFloat(sale.crediCuotas) +
-                    parseFloat(sale.visaCuotas) +
+                    parseFloat(sale.crediCuotas.toFixed(2)) +
+                    parseFloat(sale.visaCuotas.toFixed(2)) +
                     //Envios
-                    parseFloat(sale.valorEnvioEfectivo) +
+                    parseFloat(sale.valorEnvioEfectivo.toFixed(2)) +
                     //Especiales
-                    parseFloat(sale.lifeMilesValor) +
-                    parseFloat(sale.exencionIva) +
-                    parseFloat(sale.loyalty) +
-                    parseFloat(sale.gastosAutorizados) +
-                    parseFloat(sale.retirosMercaderia) +
-                    parseFloat(sale.ventaEnLinea) +
-                    parseFloat(sale.cuadreDeCaja) +
+                    parseFloat(sale.lifeMilesValor.toFixed(2)) +
+                    parseFloat(sale.exencionIva.toFixed(2)) +
+                    parseFloat(sale.loyalty.toFixed(2)) +
+                    parseFloat(sale.gastosAutorizados.toFixed(2)) +
+                    parseFloat(sale.retirosMercaderia.toFixed(2)) +
+                    parseFloat(sale.ventaEnLinea.toFixed(2)) +
+                    parseFloat(sale.cuadreDeCaja.toFixed(2)) +
                     //Certificados
-                    parseFloat(sale.cashback) +
-                    parseFloat(sale.giftcard)
+                    parseFloat(sale.cashback.toFixed(2)) +
+                    parseFloat(sale.giftcard.toFixed(2))
     
     // Son los campos negativos que se tienen dentro de la venta del dia para cuadrar el total
     
     saleTotalDayDescounst +=
-                    parseFloat(sale.faltante) +
-                    parseFloat(sale.diferencia) +
-                    parseFloat(sale.notaDeCredito) 
+                    parseFloat(sale.faltante.toFixed(2)) +
+                    parseFloat(sale.diferencia.toFixed(2)) +
+                    parseFloat(sale.notaDeCredito.toFixed(2)) 
     
-    totalDay = parseFloat(saleTotalDay) - parseFloat(saleTotalDayDescounst)
+    totalDay = parseFloat(saleTotalDay.toFixed(2)) - parseFloat(saleTotalDayDescounst.toFixed(2))
 
-    if(parseFloat(totalDay) === parseFloat(sale.venta_diaria)){
+    if(parseFloat(totalDay.toFixed(2)) === parseFloat(sale.venta_diaria.toFixed(2))){
         message =""
         status =true
     }else{

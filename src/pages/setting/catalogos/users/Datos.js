@@ -400,7 +400,7 @@ const DatosdeVenta = () => {
                     />
                     <label> Tipo</label>
                     <Select
-                        onChange={e => setTypeUser(e.label)}
+                        onChange={e => setTypeUser(e.name)}
                         defaultValue={typeUser}
                         options={typeUserList}
                     />

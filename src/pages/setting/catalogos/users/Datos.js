@@ -324,7 +324,7 @@ const DatosdeVenta = () => {
                     />
                     <label> Tipo</label>
                     <Select
-                        onChange={e => setTypeUser(e.label)}
+                        onChange={e => setTypeUser(e.name)}
                         options={typeUserList}
                     />
                     <label> Estados</label>

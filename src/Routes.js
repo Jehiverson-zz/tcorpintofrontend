@@ -69,8 +69,9 @@ import PageNotFound from './pages/404/PageNotFound';
 
 //Bitacoras
 import Landing_Bitacoras from './pages/bitacoras/Landing';
-import BitacoraVenta from './pages/bitacoras/ventadiaria/Ventadiaria'
-import Datosdeventa from './pages/bitacoras/ventadiaria/Datosdeventa'
+import BitacoraVenta from './pages/bitacoras/ventadiaria/Ventadiaria';
+import Datosdeventa from './pages/bitacoras/ventadiaria/Datosdeventa';
+import DatosdeventaUpdate from './pages/bitacoras/ventadiaria/DatosdeventaUpdate';
 import Datosdeejecucion from './pages/bitacoras/ejecucion/bitacoraEjecucion'
 
 //Tickets
@@ -103,6 +104,8 @@ import CollaboratosList from './pages/setting/catalogos/collaboration/Datos';
 import Users from './pages/setting/catalogos/users/Datos';
 import SubsidiariasList from './pages/setting/catalogos/subsidiarias/Datos';
 import StoreList from './pages/setting/catalogos/stores/Datos';
+import EmailsList from './pages/setting/catalogos/emails/Datos';
+import TemplateList from './pages/setting/catalogos/templates/Datos';
 
 class Routes extends React.Component {
 
@@ -113,6 +116,7 @@ class Routes extends React.Component {
         <Route exact path='/bitacoras' component={Landing_Bitacoras} />
         <Route exact path='/bitacora_ventas_diarias' component={BitacoraVenta} />
         <Route exact path='/bitacora_ventas_show' component={Datosdeventa} />
+        <Route exact path='/bitacora_ventas_update' component={DatosdeventaUpdate} />
         <Route exact path='/bitacora_ejecucion' component={Datosdeejecucion} />
 
         <Route exact path='/tickets' component={TicketsPage} />
@@ -134,13 +138,15 @@ class Routes extends React.Component {
         <Route exact path='/retreats_bitacoras' component={RetreatsBitacora} />
         <Route exact path='/retreats_bitacoras_list' component={RetreatsBitacoraList} />
         <Route exact path='/retreats_history' component={RetreatsHistory} />
- 
+
         <Route exact path='/settingsList' component={Settings} />
         <Route exact path='/stateList' component={StatesList} />
         <Route exact path='/collaborationList' component={CollaboratosList} />
         <Route exact path='/usersList' component={Users} />
         <Route exact path='/subsidiarias' component={SubsidiariasList} />
         <Route exact path='/stores' component={StoreList} />
+        <Route exact path='/emails' component={EmailsList} />
+        <Route exact path='/temmplates' component={TemplateList} />
 
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />
@@ -202,7 +208,7 @@ class Routes extends React.Component {
         <Route path='/tables/datatable-api' component={DatatableApiPage} />
         <Route path='/tables/datatable' component={DatatablePage} />
         <Route path='/tables/datatable-2' component={DatatablePageV5} />
-        <Route component={PageNotFound}/>
+        <Route component={PageNotFound} />
       </Switch>
     );
   }

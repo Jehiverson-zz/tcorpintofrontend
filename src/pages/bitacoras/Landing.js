@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 import {
-    MDBEdgeHeader,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -23,7 +22,7 @@ const Landing = () => {
 
     return (
         <Layaout>
-            
+
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>

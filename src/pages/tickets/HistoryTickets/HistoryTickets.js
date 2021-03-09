@@ -22,7 +22,7 @@ import {
     MDBTableHead
 } from 'mdbreact';
 import Moment from 'react-moment';
-import { FaBan, FaCheckDouble, FaPersonBooth, FaStoreAlt, FaCheckCircle, FaRegCalendar,FaHandPaper } from 'react-icons/fa';
+import { FaBan, FaCheckDouble, FaPersonBooth, FaStoreAlt, FaCheckCircle, FaRegCalendar, FaHandPaper } from 'react-icons/fa';
 import Select from 'react-select';
 import Loading from '../../bitacoras/ventadiaria/img/loading.gif'
 import Pagination from '../../../components/pagination';
@@ -106,7 +106,7 @@ const HistoryTickets = () => {
         getTicketsInemdiates(status.status)
         getTicketsExternalRetreats(status.status)
         getTicketsPhotoRetreats(status.status)
-    }, [0])
+    }, [status])
 
     function getTicketsTransfer(status) {
         getAllTicketsSystemTransfer(status).then((res) => {
@@ -151,7 +151,7 @@ const HistoryTickets = () => {
         });
     }
 
-     // Get current posts
+    // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = dataTickets.slice(indexOfFirstPost, indexOfLastPost);
@@ -172,10 +172,10 @@ const HistoryTickets = () => {
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    <Tab label="Traslado de Sistema" {...a11yProps(0)} onClick={()=>handleClickTab('Traslado')} />
-                    <Tab label="Entregas Inemdiatas" {...a11yProps(1)} onClick={()=>handleClickTab('Inmediates')} />
-                    <Tab label="Retiros Externos" {...a11yProps(2)} onClick={()=>handleClickTab('Externos')} />
-                    <Tab label="Retiros Fotografía" {...a11yProps(3)} onClick={()=>handleClickTab('Fotografias')} />
+                    <Tab label="Traslado de Sistema" {...a11yProps(0)} onClick={() => handleClickTab('Traslado')} />
+                    <Tab label="Entregas Inemdiatas" {...a11yProps(1)} onClick={() => handleClickTab('Inmediates')} />
+                    <Tab label="Retiros Externos" {...a11yProps(2)} onClick={() => handleClickTab('Externos')} />
+                    <Tab label="Retiros Fotografía" {...a11yProps(3)} onClick={() => handleClickTab('Fotografias')} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -198,75 +198,75 @@ const HistoryTickets = () => {
                     /></center>)
                     : (
                         <>
-                        <MDBRow>
-                            {
-                                dataTickets.length > 0 ? (
-                                    currentPosts.map((data) => {
+                            <MDBRow>
+                                {
+                                    dataTickets.length > 0 ? (
+                                        currentPosts.map((data) => {
                                             let orden = 0;
                                             return (
                                                 <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
                                                     <MDBCard>
                                                         <MDBCardBody style={{ Height: "300px" }}>
                                                             <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
-                                                            {data.status === 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
-                                                            {data.status === 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
-                                                            {data.status === 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
+                                                                {data.status === 'Pendiente' && (<span className="float-right"><FaHandPaper /></span>)}
+                                                                {data.status === 'Completado' && (<span className="float-right"><FaCheckCircle /></span>)}
+                                                                {data.status === 'Cancelado' && (<span className="float-right"><FaBan /></span>)}
                                                             </MDBCardTitle>
-                                                                <MDBTable small>
-                                                                    <MDBTableHead>
-                                                                        <tr>
-                                                                            <th>No.</th>
-                                                                            <th>UPC</th>
-                                                                            <th>ALU</th>
-                                                                            <th>TALLA</th>
-                                                                            <th>FACTURA</th>
-                                                                        </tr>
-                                                                    </MDBTableHead>
-                                                                    <MDBTableBody>
-                                                                        {
-                                                                            data.product.length > 0 && (
-                                                                                data.product.map((prod) => {
-                                                                                    orden++;
-                                                                                    return (
-                                                                                        <tr key={prod._id}>
-                                                                                            <td>{orden}</td>
-                                                                                            <td>{prod.upc}</td>
-                                                                                            <td>{prod.alu}</td>
-                                                                                            <td>{prod.siz || prod.size}</td>
-                                                                                            <td>{data.fact || prod.bill}</td>
-                                                                                        </tr>
-                                                                                    )
-                                                                                })
-                                                                            )
-                                                                        }
-                                                                    </MDBTableBody>
-                                                                </MDBTable>
+                                                            <MDBTable small>
+                                                                <MDBTableHead>
+                                                                    <tr>
+                                                                        <th>No.</th>
+                                                                        <th>UPC</th>
+                                                                        <th>ALU</th>
+                                                                        <th>TALLA</th>
+                                                                        <th>FACTURA</th>
+                                                                    </tr>
+                                                                </MDBTableHead>
+                                                                <MDBTableBody>
+                                                                    {
+                                                                        data.product.length > 0 && (
+                                                                            data.product.map((prod) => {
+                                                                                orden++;
+                                                                                return (
+                                                                                    <tr key={prod._id}>
+                                                                                        <td>{orden}</td>
+                                                                                        <td>{prod.upc}</td>
+                                                                                        <td>{prod.alu}</td>
+                                                                                        <td>{prod.siz || prod.size}</td>
+                                                                                        <td>{data.fact || prod.bill}</td>
+                                                                                    </tr>
+                                                                                )
+                                                                            })
+                                                                        )
+                                                                    }
+                                                                </MDBTableBody>
+                                                            </MDBTable>
                                                         </MDBCardBody>
                                                     </MDBCard>
                                                 </MDBCol>
                                             )
                                         }
+                                        )
                                     )
-                                )
-                                    :
-                                    <MDBCol md='12'>
-                                        <MDBCard color='grey' text='white' className='text-center'>
-                                            <MDBCardBody>
-                                                NO HAY DATOS
+                                        :
+                                        <MDBCol md='12'>
+                                            <MDBCard color='grey' text='white' className='text-center'>
+                                                <MDBCardBody>
+                                                    NO HAY DATOS
                                         </MDBCardBody>
-                                        </MDBCard>
-                                    </MDBCol>
-                            }
-                        </MDBRow>
-                        <MDBRow md='10' className="center-element">
-                            <Pagination
-                                            postsPerPage={postsPerPage}
-                                            totalPosts={dataTickets.length}
-                                            paginate={paginate}
-                                            currentPage={currentPage}
-                                        />
+                                            </MDBCard>
+                                        </MDBCol>
+                                }
                             </MDBRow>
-                            </>
+                            <MDBRow md='10' className="center-element">
+                                <Pagination
+                                    postsPerPage={postsPerPage}
+                                    totalPosts={dataTickets.length}
+                                    paginate={paginate}
+                                    currentPage={currentPage}
+                                />
+                            </MDBRow>
+                        </>
                     )}
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -290,23 +290,23 @@ const HistoryTickets = () => {
                         /></center>)
                         : (
                             <>
-                            <MDBRow>
-                                {
-                                    dataTicketsImmeditaes.length > 0 ? (
-                                        currentPosts2.map((data) => {
-                                            let orden = 0;
-                                            return (
-                                                <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
-                                                    <MDBCard>
-                                                        <MDBCardBody style={{ Height: "300px" }}>
-                                                            <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
-                                                            {data.status === 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
-                                                            {data.status === 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
-                                                            {data.status === 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
-                                                            </MDBCardTitle>
-                                                            <MDBCardText>
+                                <MDBRow>
+                                    {
+                                        dataTicketsImmeditaes.length > 0 ? (
+                                            currentPosts2.map((data) => {
+                                                let orden = 0;
+                                                return (
+                                                    <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
+                                                        <MDBCard>
+                                                            <MDBCardBody style={{ Height: "300px" }}>
+                                                                <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
+                                                                    {data.status === 'Pendiente' && (<span className="float-right"><FaHandPaper /></span>)}
+                                                                    {data.status === 'Completado' && (<span className="float-right"><FaCheckCircle /></span>)}
+                                                                    {data.status === 'Cancelado' && (<span className="float-right"><FaBan /></span>)}
+                                                                </MDBCardTitle>
+                                                                <MDBCardText>
                                                                     <b>Información Destino:</b> {data.desc}
-                                                                    </MDBCardText>
+                                                                </MDBCardText>
                                                                 <MDBTable small>
                                                                     <MDBTableHead>
                                                                         <tr>
@@ -334,31 +334,31 @@ const HistoryTickets = () => {
                                                                         }
                                                                     </MDBTableBody>
                                                                 </MDBTable>
-                                                            <span><FaRegCalendar />  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment></span>
-                                                        </MDBCardBody>
-                                                    </MDBCard>
-                                                </MDBCol>
-                                            )
-                                        })
-                                    )
-                                        :
-                                        <MDBCol md='12'>
-                                            <MDBCard color='grey' text='white' className='text-center'>
-                                                <MDBCardBody>
-                                                    NO HAY DATOS
+                                                                <span><FaRegCalendar />  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment></span>
+                                                            </MDBCardBody>
+                                                        </MDBCard>
+                                                    </MDBCol>
+                                                )
+                                            })
+                                        )
+                                            :
+                                            <MDBCol md='12'>
+                                                <MDBCard color='grey' text='white' className='text-center'>
+                                                    <MDBCardBody>
+                                                        NO HAY DATOS
                                         </MDBCardBody>
-                                            </MDBCard>
-                                        </MDBCol>
-                                }
-                            </MDBRow>
-                            <MDBRow className="center-element">
-                            <Pagination
-                                            postsPerPage={postsPerPage}
-                                            totalPosts={dataTicketsImmeditaes.length}
-                                            paginate={paginate}
-                                            currentPage={currentPage}
-                                        />
-                            </MDBRow>
+                                                </MDBCard>
+                                            </MDBCol>
+                                    }
+                                </MDBRow>
+                                <MDBRow className="center-element">
+                                    <Pagination
+                                        postsPerPage={postsPerPage}
+                                        totalPosts={dataTicketsImmeditaes.length}
+                                        paginate={paginate}
+                                        currentPage={currentPage}
+                                    />
+                                </MDBRow>
                             </>
                         )
                 }
@@ -384,23 +384,23 @@ const HistoryTickets = () => {
                         /></center>)
                         : (
                             <>
-                            <MDBRow>
-                                {
-                                    externalRetreats.length > 0 ? (
-                                        currentPosts3.map((data) => {
-                                            if (data.store_created == my_store) {
-                                                let orden = 0;
-                                                return (
-                                                    <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
-                                                        <MDBCard>
-                                                            <MDBCardBody style={{ Height: "300px" }}>
-                                                                <MDBCardTitle>
-                                                                    <span style={{ fontSize: "18px" }}><FaPersonBooth /> {data.name}  </span>
-                                                                    <span style={{ marginLeft: "10px", fontSize: "18px" }}><FaCheckDouble /> {data.manager}</span>
-                                                                    {data.status === 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
-                                                                    {data.status === 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
-                                                                    {data.status === 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
-                                                                </MDBCardTitle>
+                                <MDBRow>
+                                    {
+                                        externalRetreats.length > 0 ? (
+                                            currentPosts3.map((data) => {
+                                                if (data.store_created === my_store) {
+                                                    let orden = 0;
+                                                    return (
+                                                        <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
+                                                            <MDBCard>
+                                                                <MDBCardBody style={{ Height: "300px" }}>
+                                                                    <MDBCardTitle>
+                                                                        <span style={{ fontSize: "18px" }}><FaPersonBooth /> {data.name}  </span>
+                                                                        <span style={{ marginLeft: "10px", fontSize: "18px" }}><FaCheckDouble /> {data.manager}</span>
+                                                                        {data.status === 'Pendiente' && (<span className="float-right"><FaHandPaper /></span>)}
+                                                                        {data.status === 'Completado' && (<span className="float-right"><FaCheckCircle /></span>)}
+                                                                        {data.status === 'Cancelado' && (<span className="float-right"><FaBan /></span>)}
+                                                                    </MDBCardTitle>
                                                                     <MDBTable small>
                                                                         <MDBTableHead>
                                                                             <tr>
@@ -426,31 +426,32 @@ const HistoryTickets = () => {
                                                                             }
                                                                         </MDBTableBody>
                                                                     </MDBTable>
-                                                            </MDBCardBody>
-                                                        </MDBCard>
-                                                    </MDBCol>
-                                                )
-                                            }
-                                        })
-                                    )
-                                        :
-                                        <MDBCol md='12'>
-                                            <MDBCard color='grey' text='white' className='text-center'>
-                                                <MDBCardBody>
-                                                    NO HAY DATOS
+                                                                </MDBCardBody>
+                                                            </MDBCard>
+                                                        </MDBCol>
+                                                    )
+                                                }
+                                                return null;
+                                            })
+                                        )
+                                            :
+                                            <MDBCol md='12'>
+                                                <MDBCard color='grey' text='white' className='text-center'>
+                                                    <MDBCardBody>
+                                                        NO HAY DATOS
                                         </MDBCardBody>
-                                            </MDBCard>
-                                        </MDBCol>
-                                }
-                            </MDBRow>
-                            <MDBRow className="center-element">
-                            <Pagination
-                                            postsPerPage={postsPerPage}
-                                            totalPosts={externalRetreats.length}
-                                            paginate={paginate}
-                                            currentPage={currentPage}
-                                        />
-                            </MDBRow>
+                                                </MDBCard>
+                                            </MDBCol>
+                                    }
+                                </MDBRow>
+                                <MDBRow className="center-element">
+                                    <Pagination
+                                        postsPerPage={postsPerPage}
+                                        totalPosts={externalRetreats.length}
+                                        paginate={paginate}
+                                        currentPage={currentPage}
+                                    />
+                                </MDBRow>
                             </>
                         )
                 }
@@ -476,21 +477,21 @@ const HistoryTickets = () => {
                         /></center>)
                         : (
                             <>
-                            <MDBRow>
-                                {
-                                    photoRetreats.length > 0 ? (
-                                        currentPosts4.map((data) => {
-                                            if (data.store_created == my_store) {
-                                                let orden = 0;
-                                                return (
-                                                    <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
-                                                        <MDBCard>
-                                                            <MDBCardBody style={{ Height: "300px" }}>
-                                                                <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span>
-                                                                {data.status === 'Pendiente'&&(<span className="float-right"><FaHandPaper /></span>)}
-                                                                {data.status === 'Completado'&&(<span className="float-right"><FaCheckCircle /></span>)}
-                                                                {data.status === 'Cancelado'&&(<span className="float-right"><FaBan /></span>)}
-                                                                </MDBCardTitle>
+                                <MDBRow>
+                                    {
+                                        photoRetreats.length > 0 ? (
+                                            currentPosts4.map((data) => {
+                                                if (data.store_created === my_store) {
+                                                    let orden = 0;
+                                                    return (
+                                                        <MDBCol key={data._id} md="4" style={{ marginBottom: "15px" }}>
+                                                            <MDBCard>
+                                                                <MDBCardBody style={{ Height: "300px" }}>
+                                                                    <MDBCardTitle><span><FaStoreAlt /> {data.store_asigned}</span>
+                                                                        {data.status === 'Pendiente' && (<span className="float-right"><FaHandPaper /></span>)}
+                                                                        {data.status === 'Completado' && (<span className="float-right"><FaCheckCircle /></span>)}
+                                                                        {data.status === 'Cancelado' && (<span className="float-right"><FaBan /></span>)}
+                                                                    </MDBCardTitle>
                                                                     <MDBTable small>
                                                                         <MDBTableHead>
                                                                             <tr>
@@ -516,31 +517,32 @@ const HistoryTickets = () => {
                                                                             }
                                                                         </MDBTableBody>
                                                                     </MDBTable>
-                                                            </MDBCardBody>
-                                                        </MDBCard>
-                                                    </MDBCol>
-                                                )
-                                            }
-                                        })
-                                    )
-                                        :
-                                        <MDBCol md='12'>
-                                            <MDBCard color='grey' text='white' className='text-center'>
-                                                <MDBCardBody>
-                                                    NO HAY DATOS
+                                                                </MDBCardBody>
+                                                            </MDBCard>
+                                                        </MDBCol>
+                                                    )
+                                                }
+                                                return null;
+                                            })
+                                        )
+                                            :
+                                            <MDBCol md='12'>
+                                                <MDBCard color='grey' text='white' className='text-center'>
+                                                    <MDBCardBody>
+                                                        NO HAY DATOS
                                         </MDBCardBody>
-                                            </MDBCard>
-                                        </MDBCol>
-                                }
-                            </MDBRow>
-                            <MDBRow className="center-element">
-                            <Pagination
-                                            postsPerPage={postsPerPage}
-                                            totalPosts={photoRetreats.length}
-                                            paginate={paginate}
-                                            currentPage={currentPage}
-                                        />
-                            </MDBRow>
+                                                </MDBCard>
+                                            </MDBCol>
+                                    }
+                                </MDBRow>
+                                <MDBRow className="center-element">
+                                    <Pagination
+                                        postsPerPage={postsPerPage}
+                                        totalPosts={photoRetreats.length}
+                                        paginate={paginate}
+                                        currentPage={currentPage}
+                                    />
+                                </MDBRow>
                             </>
                         )
                 }

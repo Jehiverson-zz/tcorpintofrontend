@@ -106,10 +106,42 @@ const ImmediateDelivery = () => {
     const [postsPerPage] = useState(6);
 
     useEffect(() => {
+        function stores() {
+            let storesList = [];
+            getStoreActives().then((resp) =>
+                resp.map(x => {
+                    if (x.sbs === my_subs) {
+                        storesList.push({ value: x.name, label: x.name })
+                        return setdataStores(storesList);
+                    }
+                    return null;
+                })
+            );
+        }
+
+        function getTicketsCreated() {
+            getTicketsImmediatesDeliveriesCreated()
+                .then((response) => {
+                    setdataTicketsImmeditaesCreated(response)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+
+        function getTicketsAssigned() {
+            getTicketsImmediatesDeliveriesAssigned()
+                .then((response) => {
+                    setdataTicketsImmeditaesAssigned(response)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
         stores();
         getTicketsAssigned();
         getTicketsCreated();
-    }, []);
+    }, [my_subs]);
 
     function result_function(icon, text) {
         Toast.fire({
@@ -118,15 +150,7 @@ const ImmediateDelivery = () => {
         })
     }
 
-    function stores() {
-        let storesList = [];
-        getStoreActives().then((resp) => resp.map(x => {
-            if(x.sbs == my_subs){
-                storesList.push({ value: x.name, label: x.name })
-                setdataStores(storesList);
-            }
-        }));
-    }
+
 
     function getTicketsCreated() {
         getTicketsImmediatesDeliveriesCreated()
@@ -164,7 +188,7 @@ const ImmediateDelivery = () => {
                 result_function('error', 'Debes ingresar la TALLA');
                 cont++;
                 return true;
-            }else{
+            } else {
                 return false;
             }
         })
@@ -344,7 +368,7 @@ const ImmediateDelivery = () => {
                     })}
                     <MDBRow className="center-element">
                         <Button variant="outlined" color='primary' onClick={(e) => handleAdd(e)}><span><MDBIcon icon="plus" /> Agregar</span></Button>
-                        <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={(e) => crearTicket(e)}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
+                        <Button variant="outlined" style={{ color: "#4caf50", marginLeft: "10px" }} onClick={(e) => crearTicket(e)}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
                     </MDBRow>
                 </form>
             </CardHeader>
@@ -379,42 +403,42 @@ const ImmediateDelivery = () => {
                                                             <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}><FaTimes style={{ fontSize: '15px' }} /></MDBBtn>
                                                             <MDBBtn className="float-right" size="sm" color='dark-green' onClick={() => completeTicket(data._id)}><FaCheck style={{ fontSize: '15px' }} /></MDBBtn>
                                                         </MDBCardTitle>
-                                                            <MDBCardText>
-                                                                <b>Información Destino:</b> {data.desc}
-                                                            </MDBCardText>
-                                                            <MDBTable small>
-                                                                <MDBTableHead>
-                                                                    <tr>
-                                                                        <th>No.</th>
-                                                                        <th>UPC</th>
-                                                                        <th>ALU</th>
-                                                                        <th>TALLA</th>
-                                                                        <th>FACTURA</th>
-                                                                    </tr>
-                                                                </MDBTableHead>
-                                                                <MDBTableBody>
-                                                                    {
-                                                                            data.product.map((prod) => {
-                                                                                orden++;
-                                                                                return (
-                                                                                    <tr key={prod._id}>
-                                                                                        <td>{orden}</td>
-                                                                                        <td>{prod.upc}</td>
-                                                                                        <td>{prod.alu}</td>
-                                                                                        <td>{prod.siz || prod.size}</td>
-                                                                                        <td>{data.fact}</td>
-                                                                                    </tr>
-                                                                                )
-                                                                            })
-                                                                    }
-                                                                </MDBTableBody>
-                                                            </MDBTable>
+                                                        <MDBCardText>
+                                                            <b>Información Destino:</b> {data.desc}
+                                                        </MDBCardText>
+                                                        <MDBTable small>
+                                                            <MDBTableHead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>UPC</th>
+                                                                    <th>ALU</th>
+                                                                    <th>TALLA</th>
+                                                                    <th>FACTURA</th>
+                                                                </tr>
+                                                            </MDBTableHead>
+                                                            <MDBTableBody>
+                                                                {
+                                                                    data.product.map((prod) => {
+                                                                        orden++;
+                                                                        return (
+                                                                            <tr key={prod._id}>
+                                                                                <td>{orden}</td>
+                                                                                <td>{prod.upc}</td>
+                                                                                <td>{prod.alu}</td>
+                                                                                <td>{prod.siz || prod.size}</td>
+                                                                                <td>{data.fact}</td>
+                                                                            </tr>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </MDBTableBody>
+                                                        </MDBTable>
                                                         <span><FaRegCalendar />  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment></span>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }else{ return '' }
+                                    } else { return '' }
                                 })
                             )
                                 :
@@ -451,41 +475,41 @@ const ImmediateDelivery = () => {
                                                         <MDBCardTitle><span><FaStoreAlt /> {data.store_created}</span>
                                                         </MDBCardTitle>
                                                         <MDBCardText>
-                                                                <b>Información Destino:</b> {data.desc}
+                                                            <b>Información Destino:</b> {data.desc}
                                                         </MDBCardText>
-                                                            <MDBTable small>
-                                                                <MDBTableHead>
-                                                                    <tr>
-                                                                        <th>No.</th>
-                                                                        <th>UPC</th>
-                                                                        <th>ALU</th>
-                                                                        <th>TALLA</th>
-                                                                        <th>FACTURA</th>
-                                                                    </tr>
-                                                                </MDBTableHead>
-                                                                            <MDBTableBody>
+                                                        <MDBTable small>
+                                                            <MDBTableHead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>UPC</th>
+                                                                    <th>ALU</th>
+                                                                    <th>TALLA</th>
+                                                                    <th>FACTURA</th>
+                                                                </tr>
+                                                            </MDBTableHead>
+                                                            <MDBTableBody>
                                                                 {
                                                                     data.product.map((prod) => {
                                                                         orden++;
                                                                         return (
-                                                                                <tr key={prod._id}>
-                                                                                    <td>{orden}</td>
-                                                                                    <td>{prod.upc}</td>
-                                                                                    <td>{prod.alu}</td>
-                                                                                    <td>{prod.siz || prod.size}</td>
-                                                                                    <td>{data.fact}</td>
-                                                                                </tr>
+                                                                            <tr key={prod._id}>
+                                                                                <td>{orden}</td>
+                                                                                <td>{prod.upc}</td>
+                                                                                <td>{prod.alu}</td>
+                                                                                <td>{prod.siz || prod.size}</td>
+                                                                                <td>{data.fact}</td>
+                                                                            </tr>
                                                                         )
                                                                     })
                                                                 }
-                                                                            </MDBTableBody>
-                                                            </MDBTable>
+                                                            </MDBTableBody>
+                                                        </MDBTable>
                                                         <span><FaRegCalendar />  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment></span>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }else{ return '' }
+                                    } else { return '' }
                                 })
                             )
                                 :

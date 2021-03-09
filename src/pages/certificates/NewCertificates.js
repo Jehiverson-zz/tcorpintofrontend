@@ -61,21 +61,7 @@ const NewCertificate = () => {
             title: text
         })
     }
-    
-  
 
-    function certificates_actives() {
-        getCertificates().then((response) => {
-            if(response.data){
-                setDataCertificates(response.data.certificados)
-                setLoading(false)
-            }else{
-                result_function('error', 'No se puedo obtener una respuesta del servidor')
-            }
-        }).catch(err => console.log(err));
-    }
-    
-   
     function crearCertificate() {
         let cont = 0;
         fields.some(function (x, i) {
@@ -139,11 +125,19 @@ const NewCertificate = () => {
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = dataCertificates?dataCertificates.slice(indexOfFirstPost, indexOfLastPost):array_null.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = dataCertificates ? dataCertificates.slice(indexOfFirstPost, indexOfLastPost) : array_null.slice(indexOfFirstPost, indexOfLastPost);
 
     useEffect(() => {
-        certificates_actives()
-        }, [])
+        getCertificates().then((response) => {
+            if (response.data) {
+                setDataCertificates(response.data.certificados)
+                setLoading(false)
+            } else {
+                result_function('error', 'No se puedo obtener una respuesta del servidor')
+            }
+        }).catch(err => console.log(err));
+    }, [])
+
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
@@ -290,7 +284,7 @@ const NewCertificate = () => {
                 <MDBTable>
                     <MDBTableHead>
                         <tr>
-                        <th>No. Certificado</th>
+                            <th>No. Certificado</th>
                             <th>Nombre</th>
                             <th>Valor</th>
                             <th>Fecha de Emisión</th>
@@ -310,7 +304,7 @@ const NewCertificate = () => {
                 </MDBTable>
                 <Pagination
                     postsPerPage={postsPerPage}
-                    totalPosts={dataCertificates !== undefined?dataCertificates.length:0}
+                    totalPosts={dataCertificates !== undefined ? dataCertificates.length : 0}
                     paginate={paginate}
                     currentPage={currentPage}
                 />

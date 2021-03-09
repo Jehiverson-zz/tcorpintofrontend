@@ -5,14 +5,11 @@ import CardHeader from '../../../components/CardHeader'
 import { salesShow } from '../../../functions/salesFunctions'
 import Loading from './img/loading.gif'
 import {
-    MDBRow,
-    MDBCol,
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './Tablebinnacle';
-import Select from 'react-select';
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
     const history = useHistory();
@@ -22,20 +19,21 @@ const DatosdeVenta = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let data = {store: localStorage.getItem('store'), type: localStorage.getItem('type')}
+        let data = { store: localStorage.getItem('store'), type: localStorage.getItem('type') }
         salesShow(data)
-            .then((res) =>{
-            setLoading(false)
-            setDataSales(res)
-        }
+            .then((res) => {
+                //console.log({ store: localStorage.getItem('store'), type: localStorage.getItem('type') }, res);
+                setLoading(false)
+                setDataSales(res)
+            }
             )
             .catch(err =>
                 console.log(err),
-                setLoading(true)
+                //setLoading(true)
             )
     }, [])
 
-    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
+    //    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -57,48 +55,33 @@ const DatosdeVenta = () => {
                     className='img-fluid'
                     src={Loading}
                 /></center>)
-                : 
+                :
                 <>
-                <br></br>
-                <CardHeader title="Datos de venta" icon="ticket-alt">
-                    {/* <MDBRow>
-                        <MDBCol md='3' style={{ marginTop: "26px" }}>
-                            <Select
-                                //onChange={e => handleChange(e, "store_asigned")}
-                                defaultValue={value2}
-                                options={value2}
-                            />
-                        </MDBCol>
-                        <MDBCol md='3' style={{ marginTop: "26px" }}>
-                            <Select
-                                //onChange={e => handleChange(e, "store_asigned")}
-                                defaultValue={value2}
-                                options={value2}
-                            />
-                        </MDBCol>
-                    </MDBRow> */}
-                    <MDBTable>
-                        <MDBTableHead>
-                            <tr>
-                                <th>Venta</th>
-                                <th>Meta</th>
-                                <th>Encargado</th>
-                                <th>Tienda</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </MDBTableHead>
-                        <MDBTableBody>
-                            <Tablebinnacle posts={currentPosts} loading={loading} />
-                        </MDBTableBody>
-                        {dataSales.length < 1 ? (<tr><td colspan="4"><center>No existen datos de venta</center></td></tr>):""}
-                    </MDBTable>
+                    <br></br>
+                    <CardHeader title="Datos de venta" icon="ticket-alt">
+
+                        <MDBTable>
+                            <MDBTableHead>
+                                <tr>
+                                    <th>Venta</th>
+                                    <th>Meta</th>
+                                    <th>Encargado</th>
+                                    <th>Tienda</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </MDBTableHead>
+                            <MDBTableBody>
+                                <Tablebinnacle posts={currentPosts} loading={loading} />
+                            </MDBTableBody>
+                            {dataSales.length < 1 ? (<tr><td colspan="4"><center>No existen datos de venta</center></td></tr>) : ""}
+                        </MDBTable>
                         <Pagination
                             postsPerPage={postsPerPage}
                             totalPosts={dataSales.length}
                             paginate={paginate}
                             currentPage={currentPage}
                         />
-                </CardHeader>
+                    </CardHeader>
                 </>}
         </Layaout>
     )

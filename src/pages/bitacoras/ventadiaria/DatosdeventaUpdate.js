@@ -9,6 +9,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import "react-datepicker/dist/react-datepicker.css";
+
 import {
     MDBRow,
     MDBCol,
@@ -16,7 +17,7 @@ import {
     MDBBtn,
     MDBIcon,
     MDBCard,
-    MDBCardBody,
+    MDBCardBody
 } from 'mdbreact';
 
 //componentes
@@ -27,9 +28,9 @@ import Select from 'react-select';
 import Swal from 'sweetalert2'
 import Loading from './img/loading.gif'
 //Funciones
-import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales, validDataSales } from '../../../functions/salesFunctions'
+import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, updateDataSales, validDataSales } from '../../../functions/salesFunctions'
 import { getStore } from '../../../functions/ticketFunction'
-
+import { salesShowById } from '../../../functions/salesFunctions'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,10 +50,8 @@ function getSteps() {
     return ['Datos de venta', 'Datos de vendedores', 'Facturación', 'Métodos de pago', 'Observaciones'];
 }
 
-const TransferSystemPage = () => {
+const DatosdeventaUpdate = () => {
     const history = useHistory();
-
-
     //Stepper
     const [activeStep, setActiveStep] = useState(0);
     const [skipped] = useState(new Set());
@@ -63,53 +62,9 @@ const TransferSystemPage = () => {
     const steps = getSteps();
 
     //Hooks Datos formulario
-    const [vendor, setVendor] = useState([{ nombre: null, venta: 0 }]);
+    const [vendor, setVendor] = useState([]);
     const [vendorDescount, setVendorDescount] = useState([]);
-    const [dataSales, setdataSales] = useState([{
-        venta_diaria: 0,
-        no_personas: 0,
-        no_ventas: 0,
-        meta: 0,
-        venta_anterior: 0,
-        encargado: null,
-        factoresDeVenta: "-",
-        facturas_sis_desde: "-",
-        facturas_sis_hasta: "-",
-        facturas_sis_total: 0,
-        facturas_man_desde: "-",
-        facturas_man_hasta: "-",
-        facturas_man_total: 0,
-        facturas_cod_desde: "-",
-        facturas_cod_hasta: "-",
-        facturas_cod_total: 0,
-        facturas_nota_desde: "-",
-        facturas_nota_hasta: "-",
-        facturas_nota_total: 0,
-        efectivoQuetzales: 0,
-        efectivoQuetzalesDolares: 0,
-        credomatic: 0,
-        visa: 0,
-        visaOnline: 0,
-        visaDolares: 0,
-        masterCard: 0,
-        crediCuotas: 0,
-        visaCuotas: 0,
-        valorEnvioEfectivo: 0,
-        lifeMilesNumber: 0,
-        lifeMilesValor: 0,
-        exencionIva: 0,
-        loyalty: 0,
-        gastosAutorizados: 0,
-        retirosMercaderia: 0,
-        ventaEnLinea: 0,
-        notaDeCredito: 0,
-        faltante: 0,
-        cuadreDeCaja: 0,
-        diferencia: 0,
-        cashback: 0,
-        giftcard: 0,
-        observaciones: "-",
-    }]);
+    const [dataSales, setdataSales] = useState();
     const [startDate, setStartDate] = useState(null);
     const [store, setStore] = useState(null);
     //ApiRest datos de colaboradores
@@ -119,46 +74,121 @@ const TransferSystemPage = () => {
     //ApiRest datos de tienndas
     const datosTiendas = [];
     getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
-
     useEffect(() => {
+        let data = { store: localStorage.getItem('store'), type: localStorage.getItem('type'), _id: localStorage.getItem('idBinnacleSale') }
+        //Funcion que llama los datos
+        const datosVentas = async (datos) => {
+            await salesShowById(datos)
+                .then((res) => {
+                    setdataSales([{
+                        id: res[0]._id,
+                        venta_diaria: res[0].sale_daily,
+                        no_personas: res[0].people_totals,
+                        no_ventas: res[0].sales_totals,
+                        meta: res[0].daily_goal,
+                        venta_anterior: res[0].year_before_sale,
+                        encargado: res[0].manager,
+                        factoresDeVenta: res[0].fact,
+                        facturas_sis_desde: res[0].fac_sis_to,
+                        facturas_sis_hasta: res[0].fac_sis_from,
+                        facturas_sis_total: res[0].total_sis,
+                        facturas_man_desde: res[0].fac_man_from,
+                        facturas_man_hasta: res[0].fac_man_to,
+                        facturas_man_total: res[0].total_man,
+                        facturas_cod_desde: res[0].fact_send_CE_from,
+                        facturas_cod_hasta: res[0].fact_send_CE_to,
+                        facturas_cod_total: res[0].fact_send_CEV,
+                        facturas_nota_desde: res[0].fact_nt_c_f,
+                        facturas_nota_hasta: res[0].fact_nt_c_to,
+                        facturas_nota_total: res[0].fact_nt_c,
+                        efectivoQuetzales: res[0].cash_quetzales,
+                        efectivoQuetzalesDolares: res[0].cash_dolares,
+                        credomatic: res[0].credomatic,
+                        visa: res[0].visa,
+                        visaOnline: res[0].visaOnline,
+                        visaDolares: res[0].visaDolares,
+                        masterCard: res[0].masterCard,
+                        crediCuotas: res[0].credicuotas,
+                        visaCuotas: res[0].visaCuotas,
+                        valorEnvioEfectivo: res[0].numb_send_cash_value,
+                        lifeMilesNumber: res[0].lifeMilesNum,
+                        lifeMilesValor: res[0].lifeMilesVa,
+                        exencionIva: res[0].extIva,
+                        loyalty: res[0].loyalty,
+                        gastosAutorizados: res[0].Authorized_Expenditure_v,
+                        retirosMercaderia: res[0].retreats,
+                        ventaEnLinea: res[0].total_on,
+                        notaDeCredito: res[0].note_credit,
+                        faltante: res[0].diff,
+                        cuadreDeCaja: res[0].box_square,
+                        diferencia: res[0].diference,
+                        cashback: res[0].cashBackVa,
+                        giftcard: res[0].giftcard,
+                        observaciones: res[0].obs_method,
+                        tienda: res[0].tienda
+                    }]);
+                    setLoading(false);
+                    setStore(res[0].store_creat);
+                    setStartDate(res[0].date_created);
+                    //pinta los vendedores
+                    const valuesVendors = [...vendor];
+                    res[0].vendors.map((field) => {
+                        return valuesVendors.push({ nombre: field.name, venta: field.sale });
+                    });
+                    setVendor(valuesVendors);
 
-    }, []);
+                    //pinta las notas de credito
+                    const valuesVendorsNotaCredito = [...vendor];
+                    res[0].vendorsDescount.map((field) => {
+                        return valuesVendorsNotaCredito.push({ nombre: field.name, venta: field.sale });
+                    });
+                    setVendorDescount(valuesVendorsNotaCredito);
 
+                }
+                )
+                .catch(err =>
+                    console.log(err)
+                )
+        }
+        datosVentas(data);
+    }, [vendor]);
+
+
+    console.log(dataSales);
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
+
         switch (stepIndex) {
             case 0:
                 let userManager = dataSales[0].encargado === null ? 'Encargado' : dataSales[0].encargado
                 const valueManager = { value: userManager, label: userManager };
 
-                let storeManger = store === null ? 'Tienda' : store
+                let storeManger = store;
                 const valueStore = { value: storeManger, label: storeManger };
                 return (
                     <>
-                        {localStorage.getItem('change_date') === 'true' ? (
-                            <MDBCol md='2' style={{ marginTop: "26px" }}>
-                                <Select
-                                    onChange={e => setStore(e.label)}
-                                    defaultValue={valueStore}
-                                    options={datosTiendas}
+                        <MDBRow>
+                            {localStorage.getItem('change_date') === 'true' ? (
+
+                                <MDBCol md='4' style={{ marginTop: "32px" }}>
+                                    <Typography variant="body2">&nbsp;</Typography>
+                                    <Select
+                                        onChange={e => setStore(e.label)}
+                                        value={valueStore}
+                                        options={datosTiendas}
+                                    />
+                                </MDBCol>
+                            ) : ''}
+                            <MDBCol md='4' style={{ marginTop: "26px" }}>
+
+                                <MDBInput
+                                    type='date'
+                                    className="form-control"
+                                    value={startDate}
+                                    onChange={e => console.log(e.target.value)}
                                 />
                             </MDBCol>
-                        ) : ''}
-                        <MDBCol md='2' style={{ marginTop: "26px" }}>
-                            {/* <DatePicker 
-                                className="form-control"
-                                selected={startDate} 
-                                onChange={date => setStartDate(date)} 
-                                dateFormat="dd/MM/yyyy"
-                                /> */}
-                            <MDBInput
-                                type='date'
-                                className="form-control"
-                                value={startDate}
-                                onChange={e => setStartDate(e.target.value)}
-                            />
-                        </MDBCol>
-
+                        </MDBRow>
 
 
                         {stepper !== null ? <MDBCol md='12'>
@@ -356,7 +386,7 @@ const TransferSystemPage = () => {
                         <MDBRow style={{ justifyContent: "center", display: "flex" }}>
                             <MDBCol md='4'>
                                 Factura De Sistema
-                        </MDBCol>
+                          </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Desde' type='text' value={dataSales[0].facturas_sis_desde} onChange={e => handleChangeData(e, "facturas_sis_desde")} />
                             </MDBCol>
@@ -379,7 +409,7 @@ const TransferSystemPage = () => {
 
                             <MDBCol md='4'>
                                 Factura Manual
-                        </MDBCol>
+                          </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Desde' type='text' value={dataSales[0].facturas_man_desde} onChange={e => handleChangeData(e, "facturas_man_desde")} />
                             </MDBCol>
@@ -401,7 +431,7 @@ const TransferSystemPage = () => {
                             </MDBCol>
                             <MDBCol md='4'>
                                 Factura COD
-                        </MDBCol>
+                          </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Desde' type='text' value={dataSales[0].facturas_cod_desde} onChange={e => handleChangeData(e, "facturas_cod_desde")} />
                             </MDBCol>
@@ -424,7 +454,7 @@ const TransferSystemPage = () => {
 
                             <MDBCol md='4'>
                                 Notas De Crédito
-                        </MDBCol>
+                          </MDBCol>
                             <MDBCol md='2'>
                                 <MDBInput label='Desde' type='text' value={dataSales[0].facturas_nota_desde} onChange={e => handleChangeData(e, "facturas_nota_desde")} />
                             </MDBCol>
@@ -459,7 +489,7 @@ const TransferSystemPage = () => {
                         </MDBCol> : ""}
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             1. Efectivo
-                    </MDBRow>
+                      </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='3'>
                                 <Typography variant="body2">Efectivo En Quetzáles</Typography>
@@ -490,7 +520,7 @@ const TransferSystemPage = () => {
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             2. Tarjetas
-                    </MDBRow>
+                      </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
                                 <Typography variant="body2">Credomatic</Typography>
@@ -560,7 +590,7 @@ const TransferSystemPage = () => {
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             3. Cuota
-                    </MDBRow>
+                      </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
                                 <Typography variant="body2">Credi Cuotas</Typography>
@@ -591,7 +621,7 @@ const TransferSystemPage = () => {
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             4. Envios
-                    </MDBRow>
+                      </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
                                 <Typography variant="body2">Valor De Envio Efectivo</Typography>
@@ -609,7 +639,7 @@ const TransferSystemPage = () => {
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             5. Especiales
-                    </MDBRow>
+                      </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
                                 <MDBInput label='Life Miles Número' type='text' value={dataSales[0].lifeMilesNumber} onChange={e => handleChangeData(e, "lifeMilesNumber")} />
@@ -747,7 +777,7 @@ const TransferSystemPage = () => {
                         </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             6. Certificados
-                    </MDBRow>
+                      </MDBRow>
                         <MDBRow style={{ justifyContent: "left", display: "flex" }}>
                             <MDBCol md='2'>
                                 <Typography variant="body2">Valor Cashback</Typography>
@@ -821,14 +851,12 @@ const TransferSystemPage = () => {
                         .then((res) => {
 
                             if (res.salesNew.length > 0) {
-                                setStepper(0)
-                                setStepperMessage("Ya tienes ingresado un dato de venta, no puedes ingresar otro.")
-                                pagNext = 0;
-                            } else {
-
                                 setStepper(null)
                                 pagNext = 1;
-
+                            } else {
+                                setStepper(0)
+                                setStepperMessage("Este registro no existe en nuestra base de datos, por favor vuelva a buscarlo")
+                                pagNext = 0;
                             }
                         })
                         .catch((err) => {
@@ -919,7 +947,7 @@ const TransferSystemPage = () => {
                 }
                 break;
             case 4:
-                createDataSales(dataSales[0], vendor, vendorDescount, localStorage.getItem('email'), store, startDate)
+                updateDataSales(dataSales, vendor, vendorDescount, localStorage.getItem('email'), store, startDate)
                     .then((response) => {
                         if (response.status === true) {
                             setLoading(false)
@@ -1064,7 +1092,7 @@ const TransferSystemPage = () => {
     return (
         <Layaout>
             <br></br>
-            <CardHeader title="Venta Diaria" icon="ticket-alt">
+            <CardHeader title="Venta Diaria Actualización" icon="ticket-alt">
                 <div className={classes.root}>
                     <Stepper activeStep={activeStep} alternativeLabel>
                         {steps.map((label, index) => {
@@ -1100,23 +1128,30 @@ const TransferSystemPage = () => {
                                     /></center>)
                                     : (<Button onClick={handleMenu}>Regresar a menu</Button>)}
                             </div>
-                        ) : (
-                                <div>
-                                    <Typography className={classes.instructions} component={'span'} variant={'body2'}>{getStepContent(activeStep)}</Typography>
+                        ) :
+                            loading ?
+                                (<center> <img
+                                    alt='Preload'
+                                    className='img-fluid'
+                                    src={Loading}
+                                /></center>) : (
                                     <div>
-                                        <Button
-                                            disabled={activeStep === 0}
-                                            onClick={handleBack}
-                                            className={classes.backButton}
-                                        >
-                                            Regresar
+                                        <Typography className={classes.instructions} component={'span'} variant={'body2'}>{getStepContent(activeStep)}</Typography>
+                                        <div>
+                                            <Button
+                                                disabled={activeStep === 0}
+                                                onClick={handleBack}
+                                                className={classes.backButton}
+                                            >
+                                                Regresar
                                         </Button>
-                                        <Button variant="contained" color="primary" onClick={handleNext}>
-                                            {activeStep === steps.length - 1 ? 'Terminar' : 'Siguente'}
-                                        </Button>
+                                            <Button variant="contained" color="primary" onClick={handleNext}>
+                                                {activeStep === steps.length - 1 ? 'Terminar' : 'Siguente'}
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )
+                        }
                     </div>
                 </div>
 
@@ -1125,4 +1160,4 @@ const TransferSystemPage = () => {
     )
 }
 
-export default TransferSystemPage;
+export default DatosdeventaUpdate;

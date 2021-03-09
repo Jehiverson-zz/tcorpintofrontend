@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
-import CardHeader from '../../../../components/CardHeader'
-import { statesShow, statesCreate, statesUpdate } from '../../../../functions/settingsFunction'
+import CardHeader from '../../../../components/CardHeader';
+import { emailTemplateShow, emailTemplateCreate, emailTemplateUpdate, templateAsignedEmailShow } from '../../../../functions/settingsFunction';
 import Loading from '../img/loading.gif'
 import { useHistory } from "react-router-dom";
 import {
@@ -21,21 +21,24 @@ import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
 const DatosdeVenta = () => {
     const history = useHistory();
-    const [dataSales, setdataSales] = useState([]);
+    const [dataEmailTemplate, setdataEmailTemplate] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(80);
+    const [postsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
     const [modal, setModal] = useState(false);
     const [modalCreate, setModalCreate] = useState(false);
 
     const [item, setItem] = useState(false);
-    const [name, setName] = useState(false);
+    const [email, setEmail] = useState(false);
+    const [template, setTemplate] = useState(false);
     const [status, setStatus] = useState(false);
+    const [dataTemplate, setdataTemplate] = useState([]);
 
-    const toggleModal = (name, status, item) => {
+    const toggleModal = (item, email, template, status) => {
         setItem(item);
-        setName(name);
-        setStatus(status);
+        setStatus({ value: status, label: status });
+        setEmail(email);
+        setTemplate({ value: template, label: template });
         setModal(!modal);
     };
 
@@ -43,10 +46,14 @@ const DatosdeVenta = () => {
         setModalCreate(!modalCreate);
     };
 
-    const createEstatus = () => {
+    const createUser = () => {
 
-        if (name === false) {
-            Swal.fire('Error', 'Falto ingresar nombre', 'error');
+        if (email === false) {
+            Swal.fire('Error', 'Falto ingresar email', 'error');
+        }
+
+        if (template === false) {
+            Swal.fire('Error', 'Falto ingresar template', 'error');
         }
 
         if (status === false) {
@@ -54,25 +61,34 @@ const DatosdeVenta = () => {
         }
 
         const createItem = {
-            name: name,
-            status: status
+            email: email,
+            template: template,
+            status: status,
+            date_at: new Date(),
+            date_update: new Date()
         };
-        if (status !== false && name !== false) {
-            statesCreate(createItem).then(res => {
-                Swal.fire('Éxito', 'Estado Ingresado', 'success');
+
+        console.log(createItem);
+        if (email !== false && template !== false && status !== false) {
+            emailTemplateCreate(createItem).then(res => {
+                Swal.fire('Éxito', 'Email Ingresado', 'success');
                 ReloadData();
                 toggleModalCreate();
                 falseData();
             }).catch(err => {
-                Swal.fire('Error', 'Error al ingresar estados', 'error');
+                Swal.fire('Error', 'Error al ingresar usuario', 'error');
             })
         }
+        falseData();
     };
 
-    const updateEstatus = () => {
+    const updateUser = () => {
+        if (email === false) {
+            Swal.fire('Error', 'Falto ingresar email', 'error');
+        }
 
-        if (name === false) {
-            Swal.fire('Error', 'Falto ingresar nombre', 'error');
+        if (template === false) {
+            Swal.fire('Error', 'Falto ingresar template', 'error');
         }
 
         if (status === false) {
@@ -81,17 +97,20 @@ const DatosdeVenta = () => {
 
         const updateItem = {
             id: item,
-            name: name,
-            status: status
+            email: email,
+            template: template,
+            status: status,
+            date_update: new Date()
         };
-        if (status !== false && name !== false) {
-            statesUpdate(updateItem).then(res => {
-                Swal.fire('Éxito', 'Estado Actualizado', 'success');
+        console.log(updateItem)
+        if (email !== false && template !== false && status !== false) {
+            emailTemplateUpdate(updateItem).then(res => {
+                Swal.fire('Éxito', 'Usuario Actualizado', 'success');
                 ReloadData();
                 toggleModal();
                 falseData();
             }).catch(err => {
-                Swal.fire('Error', 'Error al ingresar estados', 'error');
+                Swal.fire('Error', 'Error al ingresar usuario', 'error');
             });
         }
 
@@ -113,10 +132,23 @@ const DatosdeVenta = () => {
     }, [])
 
     const ReloadData = () => {
-        statesShow()
+        emailTemplateShow()
             .then((res) => {
-                console.log(res)
-                setdataSales(res);
+                setdataEmailTemplate(res);
+                setLoading(false);
+            }
+            )
+            .catch(err =>
+                setLoading(true)
+            )
+
+        templateAsignedEmailShow()
+            .then((res) => {
+                var templateData = [];
+                res.map(store => {
+                    return templateData.push({ label: store.name, name: store.name });
+                });
+                setdataTemplate(templateData);
                 setLoading(false);
             }
             )
@@ -127,18 +159,17 @@ const DatosdeVenta = () => {
 
     const falseData = () => {
         setItem(false);
-        setName(false);
         setStatus(false);
+        setEmail(false);
     };
-
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = dataSales.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = dataEmailTemplate ? dataEmailTemplate.slice(indexOfFirstPost, indexOfLastPost) : [];
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
-    const valueStatus = { value: status, label: status };
+
     if (localStorage.getItem('session') !== "true") {
         history.push(`/`);
     }
@@ -153,29 +184,39 @@ const DatosdeVenta = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Estados" icon="ticket-alt">
+                    <CardHeader title="Email Plantillas" icon="ticket-alt">
                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
-                            Agregar Estado
+                            Agregar Email Plantilla
                         </MDBBtn>
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Estado</th>
-                                    <th>Fecha</th>
+                                    <th>Email</th>
+                                    <th>Template</th>
+                                    <th>Estatus</th>
+                                    <th>Fecha Creación</th>
+                                    <th>Fecha Actualización</th>
                                     <th>Acciones</th>
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
                                 <Tablebinnacle posts={currentPosts} loading={loading} toggleModal={toggleModal} />
                             </MDBTableBody>
-                            {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
-                            <Pagination
-                                postsPerPage={postsPerPage}
-                                totalPosts={dataSales.length}
-                                paginate={paginate}
-                                currentPage={currentPage}
-                            />
+
+                            {
+                                dataEmailTemplate === undefined ? (
+                                    <tr><td colSpan="6"><center>No existen datos</center></td></tr>
+                                ) :
+                                    (
+                                        <Pagination
+                                            postsPerPage={postsPerPage}
+                                            totalPosts={dataEmailTemplate.length}
+                                            paginate={paginate}
+                                            currentPage={currentPage}
+                                        />
+                                    )
+                            }
+
                         </MDBTable>
                     </CardHeader>
                 </>}
@@ -189,7 +230,7 @@ const DatosdeVenta = () => {
             >
                 <div className='modal-header primary-color white-text'>
                     <h4 className='title'>
-                        <MDBIcon icon='pencil-alt' /> Crear Estado
+                        <MDBIcon icon='pencil-alt' /> Crear Email
               </h4>
                     <button type='button' className='close' onClick={() => toggleModalCreate()}>
                         <span aria-hidden='true'>×</span>
@@ -197,21 +238,30 @@ const DatosdeVenta = () => {
                 </div>
                 <MDBModalBody>
                     <MDBInput
-                        label='Nombre'
-                        icon='user'
-                        type='text'
+                        label='Correo'
+                        icon='address-book'
+                        type='email'
                         error='wrong'
                         success='right'
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
+
+                    <label> Template</label>
                     <Select
-                        onChange={e => setStatus(e.label)}
-                        defaultValue={valueStatus}
+                        onChange={e => setTemplate(e.name)}
+                        options={dataTemplate}
+                    />
+
+                    <label> Estados</label>
+                    <Select
+                        onChange={e => setStatus(e.name)}
                         options={state}
                     />
+
+                    <br />
                 </MDBModalBody>
                 <MDBModalFooter>
-                    <MDBBtn color='primary' onClick={() => createEstatus()}>Crear</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => createUser()}>Crear</MDBBtn>
                     <MDBBtn color='secondary' onClick={() => toggleModalCreate()}>Cerrar</MDBBtn>
 
                 </MDBModalFooter>
@@ -224,7 +274,7 @@ const DatosdeVenta = () => {
             >
                 <div className='modal-header primary-color white-text'>
                     <h4 className='title'>
-                        <MDBIcon icon='pencil-alt' /> Editar Estado
+                        <MDBIcon icon='pencil-alt' /> Editar Email
               </h4>
                     <button type='button' className='close' onClick={() => toggleModal()}>
                         <span aria-hidden='true'>×</span>
@@ -232,25 +282,34 @@ const DatosdeVenta = () => {
                 </div>
                 <MDBModalBody>
                     <MDBInput
-                        label='Nombre'
-                        icon='user'
-                        type='text'
+                        label='Correo'
+                        icon='address-book'
+                        type='email'
                         error='wrong'
                         success='right'
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
+
+                    <label> Template</label>
                     <Select
-                        onChange={e => setStatus(e.label)}
+                        onChange={e => setTemplate(e.name)}
+                        defaultValue={template}
+                        options={dataTemplate}
+                    />
+                    <label> Estados</label>
+                    <Select
+                        onChange={e => setStatus(e.name)}
                         defaultValue={status}
                         options={state}
                     />
+                    <br />
                 </MDBModalBody>
                 <MDBModalFooter>
                     <MDBBtn color='secondary' onClick={() => toggleModal()}>
                         x
               </MDBBtn>
-                    <MDBBtn color='primary' onClick={() => updateEstatus()} >Actualizar</MDBBtn>
+                    <MDBBtn color='primary' onClick={() => updateUser()} >Actualizar</MDBBtn>
                 </MDBModalFooter>
             </MDBModal>
 

@@ -81,6 +81,7 @@ const StoreList = () => {
     };
 
     const updateStore = () => {
+        falseData();
         const createItem = {
             id: id,
             name: name,
@@ -109,8 +110,13 @@ const StoreList = () => {
     ];
 
     useEffect(() => {
-        ReloadData();
-    }, [0])
+        getSubsidiarias();
+        getStore().then((res) => {
+            setdataStore(res)
+            setLoading(false);
+        })
+            .catch(error => console.log(error))
+    }, [])
 
     const ReloadData = () => {
         getSubsidiarias();
@@ -126,7 +132,7 @@ const StoreList = () => {
             .then((response) => {
                 let data = []
                 response.map(sub => {
-                    data.push({ value: sub.name, label: sub.name })
+                    return data.push({ value: sub.name, label: sub.name })
                 })
                 setSubsidiarias(data);
             }

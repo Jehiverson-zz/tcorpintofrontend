@@ -5,14 +5,11 @@ import CardHeader from '../../../components/CardHeader'
 import { salesShow } from '../../../functions/salesFunctions'
 import Loading from './img/loading.gif'
 import {
-    MDBRow,
-    MDBCol,
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './Tablebinnacle';
-import Select from 'react-select';
 import Pagination from '../../../components/pagination';
 const DatosdeVenta = () => {
     const history = useHistory();
@@ -36,7 +33,7 @@ const DatosdeVenta = () => {
             )
     }, [])
 
-    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
+    //    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;

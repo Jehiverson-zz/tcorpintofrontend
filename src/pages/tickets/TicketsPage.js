@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    MDBEdgeHeader,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -15,7 +14,7 @@ const TicketsPage = () => {
 
     return (
         <Layaout>
-            
+
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>

@@ -31,7 +31,7 @@ const CollaboratosList = () => {
     const [modalCreate, setModalCreate] = useState(false);
 
     const [stores, setStores] = useState(false);
-    const [item, setItem] = useState(false);
+    //const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
     const [store, setStore] = useState(false);
     const [status, setStatus] = useState(false);
@@ -106,6 +106,21 @@ const CollaboratosList = () => {
         })
     };
 
+    useEffect(() => {
+        const ReloadData = () => {
+            getStores();
+            CollaboratorShow()
+                .then((res) =>
+                    setDataCollaborator(res),
+                    setLoading(false)
+                )
+                .catch(err =>
+                    setLoading(true)
+                )
+        };
+        ReloadData();
+    }, [])
+
     const ReloadData = () => {
         getStores();
         CollaboratorShow()
@@ -118,11 +133,6 @@ const CollaboratosList = () => {
             )
     };
 
-    useEffect(() => {
-        ReloadData();
-    }, [])
-
-
     const getStores = () => {
         getStoreActives()
             .then((response) => {
@@ -133,7 +143,7 @@ const CollaboratosList = () => {
                 setStores(data);
             }
             )
-            .catch(err =>{
+            .catch(err => {
                 console.log(err)
                 setLoading(false)
             })

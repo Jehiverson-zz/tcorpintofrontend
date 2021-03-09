@@ -58,7 +58,7 @@ const HistoryCertificate = () => {
     const [stores, setStores] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(51);
-    
+
     const default_store = { value: status.status, label: status.status };
     const handleChange2 = (event, newValue) => {
         setValue(newValue);
@@ -103,7 +103,7 @@ const HistoryCertificate = () => {
     useEffect(() => {
         getAllData(status.status);
         getAllStore();
-    }, [])
+    }, [status])
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -129,7 +129,7 @@ const HistoryCertificate = () => {
             </AppBar>
             <TabPanel value={value} index={0}>
                 {
-                    localStorage.getItem('type') == 'admin' && (
+                    localStorage.getItem('type') === 'admin' && (
                         <MDBRow className="center-element">
                             <MDBCol md='3' >
                                 <label>Selecciona una tienda</label>
@@ -185,7 +185,7 @@ const HistoryCertificate = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 {
-                    localStorage.getItem('type') == 'admin' && (
+                    localStorage.getItem('type') === 'admin' && (
                         <MDBRow className="center-element">
                             <MDBCol md='3' >
                                 <label>Selecciona una tienda</label>

@@ -8,7 +8,6 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
@@ -18,8 +17,7 @@ import {
     MDBBtn,
     MDBIcon,
     MDBCard,
-    MDBCardBody,
-    MDBDatePicker
+    MDBCardBody
 } from 'mdbreact';
 
 //componentes
@@ -71,11 +69,6 @@ const DatosdeventaUpdate = () => {
     const [store, setStore] = useState(null);
     //ApiRest datos de colaboradores
     const datos = [];
-    const date_ = new Date();
-    const hoy = date_.getDate();
-    const año = date_.getFullYear();
-    const mes = date_.getMonth() + 1;
-    const fecha = `${hoy}/${mes}/${año}`;
 
     getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
     //ApiRest datos de tienndas
@@ -83,85 +76,84 @@ const DatosdeventaUpdate = () => {
     getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
     useEffect(() => {
         let data = { store: localStorage.getItem('store'), type: localStorage.getItem('type'), _id: localStorage.getItem('idBinnacleSale') }
+        //Funcion que llama los datos
+        const datosVentas = async (datos) => {
+            await salesShowById(datos)
+                .then((res) => {
+                    setdataSales([{
+                        id: res[0]._id,
+                        venta_diaria: res[0].sale_daily,
+                        no_personas: res[0].people_totals,
+                        no_ventas: res[0].sales_totals,
+                        meta: res[0].daily_goal,
+                        venta_anterior: res[0].year_before_sale,
+                        encargado: res[0].manager,
+                        factoresDeVenta: res[0].fact,
+                        facturas_sis_desde: res[0].fac_sis_to,
+                        facturas_sis_hasta: res[0].fac_sis_from,
+                        facturas_sis_total: res[0].total_sis,
+                        facturas_man_desde: res[0].fac_man_from,
+                        facturas_man_hasta: res[0].fac_man_to,
+                        facturas_man_total: res[0].total_man,
+                        facturas_cod_desde: res[0].fact_send_CE_from,
+                        facturas_cod_hasta: res[0].fact_send_CE_to,
+                        facturas_cod_total: res[0].fact_send_CEV,
+                        facturas_nota_desde: res[0].fact_nt_c_f,
+                        facturas_nota_hasta: res[0].fact_nt_c_to,
+                        facturas_nota_total: res[0].fact_nt_c,
+                        efectivoQuetzales: res[0].cash_quetzales,
+                        efectivoQuetzalesDolares: res[0].cash_dolares,
+                        credomatic: res[0].credomatic,
+                        visa: res[0].visa,
+                        visaOnline: res[0].visaOnline,
+                        visaDolares: res[0].visaDolares,
+                        masterCard: res[0].masterCard,
+                        crediCuotas: res[0].credicuotas,
+                        visaCuotas: res[0].visaCuotas,
+                        valorEnvioEfectivo: res[0].numb_send_cash_value,
+                        lifeMilesNumber: res[0].lifeMilesNum,
+                        lifeMilesValor: res[0].lifeMilesVa,
+                        exencionIva: res[0].extIva,
+                        loyalty: res[0].loyalty,
+                        gastosAutorizados: res[0].Authorized_Expenditure_v,
+                        retirosMercaderia: res[0].retreats,
+                        ventaEnLinea: res[0].total_on,
+                        notaDeCredito: res[0].note_credit,
+                        faltante: res[0].diff,
+                        cuadreDeCaja: res[0].box_square,
+                        diferencia: res[0].diference,
+                        cashback: res[0].cashBackVa,
+                        giftcard: res[0].giftcard,
+                        observaciones: res[0].obs_method,
+                        tienda: res[0].tienda
+                    }]);
+                    setLoading(false);
+                    setStore(res[0].store_creat);
+                    setStartDate(res[0].date_created);
+                    //pinta los vendedores
+                    const valuesVendors = [...vendor];
+                    res[0].vendors.map((field) => {
+                        return valuesVendors.push({ nombre: field.name, venta: field.sale });
+                    });
+                    setVendor(valuesVendors);
+
+                    //pinta las notas de credito
+                    const valuesVendorsNotaCredito = [...vendor];
+                    res[0].vendorsDescount.map((field) => {
+                        return valuesVendorsNotaCredito.push({ nombre: field.name, venta: field.sale });
+                    });
+                    setVendorDescount(valuesVendorsNotaCredito);
+
+                }
+                )
+                .catch(err =>
+                    console.log(err)
+                )
+        }
         datosVentas(data);
-    }, []);
+    }, [vendor]);
 
-    //Funcion que llama los datos
-    const datosVentas = async (datos) => {
-        await salesShowById(datos)
-            .then((res) => {
-                setdataSales([{
-                    id: res[0]._id,
-                    venta_diaria: res[0].sale_daily,
-                    no_personas: res[0].people_totals,
-                    no_ventas: res[0].sales_totals,
-                    meta: res[0].daily_goal,
-                    venta_anterior: res[0].year_before_sale,
-                    encargado: res[0].manager,
-                    factoresDeVenta: res[0].fact,
-                    facturas_sis_desde: res[0].fac_sis_to,
-                    facturas_sis_hasta: res[0].fac_sis_from,
-                    facturas_sis_total: res[0].total_sis,
-                    facturas_man_desde: res[0].fac_man_from,
-                    facturas_man_hasta: res[0].fac_man_to,
-                    facturas_man_total: res[0].total_man,
-                    facturas_cod_desde: res[0].fact_send_CE_from,
-                    facturas_cod_hasta: res[0].fact_send_CE_to,
-                    facturas_cod_total: res[0].fact_send_CEV,
-                    facturas_nota_desde: res[0].fact_nt_c_f,
-                    facturas_nota_hasta: res[0].fact_nt_c_to,
-                    facturas_nota_total: res[0].fact_nt_c,
-                    efectivoQuetzales: res[0].cash_quetzales,
-                    efectivoQuetzalesDolares: res[0].cash_dolares,
-                    credomatic: res[0].credomatic,
-                    visa: res[0].visa,
-                    visaOnline: res[0].visaOnline,
-                    visaDolares: res[0].visaDolares,
-                    masterCard: res[0].masterCard,
-                    crediCuotas: res[0].credicuotas,
-                    visaCuotas: res[0].visaCuotas,
-                    valorEnvioEfectivo: res[0].numb_send_cash_value,
-                    lifeMilesNumber: res[0].lifeMilesNum,
-                    lifeMilesValor: res[0].lifeMilesVa,
-                    exencionIva: res[0].extIva,
-                    loyalty: res[0].loyalty,
-                    gastosAutorizados: res[0].Authorized_Expenditure_v,
-                    retirosMercaderia: res[0].retreats,
-                    ventaEnLinea: res[0].total_on,
-                    notaDeCredito: res[0].note_credit,
-                    faltante: res[0].diff,
-                    cuadreDeCaja: res[0].box_square,
-                    diferencia: res[0].diference,
-                    cashback: res[0].cashBackVa,
-                    giftcard: res[0].giftcard,
-                    observaciones: res[0].obs_method,
-                    tienda: res[0].tienda
-                }]);
-                setLoading(false);
-                setStore(res[0].store_creat);
-                setStartDate(res[0].date_created);
-                //pinta los vendedores
-                const valuesVendors = [...vendor];
-                res[0].vendors.map((field) => {
-                    valuesVendors.push({ nombre: field.name, venta: field.sale });
 
-                });
-                setVendor(valuesVendors);
-
-                //pinta las notas de credito
-                const valuesVendorsNotaCredito = [...vendor];
-                res[0].vendorsDescount.map((field) => {
-                    valuesVendorsNotaCredito.push({ nombre: field.name, venta: field.sale });
-
-                });
-                setVendorDescount(valuesVendorsNotaCredito);
-
-            }
-            )
-            .catch(err =>
-                console.log(err)
-            )
-    }
     console.log(dataSales);
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
@@ -1081,13 +1073,6 @@ const DatosdeventaUpdate = () => {
         }
     }
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-    }
     const isStepFailed = (step) => {
         return step === stepper;
     };

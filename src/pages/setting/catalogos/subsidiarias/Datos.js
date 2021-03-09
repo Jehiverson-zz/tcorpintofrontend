@@ -28,17 +28,15 @@ const SubsidiariasList = () => {
     const [modal, setModal] = useState(false);
     const [modalCreate, setModalCreate] = useState(false);
 
-
-    const [setItem] = useState(false);
     const [name, setName] = useState(false);
     const [status, setStatus] = useState(false);
     const [id, setId] = useState(false);
 
-    const toggleModal = (name = false, xid = false,status = false) => {
+    const toggleModal = (name = false, xid = false, status = false) => {
         console.log(status)
         setId(xid);
         setName(name);
-        setStatus({value:status, label:status});
+        setStatus({ value: status, label: status });
         setModal(!modal);
     };
 
@@ -80,7 +78,7 @@ const SubsidiariasList = () => {
         subsidiariaUpdate(createItem).then(res => {
             ReloadData();
             Swal.fire('Éxito', 'Subsidiaria Actualizada', 'success');
-            toggleModal(false,false,false);
+            toggleModal(false, false, false);
         }).catch(err => {
             Swal.fire('Error', 'Error al ingresar estados', 'error');
         })
@@ -99,7 +97,7 @@ const SubsidiariasList = () => {
 
     useEffect(() => {
         ReloadData();
-    }, [0])
+    }, [])
 
     const ReloadData = () => {
         SubsidiariasShow()
@@ -152,12 +150,12 @@ const SubsidiariasList = () => {
                             </MDBTableBody>
                             {dataSales.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
                         </MDBTable>
-                            <Pagination
-                                postsPerPage={postsPerPage}
-                                totalPosts={dataSales.length}
-                                paginate={paginate}
-                                currentPage={currentPage}
-                            />
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataSales.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
                     </CardHeader>
                 </>}
 
@@ -187,7 +185,7 @@ const SubsidiariasList = () => {
                     />
                     <Select
                         onChange={e => setStatus(e.label)}
-                        defaultValue={{value: '', label: 'Selecciona el estado'}}
+                        defaultValue={{ value: '', label: 'Selecciona el estado' }}
                         options={state}
                     />
                 </MDBModalBody>
@@ -212,7 +210,7 @@ const SubsidiariasList = () => {
                     </button>
                 </div>
                 <MDBModalBody>
-                <MDBInput
+                    <MDBInput
                         label='Nombre'
                         icon='user'
                         type='text'
@@ -222,7 +220,7 @@ const SubsidiariasList = () => {
                         value={name}
                     />
                     <Select
-                        onChange={e => setStatus({value: e.label})}
+                        onChange={e => setStatus({ value: e.label })}
                         defaultValue={status}
                         options={state}
                     />

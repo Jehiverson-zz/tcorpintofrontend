@@ -8,7 +8,6 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import {
     MDBRow,
@@ -18,7 +17,6 @@ import {
     MDBIcon,
     MDBCard,
     MDBCardBody,
-    MDBDatePicker
 } from 'mdbreact';
 
 //componentes
@@ -29,8 +27,8 @@ import Select from 'react-select';
 import Swal from 'sweetalert2'
 import Loading from './img/loading.gif'
 //Funciones
-import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales,validDataSales } from '../../../functions/salesFunctions'
-import {getStore} from '../../../functions/ticketFunction'
+import { confirmdataVendors, confirmdataInvoice, confirmdataMethodPayment, createDataSales, validDataSales } from '../../../functions/salesFunctions'
+import { getStore } from '../../../functions/ticketFunction'
 
 
 
@@ -52,7 +50,7 @@ function getSteps() {
 }
 
 const TransferSystemPage = () => {
-const history = useHistory();
+    const history = useHistory();
 
 
     //Stepper
@@ -63,7 +61,7 @@ const history = useHistory();
     const [loading, setLoading] = useState(true);
     const classes = useStyles();
     const steps = getSteps();
-    
+
     //Hooks Datos formulario
     const [vendor, setVendor] = useState([{ nombre: null, venta: 0 }]);
     const [vendorDescount, setVendorDescount] = useState([]);
@@ -116,21 +114,16 @@ const history = useHistory();
     const [store, setStore] = useState(null);
     //ApiRest datos de colaboradores
     const datos = [];
-    const date_ = new Date();
-    const hoy = date_.getDate();
-    const año = date_.getFullYear();
-    const mes = date_.getMonth()+1;
-    const fecha = `${hoy}/${mes}/${año}`;
 
     getCollaboration().then((res) => { res.map(resdata => datos.push({ name: resdata.name, label: resdata.name })) });
     //ApiRest datos de tienndas
     const datosTiendas = [];
     getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
-    
+
     useEffect(() => {
-        
-    },[]);
-    
+
+    }, []);
+
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
         switch (stepIndex) {
@@ -142,7 +135,7 @@ const history = useHistory();
                 const valueStore = { value: storeManger, label: storeManger };
                 return (
                     <>
-                        {localStorage.getItem('change_date') === 'true'? (
+                        {localStorage.getItem('change_date') === 'true' ? (
                             <MDBCol md='2' style={{ marginTop: "26px" }}>
                                 <Select
                                     onChange={e => setStore(e.label)}
@@ -150,24 +143,24 @@ const history = useHistory();
                                     options={datosTiendas}
                                 />
                             </MDBCol>
-                            ):''}
-                            <MDBCol md='2' style={{ marginTop: "26px" }}>
+                        ) : ''}
+                        <MDBCol md='2' style={{ marginTop: "26px" }}>
                             {/* <DatePicker 
                                 className="form-control"
                                 selected={startDate} 
                                 onChange={date => setStartDate(date)} 
                                 dateFormat="dd/MM/yyyy"
                                 /> */}
-                                <MDBInput
-                                    type='date'
-                                    className="form-control"
-                                    value={startDate}
-                                    onChange={e => setStartDate(e.target.value)}
-                                />
-                            </MDBCol>
-                        
-                        
-                                                    
+                            <MDBInput
+                                type='date'
+                                className="form-control"
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
+                            />
+                        </MDBCol>
+
+
+
                         {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>
@@ -198,7 +191,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "no_personas", "number")}
                                 />
                             </MDBCol>
@@ -211,7 +204,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "no_ventas", "number")}
                                 />
                             </MDBCol>
@@ -224,7 +217,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "meta", "number")}
                                 />
                             </MDBCol>
@@ -237,7 +230,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "venta_anterior", "number")}
                                 />
                             </MDBCol>
@@ -379,7 +372,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "facturas_sis_total", "number")}
                                 />
                             </MDBCol>
@@ -402,7 +395,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "facturas_man_total", "number")}
                                 />
                             </MDBCol>
@@ -424,7 +417,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "facturas_cod_total", "number")}
                                 />
                             </MDBCol>
@@ -447,7 +440,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "facturas_nota_total", "number")}
                                 />
                             </MDBCol>
@@ -457,7 +450,7 @@ const history = useHistory();
             case 3:
                 return (
                     <>
-                    {stepper !== null ? <MDBCol md='12'>
+                        {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>
                                     {stepperMessage}
@@ -477,7 +470,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "efectivoQuetzales", "number")}
                                 />
                             </MDBCol>
@@ -490,7 +483,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "efectivoQuetzalesDolares", "number")}
                                 />
                             </MDBCol>
@@ -508,7 +501,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "credomatic", "number")}
                                 />
                             </MDBCol>
@@ -521,7 +514,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "visa", "number")}
                                 />
                             </MDBCol>
@@ -534,7 +527,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "visaOnline", "number")}
                                 />
                             </MDBCol>
@@ -547,7 +540,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "visaDolares", "number")}
                                 />
                             </MDBCol>
@@ -560,7 +553,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "masterCard", "number")}
                                 />
                             </MDBCol>
@@ -578,7 +571,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "crediCuotas", "number")}
                                 />
                             </MDBCol>
@@ -591,7 +584,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "visaCuotas", "number")}
                                 />
                             </MDBCol>
@@ -609,7 +602,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "valorEnvioEfectivo", "number")}
                                 />
                             </MDBCol>
@@ -630,7 +623,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "lifeMilesValor", "number")}
                                 />
                             </MDBCol>
@@ -643,7 +636,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "exencionIva", "number")}
                                 />
                             </MDBCol>
@@ -656,7 +649,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "loyalty", "number")}
                                 />
                             </MDBCol>
@@ -669,7 +662,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "gastosAutorizados", "number")}
                                 />
                             </MDBCol>
@@ -682,7 +675,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "retirosMercaderia", "number")}
                                 />
                             </MDBCol>
@@ -695,7 +688,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "ventaEnLinea", "number")}
                                 />
                             </MDBCol>
@@ -708,7 +701,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "notaDeCredito", "number")}
                                 />
                             </MDBCol>
@@ -721,7 +714,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "faltante", "number")}
                                 />
                             </MDBCol>
@@ -734,7 +727,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "cuadreDeCaja", "number")}
                                 />
                             </MDBCol>
@@ -747,7 +740,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "diferencia", "number")}
                                 />
                             </MDBCol>
@@ -765,7 +758,7 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "cashback", "number")}
                                 />
                             </MDBCol>
@@ -778,43 +771,43 @@ const history = useHistory();
                                     precision={2}
                                     size={2}
                                     mobile
-                                    
+
                                     onChange={e => handleChangeData(e, "giftcard", "number")}
                                 />
                             </MDBCol>
                         </MDBRow>
                         <br></br>
-                    
+
                     </>
                 );
             case 4:
                 return (
                     <>
-                    {stepper !== null ? <MDBCol md='12'>
+                        {stepper !== null ? <MDBCol md='12'>
                             <MDBCard color='red lighten-1' text='white' className='text-center'>
                                 <MDBCardBody>
                                     {stepperMessage}
                                 </MDBCardBody>
                             </MDBCard>
                         </MDBCol> : ""}
-                    <MDBRow style={{ justifyContent: "left", display: "flex" }}>
-                        <MDBCol md='12'>
-                            <MDBInput
-                                type='textarea'
-                                rows='3'
-                                label='Observaciones del día'
-                                value={dataSales[0].observaciones} onChange={e => handleChangeData(e, "observaciones")}
-                            />
-                        </MDBCol>
-                    </MDBRow>
+                        <MDBRow style={{ justifyContent: "left", display: "flex" }}>
+                            <MDBCol md='12'>
+                                <MDBInput
+                                    type='textarea'
+                                    rows='3'
+                                    label='Observaciones del día'
+                                    value={dataSales[0].observaciones} onChange={e => handleChangeData(e, "observaciones")}
+                                />
+                            </MDBCol>
+                        </MDBRow>
                     </>
-                    )
+                )
             default:
                 return 'Ooooups! Este paso no existe';
         }
     }
 
-    const handleNext = async() => {
+    const handleNext = async () => {
         let pagNext = 1;
         switch (activeStep) {
             case 0:
@@ -824,47 +817,47 @@ const history = useHistory();
                     Swal.fire('Error', 'Tienes que seleccionar un encargado para la tienda.', 'error');
                     pagNext = 0;
                 } else {
-                    await validDataSales(startDate,store,dataSales[0].encargado)
-                    .then((res) => {
+                    await validDataSales(startDate, store, dataSales[0].encargado)
+                        .then((res) => {
 
-                      if(res.salesNew.length > 0){
-                        setStepper(0)
-                        setStepperMessage("Ya tienes ingresado un dato de venta, no puedes ingresar otro.")
-                        pagNext = 0;
-                      }else{
+                            if (res.salesNew.length > 0) {
+                                setStepper(0)
+                                setStepperMessage("Ya tienes ingresado un dato de venta, no puedes ingresar otro.")
+                                pagNext = 0;
+                            } else {
 
-                        setStepper(null)
-                        pagNext = 1;
+                                setStepper(null)
+                                pagNext = 1;
 
-                      }
-                    })
-                    .catch((err)=>{
-                        setStepper(0)
-                        setStepperMessage("Hubo un problema técnico por comunicar a soporte técnico.")
-                        pagNext = 0;
-                    })
-                    
+                            }
+                        })
+                        .catch((err) => {
+                            setStepper(0)
+                            setStepperMessage("Hubo un problema técnico por comunicar a soporte técnico.")
+                            pagNext = 0;
+                        })
+
                 }
 
                 if (parseFloat(dataSales[0].venta_diaria) === 0) {
                     Swal.fire('Observación', '¿Está seguro que su venta del día fue 0?', 'info');
                 }
 
-                if (parseFloat(dataSales[0].venta_diaria) === null ) {
+                if (parseFloat(dataSales[0].venta_diaria) === null) {
                     Swal.fire('Error', 'No puedes dejar vacio el dato de venta diaria', 'info');
                     pagNext = 0;
                 }
 
-                if (startDate === null ) {
+                if (startDate === null) {
                     Swal.fire('Error', 'No puedes dejar vacio el campo de fecha', 'info');
                     pagNext = 0;
                 }
-                
-                if(localStorage.getItem('change_date') === 'true'){
-                    if (store === null ) {
+
+                if (localStorage.getItem('change_date') === 'true') {
+                    if (store === null) {
                         Swal.fire('Error', 'No puedes dejar vacio la tienda', 'info');
                         pagNext = 0;
-                    } 
+                    }
                 }
 
                 break;
@@ -872,14 +865,14 @@ const history = useHistory();
                 var validateVendorsempty = 0;
                 vendor.map((res) => {
                     if (res.nombre === null) {
-                         validateVendorsempty += 1
+                        validateVendorsempty += 1
                     }
                     return validateVendorsempty;
                 })
 
                 vendorDescount.map((res) => {
                     if (res.nombre === null) {
-                         validateVendorsempty += 1
+                        validateVendorsempty += 1
                     }
                     return validateVendorsempty;
                 })
@@ -926,30 +919,30 @@ const history = useHistory();
                 }
                 break;
             case 4:
-            createDataSales(dataSales[0],vendor,vendorDescount,localStorage.getItem('email'),store,startDate)
-                .then((response) => {
-                    if (response.status === true) {
-                        setLoading(false)
-                        Swal.fire('Felicitaciones!', response.message, 'success');
-                        setStepper(null)
-                        pagNext = 0;
-                        history.push(`/bitacora_ventas_show`);
-                    }
-    
-                    if (response.status === false){
-                        Swal.fire('Error', response.message, 'error');
-                        pagNext = 0;
-                        setStepper(5)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                    setStepper(4)
-                    setStepperMessage("Error, no se pudo crear su registro de dato de venta")
-                    pagNext = 0;
-                })
+                createDataSales(dataSales[0], vendor, vendorDescount, localStorage.getItem('email'), store, startDate)
+                    .then((response) => {
+                        if (response.status === true) {
+                            setLoading(false)
+                            Swal.fire('Felicitaciones!', response.message, 'success');
+                            setStepper(null)
+                            pagNext = 0;
+                            history.push(`/bitacora_ventas_show`);
+                        }
 
-            break;
+                        if (response.status === false) {
+                            Swal.fire('Error', response.message, 'error');
+                            pagNext = 0;
+                            setStepper(5)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        setStepper(4)
+                        setStepperMessage("Error, no se pudo crear su registro de dato de venta")
+                        pagNext = 0;
+                    })
+
+                break;
             default:
         }
         setActiveStep((prevActiveStep) => prevActiveStep + pagNext);
@@ -1031,7 +1024,7 @@ const history = useHistory();
     }
 
     function handleChangeData(event, name, type) {
-        console.log(dataSales   )
+        console.log(dataSales)
         const values = [...dataSales];
         if (type !== "number") {
             if (name === "encargado") {
@@ -1043,22 +1036,15 @@ const history = useHistory();
             }
             setdataSales(values);
         } else {
-            if(event === null){
+            if (event === null) {
                 Swal.fire('Error', 'No puedes dejar el valor en blanco', 'info');
                 values[0][name] = 0
-            }else{
+            } else {
                 values[0][name] = event
             }
         }
     }
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-    }
     const isStepFailed = (step) => {
         return step === stepper;
     };
@@ -1106,13 +1092,13 @@ const history = useHistory();
                     <div>
                         {activeStep === steps.length ? (
                             <div>
-                                { loading?
-                                (<center> <img
-                                    alt='Preload'
-                                    className='img-fluid'
-                                    src={Loading}
-                                /></center>)
-                                :(<Button onClick={handleMenu}>Regresar a menu</Button>)}
+                                { loading ?
+                                    (<center> <img
+                                        alt='Preload'
+                                        className='img-fluid'
+                                        src={Loading}
+                                    /></center>)
+                                    : (<Button onClick={handleMenu}>Regresar a menu</Button>)}
                             </div>
                         ) : (
                                 <div>

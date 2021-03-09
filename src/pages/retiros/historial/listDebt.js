@@ -1,51 +1,38 @@
 import React, { useState } from 'react';
 import dateFormat from 'dateformat'
 import CurrencyFormat from 'react-currency-format';
-import Button from '@material-ui/core/Button';
-import { useHistory } from "react-router-dom";
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
 
 const Tablebinnacle = ({ posts, loading }) => {
 
   const [toggle, setToggle] = useState(false);
-  
-  const history = useHistory();
-  if (loading) {
-    return <h2>Cargando Datos...</h2>;
-  }
-
-  const handleNext = (name) => {
-    console.log("col:", name)
-    localStorage.setItem('collaborator', name);
-    history.push('/retreats_bitacoras');
-  };
 
   console.log(posts);
   return (
     <>
-    {posts.map((post, i) => (
-      <tr key={i}>
-        <td>{post.name?post.name:'null'}</td>
-        <td><CurrencyFormat value={post.price?post.price:0} displayType={'text'} prefix={'Q'} /></td>
-        <td>{post.descount?post.descount:0}%</td>
-        <td><CurrencyFormat value={post.price_f?post.price_f:0} displayType={'text'} prefix={'Q'} /></td>
-        <td>{dateFormat(post.date_created, 'dd/mm/yyyy')}</td>
-        <td>{dateFormat(post.update_created, 'dd/mm/yyyy')}</td>
-      </tr>
-    ))
-    }
+      {posts.map((post, i) => (
+        <tr key={i}>
+          <td>{post.name ? post.name : 'null'}</td>
+          <td><CurrencyFormat value={post.price ? post.price : 0} displayType={'text'} prefix={'Q'} /></td>
+          <td>{post.descount ? post.descount : 0}%</td>
+          <td><CurrencyFormat value={post.price_f ? post.price_f : 0} displayType={'text'} prefix={'Q'} /></td>
+          <td>{dateFormat(post.date_created, 'dd/mm/yyyy')}</td>
+          <td>{dateFormat(post.update_created, 'dd/mm/yyyy')}</td>
+        </tr>
+      ))
+      }
 
-    <MDBContainer>
-      <MDBModal isOpen={toggle}>
-        <MDBModalHeader>XX</MDBModalHeader>
-        <MDBModalBody>(...)</MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color='secondary' onClick={() => setToggle(false)}>
-            Close
+      <MDBContainer>
+        <MDBModal isOpen={toggle}>
+          <MDBModalHeader>XX</MDBModalHeader>
+          <MDBModalBody>(...)</MDBModalBody>
+          <MDBModalFooter>
+            <MDBBtn color='secondary' onClick={() => setToggle(false)}>
+              Close
           </MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
-    </MDBContainer>
+          </MDBModalFooter>
+        </MDBModal>
+      </MDBContainer>
     </>
   );
 };

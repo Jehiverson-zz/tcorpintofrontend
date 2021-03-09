@@ -58,15 +58,15 @@ const DatosdeVenta = () => {
             status: status
         };
         if (status !== false && name !== false) {
-        statesCreate(createItem).then(res => {
-            Swal.fire('Éxito', 'Estado Ingresado', 'success');
-            ReloadData();
-            toggleModalCreate();
-            falseData();
-        }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar estados', 'error');
-        })
-    }
+            statesCreate(createItem).then(res => {
+                Swal.fire('Éxito', 'Estado Ingresado', 'success');
+                ReloadData();
+                toggleModalCreate();
+                falseData();
+            }).catch(err => {
+                Swal.fire('Error', 'Error al ingresar estados', 'error');
+            })
+        }
     };
 
     const updateEstatus = () => {
@@ -80,20 +80,20 @@ const DatosdeVenta = () => {
         }
 
         const updateItem = {
-            id:item,
+            id: item,
             name: name,
             status: status
         };
         if (status !== false && name !== false) {
-        statesUpdate(updateItem).then(res => {
-            Swal.fire('Éxito', 'Estado Actualizado', 'success');
-            ReloadData();
-            toggleModal();
-            falseData();
-        }).catch(err => {
-            Swal.fire('Error', 'Error al ingresar estados', 'error');
-        });
-    }
+            statesUpdate(updateItem).then(res => {
+                Swal.fire('Éxito', 'Estado Actualizado', 'success');
+                ReloadData();
+                toggleModal();
+                falseData();
+            }).catch(err => {
+                Swal.fire('Error', 'Error al ingresar estados', 'error');
+            });
+        }
 
     };
 
@@ -110,7 +110,7 @@ const DatosdeVenta = () => {
 
     useEffect(() => {
         ReloadData();
-    }, [0])
+    }, [])
 
     const ReloadData = () => {
         statesShow()
@@ -125,7 +125,7 @@ const DatosdeVenta = () => {
             )
     };
 
-    const falseData = () =>{
+    const falseData = () => {
         setItem(false);
         setName(false);
         setStatus(false);
@@ -154,7 +154,7 @@ const DatosdeVenta = () => {
                 <>
                     <br></br>
                     <CardHeader title="Estados" icon="ticket-alt">
-                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
+                        <MDBBtn color='info' onClick={() => toggleModalCreate()}>
                             Agregar Estado
                         </MDBBtn>
                         <MDBTable>
@@ -231,7 +231,7 @@ const DatosdeVenta = () => {
                     </button>
                 </div>
                 <MDBModalBody>
-                <MDBInput
+                    <MDBInput
                         label='Nombre'
                         icon='user'
                         type='text'

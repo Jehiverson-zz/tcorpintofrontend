@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Layaout from '../../../parcials/Layaout';
 import CardHeader from '../../../../components/CardHeader';
 import { templateAsignedEmailShow, templateAsignedEmailCreate, templateAsignedEmailUpdate } from '../../../../functions/settingsFunction';
-import { getStore } from '../../../../functions/ticketFunction'
 import Loading from '../img/loading.gif'
 import { useHistory } from "react-router-dom";
 import {
@@ -22,7 +21,6 @@ import Tablebinnacle from './Table';
 import Pagination from '../../../../components/pagination';
 const DatosdeVenta = () => {
     const history = useHistory();
-    const [dataStore, setdataStore] = useState([]);
     const [dataEmailTemplate, setdataEmailTemplate] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -32,14 +30,7 @@ const DatosdeVenta = () => {
 
     const [item, setItem] = useState(false);
     const [name, setName] = useState(false);
-    const [email, setEmail] = useState(false);
-    const [template, setTemplate] = useState(false);
     const [status, setStatus] = useState(false);
-    const [store, setStore] = useState(false);
-    const [typeUser, setTypeUser] = useState(false);
-    const [password, setPassword] = useState(false);
-    const [passwordC, setPasswordC] = useState(false);
-    const [checkVal, setCheck] = useState(false);
 
     const toggleModal = (item, name, status) => {
         setItem(item);
@@ -123,18 +114,6 @@ const DatosdeVenta = () => {
         }
     ];
 
-    const typeUserList = [
-        {
-            label: "Administrador",
-            name: "admin"
-        },
-        {
-            label: "Usuario",
-            name: "user"
-        }
-    ];
-
-
     useEffect(() => {
         ReloadData();
     }, [])
@@ -149,28 +128,12 @@ const DatosdeVenta = () => {
             .catch(err =>
                 setLoading(true)
             )
-
-        getStore().then((res) => {
-            var storeData = [];
-            res.map(store => {
-                return storeData.push({ label: store.name, name: store.name });
-            });
-            setdataStore(storeData);
-            setLoading(false);
-        })
-            .catch(error => console.log(error))
     };
 
     const falseData = () => {
         setItem(false);
         setName(false);
         setStatus(false);
-        setEmail(false);
-        setStore(false);
-        setTypeUser(false);
-        setPassword(false);
-        setCheck(false);
-        setPasswordC(false);
     };
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;

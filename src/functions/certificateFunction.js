@@ -52,3 +52,16 @@ export const exchangeCertificate = (id,data) => {
             console.error(error);
         })
 }
+
+/* Obtiene los datos de los certificados en un rango de fechas especificado*/
+export const getDataReportCertificates = (date_start, date_end) => {
+    return axios
+        .post(`${url}/certificates/report/${date_start}/${date_end}`)
+        .then((response) => {
+            console.log(response)
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}

@@ -234,4 +234,32 @@ export const deletebinacleEjection = async(id) => {
         })
 }
 
+/* Obtiene los datos de venta diaria para el reporte*/
+export const getDataReportSales = (date_start, date_end, store=false) => {
+    let data = store !== null?(
+        {store : store, role : localStorage.getItem("type")}
+    ) : ({ role : localStorage.getItem("type")})
+    return axios
+        .post(`${url}/sales/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
 
+/* Obtiene los datos de bitacora de ejecucion para el reporte*/
+export const getDataReportDailies = (date_start, date_end, store=null) => {
+    let data = store !== null?(
+        {store : store, role : localStorage.getItem("type")}
+    ) : ({ role : localStorage.getItem("type")})
+    return axios
+        .post(`${url}/binnacles_dailies/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}

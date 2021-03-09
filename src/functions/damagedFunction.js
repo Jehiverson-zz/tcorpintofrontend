@@ -28,8 +28,22 @@ export const getDamagedMerchandise = () => {
     return axios
         .post(`${url}/damaged_merchandise`, data)
         .then((response) => {
-            console.log(response);
             return response.data.damaged;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+/* Obtiene los datos de mercadería dañada para el reporte*/
+export const getDamagedMerchandiseReport = (date_start, date_end, store=false) => {
+    let data = store !== null?(
+        {store : store, role : localStorage.getItem("type")}
+    ) : ({ role : localStorage.getItem("type")})
+    return axios
+        .post(`${url}/damaged_merchandise/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
         })
         .catch((error) => {
             console.error(error);

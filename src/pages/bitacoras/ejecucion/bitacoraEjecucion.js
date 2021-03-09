@@ -6,7 +6,8 @@ import CardHeader from '../../../components/CardHeader'
 import { binacleEjectionShow, createBinacleEjection } from '../../../functions/salesFunctions'
 import Tablebinnacle from './Tablebinnacle';
 import Pagination from '../../../components/pagination';
-import Loading from './img/loading.gif'
+import Loading from './img/loading.gif';
+import ReactExport from "react-export-excel";
 import {
     MDBRow,
     MDBCol,
@@ -14,9 +15,8 @@ import {
     MDBTableBody,
     MDBTableHead,
     MDBInput,
-    Button
 } from 'mdbreact';
-
+import Button from '@material-ui/core/Button';
 
 
 const DatosEjecucion = () => {
@@ -25,6 +25,12 @@ const DatosEjecucion = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
     const [loading] = useState(false);
+    const ExcelFile = ReactExport.ExcelFile;
+    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+    const date = new Date();
+    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
+    const filename = `Bitacora_Ejecución_${today}`;
     const [dataBinacle, setdataBinacle] = useState([{
      hamachi: null,
      recepTrans: null,
@@ -186,6 +192,20 @@ const DatosEjecucion = () => {
 
                     <MDBCol md='7'>
                         <CardHeader title="Bitacoras De Ejecución" icon="ticket-alt">
+                        {
+                            currentPosts.length > 0 && (
+                                <div align="right">
+                                    <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename}>
+                                        <ExcelSheet data={dataDailies} name={filename}>
+                                            <ExcelColumn label="Meta" value="daily_goal"/>
+                                            <ExcelColumn label="Año Anterior" value="year_before_sale"/>
+                                            <ExcelColumn label="Vendedores" value="vendor_number"/>
+                                            <ExcelColumn label="Fecha Creación" value="date_created"/>
+                                        </ExcelSheet>
+                                    </ExcelFile>
+                                </div>
+                            )
+                        }
                             <MDBTable>
                                 <MDBTableHead>
                                     <tr>

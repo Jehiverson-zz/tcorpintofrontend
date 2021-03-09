@@ -111,6 +111,15 @@ class Navbar extends Component {
                   <strong>Retiros</strong>
                 </MDBNavLink>
               </MDBNavItem>
+              <MDBNavItem>
+                <MDBNavLink
+                  exact
+                  to='/reports'
+                  onClick={this.closeCollapse('mainNavbarCollapse')}
+                >
+                  <strong>Reportería</strong>
+                </MDBNavLink>
+              </MDBNavItem>
               {localStorage.getItem('type') === "admin"? (
               <MDBNavItem>
                 <MDBNavLink

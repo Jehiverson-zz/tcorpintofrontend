@@ -48,7 +48,7 @@ const Tablebinnacle = ({ posts, loading }) => {
       }
     })
   };
-
+console.log("VENTA DIARIA",posts)
   return (
     posts.map((post, i) => (
       <tr key={i}>

@@ -298,3 +298,18 @@ export const completePhotoRetreats = (id) =>{
         console.log(error)
     })
 }
+
+/* Obtiene los datos de los tickets en un rango de fechas especificado*/
+export const getDataReportTickets = (date_start, date_end, type, store=false) => {
+    let data = store !== null?(
+        {store : store, role : localStorage.getItem("type"), type: type}
+    ) : ({ role : localStorage.getItem("type"), type: type})
+    return axios
+        .post(`${url}/tickets/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}

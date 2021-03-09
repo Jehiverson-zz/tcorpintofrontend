@@ -9,17 +9,26 @@ import {
     MDBCol,
     MDBTable,
     MDBTableBody,
-    MDBTableHead
+    MDBTableHead,
 } from 'mdbreact';
 import Tablebinnacle from './Tablebinnacle';
 import Select from 'react-select';
 import Pagination from '../../../components/pagination';
+import ReactExport from "react-export-excel";
+import Button from '@material-ui/core/Button';
+
 const DatosdeVenta = () => {
     const history = useHistory();
     const [dataSales, setDataSales] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(20);
     const [loading, setLoading] = useState(true);
+    const ExcelFile = ReactExport.ExcelFile;
+    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+    const date = new Date();
+    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
+    const filename = `Venta_Diaria_${today}`;
 
     useEffect(() => {
         let data = {store: localStorage.getItem('store'), type: localStorage.getItem('type')}
@@ -61,22 +70,21 @@ const DatosdeVenta = () => {
                 <>
                 <br></br>
                 <CardHeader title="Datos de venta" icon="ticket-alt">
-                    {/* <MDBRow>
-                        <MDBCol md='3' style={{ marginTop: "26px" }}>
-                            <Select
-                                //onChange={e => handleChange(e, "store_asigned")}
-                                defaultValue={value2}
-                                options={value2}
-                            />
-                        </MDBCol>
-                        <MDBCol md='3' style={{ marginTop: "26px" }}>
-                            <Select
-                                //onChange={e => handleChange(e, "store_asigned")}
-                                defaultValue={value2}
-                                options={value2}
-                            />
-                        </MDBCol>
-                    </MDBRow> */}
+                    {
+                    currentPosts.length > 0 && (
+                        <div align="right">
+                            <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename}>
+                                <ExcelSheet data={dataSales} name={filename}>
+                                    <ExcelColumn label="Venta" value="ventas"/>
+                                    <ExcelColumn label="Meta" value="metas"/>
+                                    <ExcelColumn label="Encargado" value="manager"/>
+                                    <ExcelColumn label="Tienda" value="tienda"/>
+                                    <ExcelColumn label="Fecha Creación" value="fechaCreacion"/>
+                                </ExcelSheet>
+                            </ExcelFile>
+                        </div>
+                    )
+                    }
                     <MDBTable>
                         <MDBTableHead>
                             <tr>

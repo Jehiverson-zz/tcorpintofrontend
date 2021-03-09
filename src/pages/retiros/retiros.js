@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import {
-    MDBEdgeHeader,
     MDBContainer,
     MDBRow,
     MDBCol,
     MDBJumbotron,
     MDBIcon,
-    MDBAnimation
+    MDBAnimation,
 } from 'mdbreact';
+import Button from '@material-ui/core/Button';
 import MenuLink from '../../components/menuLink';
 
 import Layaout from '../parcials/Layaout';
@@ -23,7 +23,6 @@ const Landing = () => {
 
     return (
         <Layaout>
-            
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>
@@ -34,11 +33,11 @@ const Landing = () => {
                                     Retiro
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
-                                    {   
-                                    localStorage.getItem('type') === 'admin'?(<MenuLink to='/retreats_form' title='Autorizar Retiro' />):(<MenuLink to='/retreats_form' title='Nuevo Retiro' />)    
+                                    {
+                                    localStorage.getItem('type') === 'admin'?(<MenuLink to='/retreats_form' title='Autorizar Retiro' />):(<MenuLink to='/retreats_form' title='Nuevo Retiro' />)
                                     }
-                                    {   
-                                    localStorage.getItem('type') === 'admin'?(<MenuLink to='/retreats_bitacoras_list' title='Total de retiro' />):""    
+                                    {
+                                    localStorage.getItem('type') === 'admin'?(<MenuLink to='/retreats_bitacoras_list' title='Total de retiro' />):""
                                     }
                                     <MenuLink to='/retreats_history' title='Historial Retiros' />
                                 </ul>

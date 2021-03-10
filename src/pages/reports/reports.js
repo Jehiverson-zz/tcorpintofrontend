@@ -10,7 +10,6 @@ import {
     MDBModalHeader,
     MDBModalFooter,
     MDBInput,
-    label,
 } from 'mdbreact';
 import { SiMicrosoftexcel } from "react-icons/si";
 import Button from '@material-ui/core/Button';
@@ -302,7 +301,6 @@ const Reports = () => {
             collaborators.push({ value: my_name, label: my_name })
         }
     }
-    console.log(data)
     return (
         <Layaout>
             { loading ?
@@ -328,42 +326,46 @@ const Reports = () => {
                                     <MDBTableBody>
                                         {
                                             modules.modules.map(x => {
-                                                return (
-                                                    <tr key={x._id}>
-                                                        <td>{x._id}</td>
-                                                        <td>{x.name}</td>
-                                                        <td className="center-element">
-                                                            {
-                                                                x.surname === 'colaboradores' ? (
-                                                                    <ExcelFile element={<Button className="btn text-white green"><SiMicrosoftexcel /></Button>} filename={`Collaboradores_${today}`}>
-                                                                        <ExcelSheet data={dataCollaborators} name={`Colabradores_${today}`}>
-                                                                            <ExcelColumn label="Nombre" value="name" />
-                                                                            <ExcelColumn label="TIENDA" value="store_asigned" />
-                                                                            <ExcelColumn label="ESTADO" value="status" />
-                                                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
-                                                                        </ExcelSheet>
-                                                                    </ExcelFile>
-                                                                ) : x.surname === 'usuarios' ? (
-                                                                    <ExcelFile element={<Button className="btn text-white green"><SiMicrosoftexcel /></Button>} filename={`Usuarios_${today}`}>
-                                                                        <ExcelSheet data={dataUsers} name={`Usuarios_${today}`}>
-                                                                            <ExcelColumn label="EMAIL" value="email" />
-                                                                            <ExcelColumn label="NOMBRE" value="name" />
-                                                                            <ExcelColumn label="TIPO USUARIO" value="type" />
-                                                                            <ExcelColumn label="FECHA VARIABLE" value="change_date" />
-                                                                            <ExcelColumn label="TIENDA" value="store" />
-                                                                            <ExcelColumn label="ESTADO" value="status" />
-                                                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
-                                                                        </ExcelSheet>
-                                                                    </ExcelFile>
-                                                                ) : (
-                                                                    <Button
-                                                                        className="btn text-white green"
-                                                                        onClick={() => show_modal(x.surname)}
-                                                                    ><SiMicrosoftexcel /></Button>)
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                )
+                                                if(x.view.includes(my_role)){
+                                                    return (
+                                                        <tr key={x._id}>
+                                                            <td>{x._id}</td>
+                                                            <td>{x.name}</td>
+                                                            <td className="center-element">
+                                                                {
+                                                                    x.surname === 'colaboradores' ? (
+                                                                        <ExcelFile element={<Button className="btn text-white green"><SiMicrosoftexcel /></Button>} filename={`Collaboradores_${today}`}>
+                                                                            <ExcelSheet data={dataCollaborators} name={`Colabradores_${today}`}>
+                                                                                <ExcelColumn label="Nombre" value="name" />
+                                                                                <ExcelColumn label="TIENDA" value="store_asigned" />
+                                                                                <ExcelColumn label="ESTADO" value="status" />
+                                                                                <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                                                            </ExcelSheet>
+                                                                        </ExcelFile>
+                                                                    ) : x.surname === 'usuarios' ? (
+                                                                        <ExcelFile element={<Button className="btn text-white green"><SiMicrosoftexcel /></Button>} filename={`Usuarios_${today}`}>
+                                                                            <ExcelSheet data={dataUsers} name={`Usuarios_${today}`}>
+                                                                                <ExcelColumn label="EMAIL" value="email" />
+                                                                                <ExcelColumn label="NOMBRE" value="name" />
+                                                                                <ExcelColumn label="TIPO USUARIO" value="type" />
+                                                                                <ExcelColumn label="FECHA VARIABLE" value="change_date" />
+                                                                                <ExcelColumn label="TIENDA" value="store" />
+                                                                                <ExcelColumn label="ESTADO" value="status" />
+                                                                                <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                                                            </ExcelSheet>
+                                                                        </ExcelFile>
+                                                                    ) : (
+                                                                        <Button
+                                                                            className="btn text-white green"
+                                                                            onClick={() => show_modal(x.surname)}
+                                                                        ><SiMicrosoftexcel /></Button>)
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }else{
+                                                    return null;
+                                                }
                                             })
                                         }
                                     </MDBTableBody>

@@ -89,7 +89,7 @@ class Routes extends React.Component {
         <Route exact path='/subsidiarias' component={SubsidiariasList} />
         <Route exact path='/stores' component={StoreList} />
         <Route exact path='/emails' component={EmailsList} />
-        <Route exact path='/temmplates' component={TemplateList} />
+        <Route exact path='/templates' component={TemplateList} />
 
 
         <Route component={PageNotFound} />

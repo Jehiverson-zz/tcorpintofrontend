@@ -251,7 +251,7 @@ const DatosdeVenta = () => {
                                     <th>Tipo Usuario</th>
                                     <th>Fecha variable</th>
                                     <th>Tienda</th>
-                                    <th>User</th>
+                                    <th>Estado</th>
                                     <th>Fecha Creacion</th>
                                     <th>Acciones</th>
                                 </tr>

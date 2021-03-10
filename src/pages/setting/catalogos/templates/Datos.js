@@ -62,12 +62,12 @@ const DatosdeVenta = () => {
 
         if (name !== false && status !== false) {
             templateAsignedEmailCreate(createItem).then(res => {
-                Swal.fire('Éxito', 'Email Ingresado', 'success');
+                Swal.fire('Éxito', 'Template Ingresado', 'success');
                 ReloadData();
                 toggleModalCreate();
                 falseData();
             }).catch(err => {
-                Swal.fire('Error', 'Error al ingresar usuario', 'error');
+                Swal.fire('Error', 'Error al ingresar template', 'error');
             })
         }
         falseData();
@@ -91,12 +91,12 @@ const DatosdeVenta = () => {
 
         if (name !== false && status !== false) {
             templateAsignedEmailUpdate(updateItem).then(res => {
-                Swal.fire('Éxito', 'Usuario Actualizado', 'success');
+                Swal.fire('Éxito', 'Template Actualizado', 'success');
                 ReloadData();
                 toggleModal();
                 falseData();
             }).catch(err => {
-                Swal.fire('Error', 'Error al ingresar usuario', 'error');
+                Swal.fire('Error', 'Error al ingresar template', 'error');
             });
         }
 

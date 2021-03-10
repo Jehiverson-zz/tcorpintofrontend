@@ -43,7 +43,7 @@ const Landing = () => {
                                     <MenuLink to='/subsidiarias' title='Subsidiarias' />
                                     <MenuLink to='/stores' title='Tiendas' />
                                     <MenuLink to='/emails' title='Emails de correos' />
-                                    <MenuLink to='/temmplates' title='Plantillas' />
+                                    <MenuLink to='/templates' title='Plantillas' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>

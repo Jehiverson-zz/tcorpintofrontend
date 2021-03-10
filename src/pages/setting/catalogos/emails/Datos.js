@@ -182,9 +182,9 @@ const DatosdeVenta = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Email Plantillas" icon="ticket-alt">
+                    <CardHeader title="Asignacion de email a plantillas" icon="ticket-alt">
                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
-                            Agregar Email Plantilla
+                            Agregar Email
                         </MDBBtn>
                         <MDBTable>
                             <MDBTableHead>

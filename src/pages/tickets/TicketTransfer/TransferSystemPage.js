@@ -256,7 +256,6 @@ const TransferSystemPage = () => {
     function toggle(id = 0) {
         let mostrar = !showModal;
         setidticket(id)
-        console.log(mostrar, idticket);
         setshowModal(mostrar);
     }
 

@@ -7,7 +7,6 @@ const Tablebinnacle = ({ posts, loading }) => {
 
   const [toggle, setToggle] = useState(false);
 
-  console.log(posts);
   return (
     <>
       {posts.map((post, i) => (

@@ -33,7 +33,6 @@ const SubsidiariasList = () => {
     const [id, setId] = useState(false);
 
     const toggleModal = (name = false, xid = false, status = false) => {
-        console.log(status)
         setId(xid);
         setName(name);
         setStatus({ value: status, label: status });

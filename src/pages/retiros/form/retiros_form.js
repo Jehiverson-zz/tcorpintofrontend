@@ -117,7 +117,6 @@ const ImmediateDelivery = () => {
                     let datasend = { ...fields[0], vendor: vendor };
                     retreatCreated(datasend)
                         .then(res => {
-                            console.log(res.data[0]);
                             getRetreats();
                             Swal.fire(res.data[0].type, res.data[0].message, res.data[0].status);
                             setTimeout(() => {
@@ -134,7 +133,6 @@ const ImmediateDelivery = () => {
     }
 
     function updateRetreats(id, action) {
-        console.log(id, action)
         retreatUpdate(id, action)
             .then(res => {
                 getRetreats();
@@ -150,7 +148,6 @@ const ImmediateDelivery = () => {
         if (type !== "number") {
             if (name === "colaborador") {
                 values[0][name] = event.label;
-                console.log(event.label);
             } else if (name === "image") {
                 values[0][name] = event.target.files[0];
             } else if (event.target.value === "") {
@@ -193,8 +190,6 @@ const ImmediateDelivery = () => {
         let totaldescount = (price * descount) / 100;
 
         let priceFinal = fields[0].descuento !== null ? price - totaldescount : price;
-
-        console.log(price, descount, totaldescount, priceFinal);
 
         values[0]["precioFinal"] = priceFinal;
         setFields(values);

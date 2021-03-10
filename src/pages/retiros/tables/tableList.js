@@ -10,7 +10,6 @@ import {
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './listDebt';
-import { JsonToExcel } from 'react-json-excel';
 import Pagination from '../../../components/pagination';
 
 const DatosdeVenta = () => {
@@ -19,15 +18,6 @@ const DatosdeVenta = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(80);
     const [loading, setLoading] = useState(true);
-    const date = new Date();
-    const today = `${date.getDate()}_${(date.getMonth() + 1)}_${date.getFullYear()}`;
-    const filename = `DEBITO_RETIROS_${today}`,
-        columns = {
-            "name": "NOMBRE",
-            "total_debt": "DEUDA",
-            "date_created": "FECHA DE CREACIÓN",
-            "update_created": "FECHA DE ACTUALIZACIÓN",
-        }
 
     useEffect(() => {
         retreatShowList()
@@ -62,43 +52,30 @@ const DatosdeVenta = () => {
                 /></center>)
                 :
                 <>
-                    <br></br>
-                    {
-                        currentPosts.length > 0 && (
-                            <div align="right">
-                                <JsonToExcel
-                                    data={dataRetreats}
-                                    className="btn btn-success"
-                                    filename={filename}
-                                    fields={columns}
-                                    text="Descargar Excel"
-                                />
-                            </div>
-                        )
-                    }
-                    <CardHeader title="Debitos Retiros" icon="ticket-alt">
-                        <MDBTable id="TableTotalRetiros">
-                            <MDBTableHead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Deuda</th>
-                                    <th>Fecha de Creación</th>
-                                    <th>Fecha de Actualización</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </MDBTableHead>
-                            <MDBTableBody>
-                                <Tablebinnacle posts={currentPosts} loading={loading} />
-                            </MDBTableBody>
-                            {dataRetreats.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>) : ""}
-                            <Pagination
-                                postsPerPage={postsPerPage}
-                                totalPosts={dataRetreats.length}
-                                paginate={paginate}
-                                currentPage={currentPage}
-                            />
-                        </MDBTable>
-                    </CardHeader>
+                <br></br>
+                <CardHeader title="Debitos Retiros" icon="ticket-alt">
+                    <MDBTable id="TableTotalRetiros">
+                        <MDBTableHead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Deuda</th>
+                                <th>Fecha de Creación</th>
+                                <th>Fecha de Actualización</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </MDBTableHead>
+                        <MDBTableBody>
+                            <Tablebinnacle posts={currentPosts} loading={loading} />
+                        </MDBTableBody>
+                        {dataRetreats.length < 1 ? (<tr><td colSpan="4"><center>No existen datos de venta</center></td></tr>):""}
+                        <Pagination
+                            postsPerPage={postsPerPage}
+                            totalPosts={dataRetreats.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
+                    </MDBTable>
+                </CardHeader>
                 </>}
         </Layaout>
     )

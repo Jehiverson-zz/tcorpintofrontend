@@ -58,7 +58,6 @@ const HistoryCertificate = () => {
     const [stores, setStores] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(51);
-
     const default_store = { value: status.status, label: status.status };
     const handleChange2 = (event, newValue) => {
         setValue(newValue);
@@ -131,7 +130,7 @@ const HistoryCertificate = () => {
                 {
                     localStorage.getItem('type') === 'admin' && (
                         <MDBRow className="center-element">
-                            <MDBCol md='3' >
+                            <MDBCol md='4'>
                                 <label>Selecciona una tienda</label>
                                 <Select
                                     onChange={e => handleChangeFilter(e)}
@@ -187,7 +186,7 @@ const HistoryCertificate = () => {
                 {
                     localStorage.getItem('type') === 'admin' && (
                         <MDBRow className="center-element">
-                            <MDBCol md='3' >
+                            <MDBCol md='4' >
                                 <label>Selecciona una tienda</label>
                                 <Select
                                     onChange={e => handleChangeFilter(e)}

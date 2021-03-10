@@ -68,7 +68,6 @@ const DatosdeVenta = () => {
             date_update: new Date()
         };
 
-        console.log(createItem);
         if (email !== false && template !== false && status !== false) {
             emailTemplateCreate(createItem).then(res => {
                 Swal.fire('Éxito', 'Email Ingresado', 'success');
@@ -102,7 +101,6 @@ const DatosdeVenta = () => {
             status: status,
             date_update: new Date()
         };
-        console.log(updateItem)
         if (email !== false && template !== false && status !== false) {
             emailTemplateUpdate(updateItem).then(res => {
                 Swal.fire('Éxito', 'Usuario Actualizado', 'success');
@@ -184,9 +182,9 @@ const DatosdeVenta = () => {
                 :
                 <>
                     <br></br>
-                    <CardHeader title="Email Plantillas" icon="ticket-alt">
+                    <CardHeader title="Asignacion de email a plantillas" icon="ticket-alt">
                         <MDBBtn color='info' onClick={() => toggleModalCreate()}>
-                            Agregar Email Plantilla
+                            Agregar Email
                         </MDBBtn>
                         <MDBTable>
                             <MDBTableHead>

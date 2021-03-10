@@ -154,7 +154,6 @@ const DatosdeventaUpdate = () => {
     }, [vendor]);
 
 
-    console.log(dataSales);
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
 
@@ -1052,7 +1051,6 @@ const DatosdeventaUpdate = () => {
     }
 
     function handleChangeData(event, name, type) {
-        console.log(dataSales)
         const values = [...dataSales];
         if (type !== "number") {
             if (name === "encargado") {

@@ -1024,7 +1024,6 @@ const TransferSystemPage = () => {
     }
 
     function handleChangeData(event, name, type) {
-        console.log(dataSales)
         const values = [...dataSales];
         if (type !== "number") {
             if (name === "encargado") {

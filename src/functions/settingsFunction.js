@@ -18,7 +18,6 @@ export const statesCreate = (data) => {
     return axios
         .post(url + '/statusCreate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -30,7 +29,6 @@ export const statesUpdate = (data) => {
     return axios
         .post(url + '/statusUpdate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -39,11 +37,9 @@ export const statesUpdate = (data) => {
 };
 
 export const statesDelete = (data) => {
-    console.log(data);
     return axios
         .post(url + '/statusDelete', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -57,7 +53,6 @@ export const CollaboratorShow = (store) => {
     return axios
         .post(url + '/collaboratorShow')
         .then((response) => {
-            console.log(response.data.showCollaboratorInfo);
             return response.data.showCollaboratorInfo;
         })
         .catch((error) => {
@@ -69,7 +64,6 @@ export const collaboratorCreate = (data) => {
     return axios
         .post(url + '/collaboratorCreate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -81,7 +75,6 @@ export const collaboratorUpdate = (data) => {
     return axios
         .put(url + '/collaboratorUpdate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -95,7 +88,6 @@ export const userShow = (store) => {
     return axios
         .post(url + '/userShow')
         .then((response) => {
-            console.log(response.data.showUserInfo);
             return response.data.showUserInfo;
         })
         .catch((error) => {
@@ -108,7 +100,6 @@ export const userCreate = (data) => {
     return axios
         .post(url + '/userCreate', data)
         .then((response) => {
-            console.log(response.data.showUserInfo);
             return response.data.showUserInfo;
         }).catch((error) => {
             console.log(error);
@@ -120,7 +111,6 @@ export const userUpdate = (data) => {
     return axios
         .post(url + '/userUpdate', data)
         .then((response) => {
-            console.log(response.data.showUserInfo);
             return response.data.showUserInfo;
         }).catch((error) => {
             console.log(error);
@@ -134,7 +124,6 @@ export const getSubsidiariaActives = (store) => {
     return axios
         .get(url + '/subsidiarias_actives')
         .then((response) => {
-            console.log(response.data.subsidiarias);
             return response.data.subsidiarias;
         })
         .catch((error) => {
@@ -147,7 +136,6 @@ export const SubsidiariasShow = () => {
     return axios
         .post(url + '/subsidiariaShow')
         .then((response) => {
-            console.log(response.data.subsidiarias);
             return response.data.subsidiarias;
         })
         .catch((error) => {
@@ -159,7 +147,6 @@ export const subsidiariaCreate = (data) => {
     return axios
         .post(url + '/subsidiariaCreate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -171,7 +158,6 @@ export const subsidiariaUpdate = (data) => {
     return axios
         .put(url + '/subsidiariaUpdate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -196,7 +182,6 @@ export const storeCreate = (data) => {
     return axios
         .post(url + '/storeCreate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -208,7 +193,6 @@ export const storeUpdate = (data) => {
     return axios
         .put(url + '/storeUpdate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -221,7 +205,6 @@ export const emailTemplateShow = () => {
     return axios
         .post(url + '/emailTemplateShow')
         .then((response) => {
-            console.log(response.data.showUserInfo);
             return response.data.showUserInfo;
         })
         .catch((error) => {
@@ -233,7 +216,6 @@ export const emailTemplateCreate = (data) => {
     return axios
         .post(url + '/emailTemplateCreate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -245,7 +227,6 @@ export const emailTemplateUpdate = (data) => {
     return axios
         .put(url + '/emailTemplateUpdate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -258,7 +239,6 @@ export const templateAsignedEmailShow = () => {
     return axios
         .post(url + '/templateAsignedEmaileShow')
         .then((response) => {
-            console.log(response.data.showTemplateAsignationEmail);
             return response.data.showTemplateAsignationEmail;
         })
         .catch((error) => {
@@ -270,7 +250,6 @@ export const templateAsignedEmailCreate = (data) => {
     return axios
         .post(url + '/templateAsignedEmailCreate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {
@@ -282,7 +261,6 @@ export const templateAsignedEmailUpdate = (data) => {
     return axios
         .put(url + '/templateAsignedEmailUpdate', data)
         .then((response) => {
-            console.log(response.data)
             return response.data;
         })
         .catch((error) => {

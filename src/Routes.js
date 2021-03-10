@@ -35,6 +35,9 @@ import RetreatsBitacora from './pages/retiros/tables/form_bitacora';
 import RetreatsBitacoraList from './pages/retiros/tables/tableList';
 import RetreatsHistory from './pages/retiros/historial/tableList';
 
+//Reports
+import Reports from './pages/reports/reports';
+
 //Settings
 import Settings from './pages/setting/Settings';
 import StatesList from './pages/setting/catalogos/states/Datos';
@@ -77,6 +80,8 @@ class Routes extends React.Component {
         <Route exact path='/retreats_bitacoras_list' component={RetreatsBitacoraList} />
         <Route exact path='/retreats_history' component={RetreatsHistory} />
 
+        <Route exact path="/reports" component={Reports} />
+
         <Route exact path='/settingsList' component={Settings} />
         <Route exact path='/stateList' component={StatesList} />
         <Route exact path='/collaborationList' component={CollaboratosList} />
@@ -84,7 +89,7 @@ class Routes extends React.Component {
         <Route exact path='/subsidiarias' component={SubsidiariasList} />
         <Route exact path='/stores' component={StoreList} />
         <Route exact path='/emails' component={EmailsList} />
-        <Route exact path='/temmplates' component={TemplateList} />
+        <Route exact path='/templates' component={TemplateList} />
 
 
         <Route component={PageNotFound} />

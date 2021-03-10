@@ -9,7 +9,6 @@ import {
 import Pagination from '../../components/pagination';
 import TableDamaged from './TableDamaged';
 import Button from '@material-ui/core/Button';
-import { JsonToExcel } from 'react-json-excel';
 import {
     MDBRow,
     MDBCol,
@@ -43,18 +42,6 @@ const DamagedMerchandise = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
-    const date = new Date();
-    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
-    const filename = `Mercaderia_Dañada${today}`,
-    columns = {
-        "damage": "DAÑO",
-        "upc": "UPC",
-        "alu": "ALU",
-        "siz": "TALLA",
-        "price": "PRECIO",
-        "store_created": "TIENDA CREADORA",
-        "timestamp": "FECHA DE CREACIÓN",
-    }
 
     useEffect(() => {
         damaged_merchandise();
@@ -105,7 +92,6 @@ const DamagedMerchandise = () => {
             }
         })
         if (cont === 0) {
-            console.log(fields);
             storeDamagedMerchandise(fields)
                 .then(response => {
                     result_function('success', 'Registro almecenado exitosamente')
@@ -170,19 +156,6 @@ const DamagedMerchandise = () => {
             </CardHeader>
             <br></br>
             <MDBContainer>
-                {
-                    currentPosts.length > 0 && (
-                        <div align="right">
-                            <JsonToExcel
-                                data={dataDamaged}
-                                className="btn btn-success"
-                                filename={filename}
-                                fields={columns}
-                                text="Descargar Excel"
-                                />
-                        </div>
-                    )
-                }
                 <MDBTable id="tableDamagedMerchandise">
                     <MDBTableHead>
                         <tr>

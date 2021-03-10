@@ -7,10 +7,11 @@ import Loading from './img/loading.gif'
 import {
     MDBTable,
     MDBTableBody,
-    MDBTableHead
+    MDBTableHead,
 } from 'mdbreact';
 import Tablebinnacle from './Tablebinnacle';
 import Pagination from '../../../components/pagination';
+
 const DatosdeVenta = () => {
     const history = useHistory();
     const [dataSales, setDataSales] = useState([]);
@@ -22,7 +23,6 @@ const DatosdeVenta = () => {
         let data = { store: localStorage.getItem('store'), type: localStorage.getItem('type') }
         salesShow(data)
             .then((res) => {
-                //console.log({ store: localStorage.getItem('store'), type: localStorage.getItem('type') }, res);
                 setLoading(false)
                 setDataSales(res)
             }
@@ -32,8 +32,6 @@ const DatosdeVenta = () => {
                 //setLoading(true)
             )
     }, [])
-
-    //    const value2 = { value: 'Selecciona una tienda', label: 'Selecciona una tienda' };
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;

@@ -168,7 +168,6 @@ export const createDataSales = async (sales, vendors, vendorsDescount, email, da
     } else {
         storeDefault = store;
     }
-    console.log(storeDefault)
     if (dateStore) {
 
         dateStoreDefault = dateStore;
@@ -179,7 +178,6 @@ export const createDataSales = async (sales, vendors, vendorsDescount, email, da
 
     let data = { sales, vendors, vendorsDescount, email, storeDefault, dateStoreDefault }
 
-    console.log(data);
     return axios
         .post(`${url}/sales/create`, data)
         .then((response) => {
@@ -202,7 +200,6 @@ export const updateDataSales = async (sales, vendors, vendorsDescount, email, da
     } else {
         storeDefault = store;
     }
-    console.log(storeDefault)
     if (dateStore) {
 
         dateStoreDefault = dateStore;
@@ -213,7 +210,6 @@ export const updateDataSales = async (sales, vendors, vendorsDescount, email, da
 
     let data = { sales, vendors, vendorsDescount, email, storeDefault, dateStoreDefault }
 
-    console.log(data);
     return axios
         .post(`${url}/sales/update`, data)
         .then((response) => {
@@ -248,7 +244,6 @@ export const binacleEjectionShow = (store) => {
     return axios
         .post(url + '/binnacles_dailies/show', data)
         .then((response) => {
-            console.log(response.data.binnacleDailies);
             return response.data.binnacleDailies;
         })
         .catch((error) => {
@@ -285,4 +280,32 @@ export const deletebinacleEjection = async (id) => {
         })
 }
 
+/* Obtiene los datos de venta diaria para el reporte*/
+export const getDataReportSales = (date_start, date_end, store=false) => {
+    let data = store !== null?(
+        {store : store, role : localStorage.getItem("type")}
+    ) : ({ role : localStorage.getItem("type")})
+    return axios
+        .post(`${url}/sales/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
 
+/* Obtiene los datos de bitacora de ejecucion para el reporte*/
+export const getDataReportDailies = (date_start, date_end, store=null) => {
+    let data = store !== null?(
+        {store : store, role : localStorage.getItem("type")}
+    ) : ({ role : localStorage.getItem("type")})
+    return axios
+        .post(`${url}/binnacles_dailies/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}

@@ -35,7 +35,6 @@ const Login = () => {
         }
 
         login(userData).then(res => {
-            console.log(res)
             if (res.error === 1) {
                 Swal.fire('Oops...', res.message, 'error');
             } else {

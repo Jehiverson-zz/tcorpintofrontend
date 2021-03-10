@@ -6,7 +6,7 @@ import {
     MDBCol,
     MDBJumbotron,
     MDBIcon,
-    MDBAnimation
+    MDBAnimation,
 } from 'mdbreact';
 import MenuLink from '../../components/menuLink';
 
@@ -22,7 +22,6 @@ const Landing = () => {
 
     return (
         <Layaout>
-
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>
@@ -34,10 +33,10 @@ const Landing = () => {
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
                                     {
-                                        localStorage.getItem('type') === 'admin' ? (<MenuLink to='/retreats_form' title='Autorizar Retiro' />) : (<MenuLink to='/retreats_form' title='Nuevo Retiro' />)
+                                    localStorage.getItem('type') === 'admin'?(<MenuLink to='/retreats_form' title='Autorizar Retiro' />):(<MenuLink to='/retreats_form' title='Nuevo Retiro' />)
                                     }
                                     {
-                                        localStorage.getItem('type') === 'admin' ? (<MenuLink to='/retreats_bitacoras_list' title='Total de retiro' />) : ""
+                                    localStorage.getItem('type') === 'admin'?(<MenuLink to='/retreats_bitacoras_list' title='Total de retiro' />):""
                                     }
                                     <MenuLink to='/retreats_history' title='Historial Retiros' />
                                 </ul>

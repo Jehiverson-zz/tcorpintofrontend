@@ -41,7 +41,6 @@ const DatosdeVenta = () => {
     const [checkVal, setCheck] = useState(false);
 
     const toggleModal = (email, name, type, change_date, store, status, item, password) => {
-        console.log("c1",checkVal);
         setItem(item);
         setName(name);
         setStatus(status);
@@ -52,7 +51,6 @@ const DatosdeVenta = () => {
         setCheck(change_date);
         setPasswordC(password);
         setModal(!modal);
-        console.log("c2",checkVal);
     };
 
     const toggleModalCreate = () => {
@@ -96,7 +94,6 @@ const DatosdeVenta = () => {
         };
 
         if (name !== false && status !== false && email !== false && store !== false && typeUser !== false) {
-            console.log(createItem)
             userCreate(createItem).then(res => {
                 Swal.fire('Éxito', 'Usuario Ingresado', 'success');
                 ReloadData();
@@ -148,7 +145,6 @@ const DatosdeVenta = () => {
         };
 
         if (name !== false && status !== false && email !== false && store !== false && typeUser !== false) {
-            console.log(updateItem);
             userUpdate(updateItem).then(res => {
                 Swal.fire('Éxito', 'Usuario Actualizado', 'success');
                 ReloadData();
@@ -200,7 +196,6 @@ const DatosdeVenta = () => {
             )
 
         getStore().then((res) => {
-            console.log(res);
             var storeData = [];
             res.map(store => {
                 return storeData.push({ label: store.name, name: store.name });
@@ -256,7 +251,7 @@ const DatosdeVenta = () => {
                                     <th>Tipo Usuario</th>
                                     <th>Fecha variable</th>
                                     <th>Tienda</th>
-                                    <th>User</th>
+                                    <th>Estado</th>
                                     <th>Fecha Creacion</th>
                                     <th>Acciones</th>
                                 </tr>

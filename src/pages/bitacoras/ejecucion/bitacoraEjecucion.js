@@ -6,7 +6,7 @@ import CardHeader from '../../../components/CardHeader'
 import { binacleEjectionShow, createBinacleEjection } from '../../../functions/salesFunctions'
 import Tablebinnacle from './Tablebinnacle';
 import Pagination from '../../../components/pagination';
-import Loading from './img/loading.gif'
+import Loading from './img/loading.gif';
 import {
     MDBRow,
     MDBCol,
@@ -14,9 +14,8 @@ import {
     MDBTableBody,
     MDBTableHead,
     MDBInput,
-    Button
 } from 'mdbreact';
-
+import Button from '@material-ui/core/Button';
 
 
 const DatosEjecucion = () => {

@@ -4,7 +4,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
 import { retreatShowListHistory } from '../../../functions/retreatsFunction'
@@ -15,7 +14,6 @@ import {
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './listDebt';
-
 import Pagination from '../../../components/pagination';
 
 function a11yProps(index) {
@@ -50,23 +48,19 @@ const DatosdeVenta = () => {
     const [dataRetreatsAccepted, setdataRetreatsAccepted] = useState([]);
     const [dataRetreatsCancel, setdataRetreatsCancel] = useState([]);
     const [dataRetreatsDeneged, setdataRetreatsDeneged] = useState([]);
-
     const [currentPageAccepted, setCurrentPageAccepted] = useState(1);
     const [postsPerPageAccepted] = useState(80);
-
     const [currentPageCancel, setCurrentPageCancel] = useState(1);
     const [postsPerPageCancel] = useState(80);
-
     const [currentPageDeneged, setCurrentPageDeneged] = useState(1);
     const [postsPerPageDeneged] = useState(80);
-
     const [loading, setLoading] = useState(true);
     const [step, setStep] = useState(0);
-    
+
     const handleChangeSteps = (event, newValue) => {
         setStep(newValue);
     };
- 
+
     useEffect(() => {
         retreatShowListHistory(localStorage.getItem("store"),localStorage.getItem('type'))
             .then((res) =>{
@@ -82,7 +76,6 @@ const DatosdeVenta = () => {
          setdataRetreatsAccepted(data.acepted)
          setdataRetreatsCancel(data.cancel)
          setdataRetreatsDeneged(data.deneged)
-        
     };
 
     // Get current posts
@@ -193,7 +186,7 @@ const DatosdeVenta = () => {
                                     <th>Nombre</th>
                                     <th>Precio</th>
                                     <th>Descuento</th>
-                                    <th>Prefio final</th>
+                                    <th>Precio final</th>
                                     <th>Fecha de Creación</th>
                                     <th>Fecha de Actualización</th>
                                 </tr>

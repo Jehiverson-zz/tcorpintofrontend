@@ -7,7 +7,6 @@ export const retreatShow = (store, my_type,my_email) => {
     return axios
     .post(url + '/retreatsShow', {"store": store, "type":my_type, "email": my_email})
     .then((response) => {
-        console.log(response.data.showRetreatsInfo);
         return response.data.showRetreatsInfo;
     })
     .catch((error) => {
@@ -20,7 +19,6 @@ export const retreatShowList = (store) => {
     return axios
     .post(url + '/retreatsDebtShowList', {"store": store})
     .then((response) => {
-        console.log(response.data.showRetreatsInfo);
         return response.data.showRetreatsInfo;
     })
     .catch((error) => {
@@ -30,11 +28,9 @@ export const retreatShowList = (store) => {
 
 /*Muestra los datos de retiros Lista*/
 export const retreatShowListHistory = (store,type) => {
-    console.log("datos");
     return axios
     .post(url + '/retreatsDebtShowListHistory', {"store": store, "type": type})
     .then((response) => {
-        console.log(response.data);
         return response.data;
     })
     .catch((error) => {
@@ -47,7 +43,6 @@ export const retreatShowBinacleList = (collaborator) => {
     return axios
     .post(url + '/retreatsBinacleList', {"collaborator": collaborator})
     .then((response) => {
-        console.log(response)
         return response.data;
     })
     .catch((error) => {
@@ -68,7 +63,6 @@ export const retreatCreated = (data) => {
         }
     })
     .then((response) => {
-        console.log(response);
         var data = [];
         if(response.status === 200){
             data.push({status: "success", type: "Ingresado", message: "Retiro creado con éxito."});
@@ -97,20 +91,27 @@ export const retreatUpdate = (id, action) => {
 
 /*Actuliza los datos de retiros la deuda total*/
 export const retreatUpdateRemove = (datos) => {
-    console.log("entro");
     return axios
     .post(url + '/retreatsUpdateRove', {"datos": datos})
     .then((response) => {
-        console.log(response);
         return {message:response.data.message, type:response.data.type, tittle: response.data.tittle};
     })
     .catch((error) => {
-        console.log("1");
         console.log(error);
     })
 };
 
-
-
-
-
+/* Obtiene los datos de los retiros en un rango de fechas especificado*/
+export const getDataReportRetreats = (date_start, date_end, type, name=false) => {
+    let data = name?(
+        {name : name, role : localStorage.getItem("type"), type: type}
+    ) : ({ role : localStorage.getItem("type"), type: type})
+    return axios
+        .post(`${url}/retreats/report/${date_start}/${date_end}`, data)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}

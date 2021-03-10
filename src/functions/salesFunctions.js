@@ -69,7 +69,7 @@ export const confirmdataVendors = (vendors, vendorDescount, sale) => {
         message = ""
         status = true
     } else {
-        message = "Los datos ingresados no cuadran, datos de vendedores es: " + parseFloat(totalFinanVendors) + " y la venta ingresada es: " + sale
+        message = "Los datos ingresados no cuadran, datos de vendedores es: " + parseFloat(totalFinanVendors.toFixed(2)) + " y la venta ingresada es: " + sale;
         status = false
     }
     return { message: message, status: status }
@@ -281,10 +281,10 @@ export const deletebinacleEjection = async (id) => {
 }
 
 /* Obtiene los datos de venta diaria para el reporte*/
-export const getDataReportSales = (date_start, date_end, store=false) => {
-    let data = store !== null?(
-        {store : store, role : localStorage.getItem("type")}
-    ) : ({ role : localStorage.getItem("type")})
+export const getDataReportSales = (date_start, date_end, store = false) => {
+    let data = store !== null ? (
+        { store: store, role: localStorage.getItem("type") }
+    ) : ({ role: localStorage.getItem("type") })
     return axios
         .post(`${url}/sales/report/${date_start}/${date_end}`, data)
         .then((response) => {
@@ -296,10 +296,10 @@ export const getDataReportSales = (date_start, date_end, store=false) => {
 }
 
 /* Obtiene los datos de bitacora de ejecucion para el reporte*/
-export const getDataReportDailies = (date_start, date_end, store=null) => {
-    let data = store !== null?(
-        {store : store, role : localStorage.getItem("type")}
-    ) : ({ role : localStorage.getItem("type")})
+export const getDataReportDailies = (date_start, date_end, store = null) => {
+    let data = store !== null ? (
+        { store: store, role: localStorage.getItem("type") }
+    ) : ({ role: localStorage.getItem("type") })
     return axios
         .post(`${url}/binnacles_dailies/report/${date_start}/${date_end}`, data)
         .then((response) => {

@@ -4,6 +4,7 @@ import CurrencyFormat from 'react-currency-format';
 import Button from '@material-ui/core/Button';
 import Swal from 'sweetalert2';
 import { useHistory } from "react-router-dom";
+import { MDBIcon } from 'mdbreact'
 //Funciones
 import { deleteDataSales } from '../../../functions/salesFunctions'
 const Tablebinnacle = ({ posts, loading }) => {
@@ -48,7 +49,12 @@ const Tablebinnacle = ({ posts, loading }) => {
       }
     })
   };
-console.log("VENTA DIARIA",posts)
+
+  const sendUpdate = (id) => {
+    localStorage.setItem("idBinnacleSale", id);
+    history.push(`/bitacora_ventas_update`);
+  }
+
   return (
     posts.map((post, i) => (
       <tr key={i}>
@@ -58,7 +64,10 @@ console.log("VENTA DIARIA",posts)
         <td>{post.tienda}</td>
         <td>{dateFormat(post.fechaCreacion, 'dd/mm/yyyy')}</td>
         {localStorage.getItem('type') === 'admin' ? (
-        <td><Button variant="contained" color="primary" onClick={() => handleNext(post.id)}>x</Button></td>
+          <>
+            <td><Button variant="contained" color="primary" onClick={() => sendUpdate(post.id)}><MDBIcon icon='edit' /></Button></td>
+            <td><Button variant="contained" color="primary" onClick={() => handleNext(post.id)}><MDBIcon icon='calendar-times' /></Button></td>
+          </>
         ) : ''}
       </tr>
     ))

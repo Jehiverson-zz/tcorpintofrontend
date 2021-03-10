@@ -4,20 +4,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-
 import Layaout from '../../parcials/Layaout';
 import CardHeader from '../../../components/CardHeader'
 import { retreatShowListHistory } from '../../../functions/retreatsFunction'
 import Loading from './img/loading.gif'
-import ReactExport from "react-export-excel";
 import {
     MDBTable,
     MDBTableBody,
     MDBTableHead
 } from 'mdbreact';
 import Tablebinnacle from './listDebt';
-
 import Pagination from '../../../components/pagination';
 
 function a11yProps(index) {
@@ -60,18 +56,11 @@ const DatosdeVenta = () => {
     const [postsPerPageDeneged] = useState(80);
     const [loading, setLoading] = useState(true);
     const [step, setStep] = useState(0);
-    const ExcelFile = ReactExport.ExcelFile;
-    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-    const date = new Date();
-    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
-    const filename_aceptados = `Retiros_Aceptados_${today}`;
-    const filename_denegados = `Retiros_Denegados_${today}`;
-    const filename_cancel = `Retiros_Cancelados_${today}`;
+
     const handleChangeSteps = (event, newValue) => {
         setStep(newValue);
     };
- 
+
     useEffect(() => {
         retreatShowListHistory(localStorage.getItem("store"),localStorage.getItem('type'))
             .then((res) =>{
@@ -87,7 +76,6 @@ const DatosdeVenta = () => {
          setdataRetreatsAccepted(data.acepted)
          setdataRetreatsCancel(data.cancel)
          setdataRetreatsDeneged(data.deneged)
-        
     };
 
     // Get current posts
@@ -140,22 +128,6 @@ const DatosdeVenta = () => {
 
                 <TabPanel value={step} index={0}>
                     <CardHeader title="Historial Aceptados" icon="ticket-alt">
-                        {
-                            currentPostsAccepted.length > 0 && (
-                                <div align="right">
-                                    <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename_aceptados}>
-                                        <ExcelSheet data={currentPostsAccepted} name={filename_aceptados}>
-                                            <ExcelColumn label="Nombre" value="name"/>
-                                            <ExcelColumn label="Precio" value="price"/>
-                                            <ExcelColumn label="Descuento" value="total_debt"/>
-                                            <ExcelColumn label="Precio Final" value="price_f"/>
-                                            <ExcelColumn label="Fecha Creación" value="date_created"/>
-                                            <ExcelColumn label="Fecha Actualización" value="update_created"/>
-                                        </ExcelSheet>
-                                    </ExcelFile>
-                                </div>
-                            )
-                        }
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>
@@ -182,22 +154,6 @@ const DatosdeVenta = () => {
                 </TabPanel>
                 <TabPanel value={step} index={1}>
                     <CardHeader title="Historial Denegados" icon="ticket-alt">
-                    {
-                        currentPostsDeneged.length > 0 && (
-                            <div align="right">
-                                <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename_denegados}>
-                                    <ExcelSheet data={currentPostsDeneged} name={filename_denegados}>
-                                        <ExcelColumn label="Nombre" value="name"/>
-                                        <ExcelColumn label="Precio" value="price"/>
-                                        <ExcelColumn label="Descuento" value="total_debt"/>
-                                        <ExcelColumn label="Precio Final" value="price_f"/>
-                                        <ExcelColumn label="Fecha Creación" value="date_created"/>
-                                        <ExcelColumn label="Fecha Actualización" value="update_created"/>
-                                    </ExcelSheet>
-                                </ExcelFile>
-                            </div>
-                        )
-                    }
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>
@@ -224,22 +180,6 @@ const DatosdeVenta = () => {
                 </TabPanel>
                 <TabPanel value={step} index={2}>
                     <CardHeader title="Historial Cancelados" icon="ticket-alt">
-                    {
-                        currentPostsCancel.length > 0 && (
-                            <div align="right">
-                                <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename_cancel}>
-                                    <ExcelSheet data={currentPostsCancel} name={filename_cancel}>
-                                        <ExcelColumn label="Nombre" value="name"/>
-                                        <ExcelColumn label="Precio" value="price"/>
-                                        <ExcelColumn label="Descuento" value="total_debt"/>
-                                        <ExcelColumn label="Precio Final" value="price_f"/>
-                                        <ExcelColumn label="Fecha Creación" value="date_created"/>
-                                        <ExcelColumn label="Fecha Actualización" value="update_created"/>
-                                    </ExcelSheet>
-                                </ExcelFile>
-                            </div>
-                        )
-                    }
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 import {
-    MDBEdgeHeader,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -20,14 +19,14 @@ const Landing = () => {
     if (localStorage.getItem('session') !== "true") {
         history.push(`/`);
     }
-	
-	  if (localStorage.getItem('type') !== "admin") {
+
+    if (localStorage.getItem('type') !== "admin") {
         history.push(`/retreats`);
     }
 
     return (
         <Layaout>
-            
+
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>
@@ -43,6 +42,8 @@ const Landing = () => {
                                     <MenuLink to='/usersList' title='Usuario' />
                                     <MenuLink to='/subsidiarias' title='Subsidiarias' />
                                     <MenuLink to='/stores' title='Tiendas' />
+                                    <MenuLink to='/emails' title='Emails de correos' />
+                                    <MenuLink to='/temmplates' title='Plantillas' />
                                 </ul>
                             </MDBJumbotron>
                         </MDBCol>

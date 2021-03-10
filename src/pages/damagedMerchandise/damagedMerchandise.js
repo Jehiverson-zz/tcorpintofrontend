@@ -9,7 +9,6 @@ import {
 import Pagination from '../../components/pagination';
 import TableDamaged from './TableDamaged';
 import Button from '@material-ui/core/Button';
-import ReactExport from "react-export-excel";
 import {
     MDBRow,
     MDBCol,
@@ -43,12 +42,6 @@ const DamagedMerchandise = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
-    const ExcelFile = ReactExport.ExcelFile;
-    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-    const date = new Date();
-    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
-    const filename = `Mercaderia_Dañada${today}`;
 
     useEffect(() => {
         damaged_merchandise();
@@ -99,7 +92,6 @@ const DamagedMerchandise = () => {
             }
         })
         if (cont === 0) {
-            console.log(fields);
             storeDamagedMerchandise(fields)
                 .then(response => {
                     result_function('success', 'Registro almecenado exitosamente')
@@ -164,24 +156,6 @@ const DamagedMerchandise = () => {
             </CardHeader>
             <br></br>
             <MDBContainer>
-                {
-                    currentPosts.length > 0 && (
-                        <div align="right">
-                            <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename}>
-                                <ExcelSheet data={dataDamaged} name={filename}>
-                                    <ExcelColumn label="Daño" value="damage"/>
-                                    <ExcelColumn label="UPC" value="upc"/>
-                                    <ExcelColumn label="ALU" value="alu"/>
-                                    <ExcelColumn label="TALLA" value="siz"/>
-                                    <ExcelColumn label="Precio" value="price"/>
-                                    <ExcelColumn label="Tienda" value="store_created"/>
-                                    <ExcelColumn label="Fecha Creación" value="timestamp"/>
-                                    <ExcelColumn label="Imagen" value="image" />
-                                </ExcelSheet>
-                            </ExcelFile>
-                        </div>
-                    )
-                }
                 <MDBTable id="tableDamagedMerchandise">
                     <MDBTableHead>
                         <tr>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    MDBEdgeHeader,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -15,7 +14,7 @@ const CertificatesPage = () => {
 
     return (
         <Layaout>
-            
+
             <MDBAnimation type='zoomIn' duration='500ms'>
                 <MDBContainer>
                     <MDBRow>
@@ -26,11 +25,11 @@ const CertificatesPage = () => {
                                     Certificados
                                 </h1>
                                 <ul className='list-unstyled example-components-list'>
-                                {
-                                    localStorage.getItem('type') === 'admin' &&(
-                                        <MenuLink to='/certificate/new_certificate' title='Nuevo Certificado' />
-                                    )
-                                }
+                                    {
+                                        localStorage.getItem('type') === 'admin' && (
+                                            <MenuLink to='/certificate/new_certificate' title='Nuevo Certificado' />
+                                        )
+                                    }
                                     <MenuLink to='/certificate/redeem_certificate' title='Canjear Certificado' />
                                     <MenuLink to='/certificate/history' title='Historico de Certificado' />
                                 </ul>

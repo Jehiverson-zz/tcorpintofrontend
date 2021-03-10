@@ -15,12 +15,10 @@ const Tablebinnacle = ({ posts, loading }) => {
   }
 
   const handleNext = (name) => {
-    console.log("col:", name)
     localStorage.setItem('collaborator', name);
     history.push('/retreats_bitacoras');
   };
 
-  console.log(posts);
   return (
     <>
     {posts.map((post, i) => (

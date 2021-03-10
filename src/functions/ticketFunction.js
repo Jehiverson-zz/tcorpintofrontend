@@ -72,7 +72,6 @@ export const getAllTicketsSystemTransfer = (status) => {
 /* Obtiene la data de movimientos de tikets entre tiendas (de la tienda registrada)*/
 export const getTicketsSystemTransferCreated = () => {
     const data = {store : localStorage.getItem("store"), subs: localStorage.getItem("subsidiaria")}
-    console.log(data)
     return axios
         .post(`${url}/tickets/transfer_created`, data)
         .then((response) => {

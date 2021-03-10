@@ -10,7 +10,6 @@ import {
     inactivateTicket,
     completeTicket
 } from '../../../functions/ticketFunction';
-import { getOneStore } from '../../../functions/settingsFunction';
 import Pagination from '../../../components/pagination';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -36,7 +35,7 @@ import {
     MDBModalHeader,
     MDBModalFooter
 } from 'mdbreact';
-import { FaRegPaperPlane, FaStoreAlt, FaCheckDouble,FaBan } from 'react-icons/fa'
+import { FaRegPaperPlane, FaStoreAlt, FaCheckDouble, FaBan } from 'react-icons/fa'
 import Select from 'react-select';
 import Swal from 'sweetalert2';
 
@@ -97,10 +96,33 @@ const TransferSystemPage = () => {
     const [postsPerPage] = useState(6);
 
     useEffect(() => {
+        function stores() {
+            let storesList = [];
+            getStoreActives().then((resp) => resp.map(x => {
+                if (x.sbs === my_subs) {
+                    storesList.push({ value: x.name, label: x.name })
+                    return setdataStores(storesList)
+                }
+                return null;
+            }));
+        }
+
+        function tickets_created() {
+            getTicketsSystemTransferCreated()
+                .then((res) => setdataTicketsCreated(res))
+                .catch((error) => result_function('error', 'No se pueden cargar los datos'));
+        }
+
+        function tickets_asigned() {
+            getTicketsSystemTransferAssigned()
+                .then((res) => setdataTicketsAssigned(res))
+                .catch((error) => result_function('error', 'No se pueden cargar los datos'));
+        }
+
         stores();
         tickets_created();
         tickets_asigned();
-    }, [0])
+    }, [my_subs])
 
     function result_function(icon, text) {
         Toast.fire({
@@ -109,26 +131,16 @@ const TransferSystemPage = () => {
         })
     }
 
-    function stores() {
-        let storesList = [];
-        getStoreActives().then((resp) => resp.map(x => {
-            if(x.sbs == my_subs){
-                storesList.push({ value: x.name, label: x.name })
-                setdataStores(storesList)
-            }
-        }));
-    }
-
     function tickets_created() {
         getTicketsSystemTransferCreated()
-        .then((res) => setdataTicketsCreated(res))
-        .catch((error)=> result_function('error','No se pueden cargar los datos'));
+            .then((res) => setdataTicketsCreated(res))
+            .catch((error) => result_function('error', 'No se pueden cargar los datos'));
     }
 
     function tickets_asigned() {
         getTicketsSystemTransferAssigned()
-        .then((res) => setdataTicketsAssigned(res))
-        .catch((error)=> result_function('error','No se pueden cargar los datos'));
+            .then((res) => setdataTicketsAssigned(res))
+            .catch((error) => result_function('error', 'No se pueden cargar los datos'));
     }
 
     function crearTicket() {
@@ -150,7 +162,7 @@ const TransferSystemPage = () => {
                 result_function('error', 'Ingresa un número de FACTURA');
                 cont++;
                 return true;
-            }else{
+            } else {
                 return false;
             }
         })
@@ -178,18 +190,18 @@ const TransferSystemPage = () => {
             tickets_asigned();
             result_function('success', res.data.message);
         }).catch((err) => {
-            result_function('error','Error al eliminar el ticket')
+            result_function('error', 'Error al eliminar el ticket')
         })
     }
 
     function completarTicket(id) {
-        completeTicket(id,retailn[0]).then((res) => {
+        completeTicket(id, retailn[0]).then((res) => {
             tickets_created();
             tickets_asigned();
             result_function('success', res.data.message);
             setshowModal(false);
         }).catch((err) => {
-            result_function('error','Error al completar el ticket');
+            result_function('error', 'Error al completar el ticket');
         })
     }
 
@@ -205,8 +217,8 @@ const TransferSystemPage = () => {
         setFields(values);
     }
 
-    function handleChangeRetailn(e){
-        setRetailn([{retailn: e.target.value}]);
+    function handleChangeRetailn(e) {
+        setRetailn([{ retailn: e.target.value }]);
     }
 
     function handleAdd() {
@@ -241,12 +253,11 @@ const TransferSystemPage = () => {
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    function toggle(id=0) {
+    function toggle(id = 0) {
         let mostrar = !showModal;
         setidticket(id)
-        console.log(mostrar, idticket);
         setshowModal(mostrar);
-      }
+    }
 
     return (
         <Layaout>
@@ -287,7 +298,7 @@ const TransferSystemPage = () => {
                 })}
                 <MDBRow className="center-element">
                     <Button variant="outlined" color='primary' onClick={() => handleAdd()}><MDBIcon icon="plus" />  Agregar</Button>
-                    <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={() => crearTicket()}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
+                    <Button variant="outlined" style={{ color: "#4caf50", marginLeft: "10px" }} onClick={() => crearTicket()}><span><MDBIcon icon='ticket-alt' />  Crear Ticket</span></Button>
                 </MDBRow>
             </CardHeader>
             <br></br>
@@ -321,40 +332,40 @@ const TransferSystemPage = () => {
                                                         <MDBCardTitle> <span><FaStoreAlt /> {data.store_asigned}</span>
                                                             <MDBBtn className="float-right" size="sm" color='danger' onClick={() => removeTicket(data._id)}>X</MDBBtn>
                                                         </MDBCardTitle>
-                                                            <MDBTable small>
-                                                                <MDBTableHead>
-                                                                    <tr>
-                                                                        <th>No.</th>
-                                                                        <th>UPC</th>
-                                                                        <th>ALU</th>
-                                                                        <th>TALLA</th>
-                                                                        <th>FACTURA</th>
-                                                                    </tr>
-                                                                </MDBTableHead>
-                                                                <MDBTableBody>
-                                                                    {
-                                                                        data.product.length > 0 && (
-                                                                            data.product.map((prod) => {
-                                                                                orden++;
-                                                                                return (
-                                                                                    <tr key={prod._id}>
-                                                                                        <td>{orden}</td>
-                                                                                        <td>{prod.upc}</td>
-                                                                                        <td>{prod.alu}</td>
-                                                                                        <td>{prod.siz || prod.size}</td>
-                                                                                        <td>{data.fact || prod.bill}</td>
-                                                                                    </tr>
-                                                                                )
-                                                                            })
-                                                                        )
-                                                                    }
-                                                                </MDBTableBody>
-                                                            </MDBTable>
+                                                        <MDBTable small>
+                                                            <MDBTableHead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>UPC</th>
+                                                                    <th>ALU</th>
+                                                                    <th>TALLA</th>
+                                                                    <th>FACTURA</th>
+                                                                </tr>
+                                                            </MDBTableHead>
+                                                            <MDBTableBody>
+                                                                {
+                                                                    data.product.length > 0 && (
+                                                                        data.product.map((prod) => {
+                                                                            orden++;
+                                                                            return (
+                                                                                <tr key={prod._id}>
+                                                                                    <td>{orden}</td>
+                                                                                    <td>{prod.upc}</td>
+                                                                                    <td>{prod.alu}</td>
+                                                                                    <td>{prod.siz || prod.size}</td>
+                                                                                    <td>{data.fact || prod.bill}</td>
+                                                                                </tr>
+                                                                            )
+                                                                        })
+                                                                    )
+                                                                }
+                                                            </MDBTableBody>
+                                                        </MDBTable>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }else{ return '' }
+                                    } else { return '' }
                                 })
                             )
                                 : (
@@ -393,39 +404,39 @@ const TransferSystemPage = () => {
                                                                 <FaRegPaperPlane style={{ fontSize: '15px' }} />
                                                             </MDBBtn>
                                                         </MDBCardTitle>
-                                                            <MDBTable small>
-                                                                <MDBTableHead>
-                                                                    <tr>
-                                                                        <th>No.</th>
-                                                                        <th>UPC</th>
-                                                                        <th>ALU</th>
-                                                                        <th>TALLA</th>
-                                                                        <th>FACTURA</th>
-                                                                    </tr>
-                                                                </MDBTableHead>
-                                                                                <MDBTableBody>
+                                                        <MDBTable small>
+                                                            <MDBTableHead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>UPC</th>
+                                                                    <th>ALU</th>
+                                                                    <th>TALLA</th>
+                                                                    <th>FACTURA</th>
+                                                                </tr>
+                                                            </MDBTableHead>
+                                                            <MDBTableBody>
                                                                 {
                                                                     data.product.length > 0 && (
                                                                         data.product.map((prod) => {
                                                                             orden++;
                                                                             return (
-                                                                                    <tr key={prod._id}>
-                                                                                        <td>{orden}</td>
-                                                                                        <td>{prod.upc}</td>
-                                                                                        <td>{prod.alu}</td>
-                                                                                        <td>{prod.siz || prod.size}</td>
-                                                                                        <td>{data.fact || prod.bill}</td>
-                                                                                    </tr>
+                                                                                <tr key={prod._id}>
+                                                                                    <td>{orden}</td>
+                                                                                    <td>{prod.upc}</td>
+                                                                                    <td>{prod.alu}</td>
+                                                                                    <td>{prod.siz || prod.size}</td>
+                                                                                    <td>{data.fact || prod.bill}</td>
+                                                                                </tr>
                                                                             )
                                                                         })
                                                                     )}
-                                                                                </MDBTableBody>
-                                                            </MDBTable>
+                                                            </MDBTableBody>
+                                                        </MDBTable>
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
                                         )
-                                    }else{ return '' }
+                                    } else { return '' }
                                 })
                             )
                                 :
@@ -456,7 +467,7 @@ const TransferSystemPage = () => {
                     </MDBModalBody>
                     <MDBModalFooter>
                         <Button variant="outlined" color='secondary' onClick={() => toggle()}><span><FaBan />  Cancelar</span></Button>
-                        <Button variant="outlined" style={{color: "#4caf50", marginLeft: "10px"}} onClick={() => completarTicket(idticket)}><span><FaCheckDouble />  Completar</span></Button>
+                        <Button variant="outlined" style={{ color: "#4caf50", marginLeft: "10px" }} onClick={() => completarTicket(idticket)}><span><FaCheckDouble />  Completar</span></Button>
                     </MDBModalFooter>
                 </MDBModal>
             </MDBContainer>

@@ -22,8 +22,6 @@ import {
 import Select from 'react-select';
 import Loading from '../bitacoras/ventadiaria/img/loading.gif'
 import Pagination from '../../components/pagination';
-import Button from '@material-ui/core/Button';
-import ReactExport from "react-export-excel";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -60,13 +58,6 @@ const HistoryCertificate = () => {
     const [stores, setStores] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(51);
-    const ExcelFile = ReactExport.ExcelFile;
-    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-    const date = new Date();
-    const today = `${date.getDate()}_${(date.getMonth() +1)}_${date.getFullYear()}`;
-    const filename_act = `Certificados_Activos_${today}`;
-    const filename_inact = `Certificados_Inactivos_${today}`;
     const default_store = { value: status.status, label: status.status };
     const handleChange2 = (event, newValue) => {
         setValue(newValue);
@@ -111,7 +102,7 @@ const HistoryCertificate = () => {
     useEffect(() => {
         getAllData(status.status);
         getAllStore();
-    }, [])
+    }, [status])
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -137,39 +128,15 @@ const HistoryCertificate = () => {
             </AppBar>
             <TabPanel value={value} index={0}>
                 {
-                    localStorage.getItem('type') == 'admin' && (
+                    localStorage.getItem('type') === 'admin' && (
                         <MDBRow className="center-element">
-                            <MDBCol md='3'>
+                            <MDBCol md='4'>
                                 <label>Selecciona una tienda</label>
                                 <Select
                                     onChange={e => handleChangeFilter(e)}
                                     defaultValue={default_store}
                                     options={stores}
                                 />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                            {
-                                currentPosts.length > 0 && (
-                                    <div align="right" style={{marginTop: "30px"}}>
-                                        <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename_act}>
-                                            <ExcelSheet data={currentPosts} name={filename_act}>
-                                                <ExcelColumn label="No. Certificado" value="no_cer"/>
-                                                <ExcelColumn label="Nombre" value="name_cer"/>
-                                                <ExcelColumn label="Valor" value="val_cer"/>
-                                                <ExcelColumn label="Fecha Emisión" value="date_start_cer"/>
-                                                <ExcelColumn label="Fecha Vencimiento" value="date_end_cer"/>
-                                                <ExcelColumn label="Observaciones" value="obs_cer"/>
-                                                <ExcelColumn label="Meatpack" value="meatpack"/>
-                                                <ExcelColumn label="Sperry" value="sperry"/>
-                                                <ExcelColumn label="Quiksilver" value="quiksilver"/>
-                                                <ExcelColumn label="Guess" value="guess"/>
-                                                <ExcelColumn label="Cole Haan" value="colehaan"/>
-                                                <ExcelColumn label="Diesel" value="diesel"/>
-                                            </ExcelSheet>
-                                        </ExcelFile>
-                                    </div>
-                                )
-                            }
                             </MDBCol>
                         </MDBRow>
                     )
@@ -217,39 +184,15 @@ const HistoryCertificate = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 {
-                    localStorage.getItem('type') == 'admin' && (
+                    localStorage.getItem('type') === 'admin' && (
                         <MDBRow className="center-element">
-                            <MDBCol md='3' >
+                            <MDBCol md='4' >
                                 <label>Selecciona una tienda</label>
                                 <Select
                                     onChange={e => handleChangeFilter(e)}
                                     defaultValue={default_store}
                                     options={stores}
                                 />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                            {
-                                currentPosts2.length > 0 && (
-                                    <div align="right" style={{marginTop: "30px"}}>
-                                        <ExcelFile element={<Button className="btn btn-success text-white">Exportar a Excel</Button>} filename={filename_inact}>
-                                            <ExcelSheet data={currentPosts} name={filename_inact}>
-                                                <ExcelColumn label="No. Certificado" value="no_cer"/>
-                                                <ExcelColumn label="Nombre" value="name_cer"/>
-                                                <ExcelColumn label="Valor" value="val_cer"/>
-                                                <ExcelColumn label="Fecha Emisión" value="date_start_cer"/>
-                                                <ExcelColumn label="Fecha Vencimiento" value="date_end_cer"/>
-                                                <ExcelColumn label="Observaciones" value="obs_cer"/>
-                                                <ExcelColumn label="Meatpack" value="meatpack"/>
-                                                <ExcelColumn label="Sperry" value="sperry"/>
-                                                <ExcelColumn label="Quiksilver" value="quiksilver"/>
-                                                <ExcelColumn label="Guess" value="guess"/>
-                                                <ExcelColumn label="Cole Haan" value="colehaan"/>
-                                                <ExcelColumn label="Diesel" value="diesel"/>
-                                            </ExcelSheet>
-                                        </ExcelFile>
-                                    </div>
-                                )
-                            }
                             </MDBCol>
                         </MDBRow>
                     )

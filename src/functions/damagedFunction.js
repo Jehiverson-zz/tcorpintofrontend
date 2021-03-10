@@ -7,7 +7,6 @@ export const storeDamagedMerchandise = (data) => {
     let formData = new FormData();
     formData.append('file',data[0].image);
     formData.append('data',JSON.stringify(data[0]));
-    console.log("FORMADATA",formData);
     return axios
         .post(`${url}/damaged_merchandise/create`, formData,{
             headers:{

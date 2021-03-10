@@ -45,7 +45,6 @@ export const exchangeCertificate = (id,data) => {
     return axios
         .put(`${url}/certificate/exchange`, { id: id ,store:store, data: data})
         .then((response) => {
-            console.log(response)
             return response;
         })
         .catch((error) => {
@@ -58,7 +57,6 @@ export const getDataReportCertificates = (date_start, date_end) => {
     return axios
         .post(`${url}/certificates/report/${date_start}/${date_end}`)
         .then((response) => {
-            console.log(response)
             return response;
         })
         .catch((error) => {

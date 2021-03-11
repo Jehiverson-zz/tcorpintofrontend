@@ -8,6 +8,10 @@ import {
     MDBTable,
     MDBTableBody,
     MDBTableHead,
+    MDBRow,
+    MDBCol,
+    MDBInput,
+    MDBBtn
 } from 'mdbreact';
 import Tablebinnacle from './Tablebinnacle';
 import Pagination from '../../../components/pagination';
@@ -19,18 +23,12 @@ const DatosdeVenta = () => {
     const [postsPerPage] = useState(20);
     const [loading, setLoading] = useState(true);
 
+    const dateDefault = new Date();
+    const formatDefault = dateDefault.getFullYear() + "-" + ((dateDefault.getMonth() + 1) > 9 ? (dateDefault.getMonth() + 1) : "0" + (dateDefault.getMonth() + 1)) + "-" + dateDefault.getDate();
+    const [startDate, setStartDate] = useState(formatDefault);
+
     useEffect(() => {
-        let data = { store: localStorage.getItem('store'), type: localStorage.getItem('type') }
-        salesShow(data)
-            .then((res) => {
-                setLoading(false)
-                setDataSales(res)
-            }
-            )
-            .catch(err =>
-                console.log(err),
-                //setLoading(true)
-            )
+        handleSearch();
     }, [])
 
     // Get current posts
@@ -45,6 +43,20 @@ const DatosdeVenta = () => {
         history.push(`/`);
     }
 
+    const handleSearch = () => {
+        console.log(startDate);
+        let data = { store: localStorage.getItem('store'), type: localStorage.getItem('type'), dateStart: startDate }
+        salesShow(data)
+            .then((res) => {
+                setLoading(false)
+                setDataSales(res)
+            }
+            )
+            .catch(err =>
+                console.log(err)
+            )
+    }
+
     return (
         <Layaout>
             { loading ?
@@ -57,7 +69,21 @@ const DatosdeVenta = () => {
                 <>
                     <br></br>
                     <CardHeader title="Datos de venta" icon="ticket-alt">
-
+                        <center>
+                            <MDBRow>
+                                <MDBCol md='6' style={{ marginTop: "26px" }}>
+                                    <MDBInput
+                                        type='date'
+                                        className="form-control"
+                                        value={startDate}
+                                        onChange={e => setStartDate(e.target.value)}
+                                    />
+                                </MDBCol>
+                                <MDBCol md='6' style={{ marginTop: "26px" }}>
+                                    <MDBBtn color="light-blue" onClick={() => handleSearch()}>Buscar</MDBBtn>
+                                </MDBCol>
+                            </MDBRow>
+                        </center>
                         <MDBTable>
                             <MDBTableHead>
                                 <tr>

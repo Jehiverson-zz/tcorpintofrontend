@@ -84,6 +84,7 @@ const DatosdeventaUpdate = () => {
     const datosVentas = async (datos) => {
         await salesShowById(datos)
             .then((res) => {
+                console.log(res[0].date_created);
                 setdataSales([{
                     id: res[0]._id,
                     venta_diaria: res[0].sale_daily,

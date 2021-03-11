@@ -35,7 +35,7 @@ const DatosdeVenta = () => {
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = dataSales.slice(indexOfFirstPost, indexOfLastPost);
-
+    console.log(dataSales)
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 

@@ -17,7 +17,7 @@ import Select from 'react-select';
 import dateFormat from 'dateformat'
 import ReactExport from "react-export-excel";
 import { getDamagedMerchandiseReport } from "../../functions/damagedFunction"
-import { getDataReportSales, getDataReportDailies } from "../../functions/salesFunctions"
+import { getDataReportSales, getDataReportSalesPaymentMethods, getDataReportDailies } from "../../functions/salesFunctions"
 import { getStoreActives, getDataReportTickets } from "../../functions/ticketFunction";
 import { getDataReportCertificates } from "../../functions/certificateFunction";
 import { getDataReportRetreats } from "../../functions/retreatsFunction";
@@ -33,12 +33,14 @@ const Reports = () => {
     const my_store = localStorage.getItem("store");
     const my_role = localStorage.getItem("type");
     const my_name = localStorage.getItem("name");
-    const date_init = date.toLocaleDateString().replace("/", "-").replace("/", "-");
+    const date_split = date.toISOString().split("T");
+    const date_init = date_split[0];
     const [dataStores, setDataStores] = useState([]);
     const [dataCollaborators, setDataCollaborators] = useState([]);
     const [dataUsers, setDataUsers] = useState([]);
     const [dataBinacleEjection, setDataBinacleEjection] = useState([]);
     const [dataBinacleSales, setDataBinacleSales] = useState([]);
+    const [dataPaymentMethods, setDataPaymentMethods] = useState([]);
     const [dataTickets, setDataTickets] = useState([]);
     const [dataDamagedMerchandise, setDataDamagedMerchandise] = useState([]);
     const [dataCertificates, setDataCertificates] = useState([]);
@@ -46,7 +48,7 @@ const Reports = () => {
     const [data, setData] = useState([]);
     const [dateStart, setDateStart] = useState(date_init);
     const [dateEnd, setDateEnd] = useState(date_init);
-    const [dataStore, setDataStore] = useState(my_store);
+    const [dataStore, setDataStore] = useState(my_role=='admin'?'Todas':my_store);
     const [dataRetrat, setDataRetreat] = useState('Todos');
     const [dataCollaborator, setDataCollaborator] = useState('Todos');
     const [dataTicket, setDataTicket] = useState('Todos');
@@ -127,6 +129,9 @@ const Reports = () => {
         getDataReportSales(dateStart, dateEnd, my_store).then((res) => {
             setDataTickets(res.data.data);
         })
+        getDataReportSalesPaymentMethods(dateStart, dateEnd, my_store).then(res => {
+            setDataPaymentMethods(res.data.data)
+        })
         getDataReportTickets(dateStart, dateEnd, dataTicket, dataStore).then((res) => {
             setDataTickets(res.data.data);
         })
@@ -151,9 +156,6 @@ const Reports = () => {
     }
 
     const limpiar = () => {
-        setModel('');
-        setDateStart(date_init);
-        setDateEnd(date_init);
         setData([]);
         getData();
     }
@@ -163,8 +165,8 @@ const Reports = () => {
         let fecha_inicial = new Date(dateStart);
         let fecha_final = new Date(dateEnd);
 
-        if (fecha_inicial > fecha_limite && fecha_final > fecha_limite) {
-            if (fecha_inicial < fecha_final) {
+        if (fecha_inicial >= fecha_limite && fecha_final >= fecha_limite) {
+            if (fecha_inicial <= fecha_final) {
                 setLoadingButton(true);
                 switch (model) {
                     case 'bitacora':
@@ -187,6 +189,7 @@ const Reports = () => {
                             setData([{ export: true }]);
                             setLoadingButton(false);
                             if (res.data.data.length === 0) {
+                                console.log("DATA",res.data.data)
                                 Swal.fire({
                                     icon: 'info',
                                     title: 'No se encontraron datos'
@@ -249,8 +252,21 @@ const Reports = () => {
                             setLoadingButton(false);
                             let retiros = res.data.data.retiro === null || res.data.data.retiro.length === 0 ? 0 : res.data.data.retiro.length;
                             let debitos = res.data.data.retiro_debito === null || res.data.data.retiro_debito.length === 0 ? 0 : res.data.data.retiro_debito.length;
-                            console.log(res.data.data)
                             if (retiros === 0 && debitos === 0) {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'No se encontraron datos'
+                                })
+                                setData([]);
+                            }
+                        })
+                        break;
+                    case 'payment_methods':
+                        getDataReportSalesPaymentMethods(dateStart, dateEnd, dataStore).then(res => {
+                            setDataPaymentMethods(res.data.data);
+                            setData([{ export: true }]);
+                            setLoadingButton(false);
+                            if (res.data.data.length === 0) {
                                 Swal.fire({
                                     icon: 'info',
                                     title: 'No se encontraron datos'
@@ -281,7 +297,9 @@ const Reports = () => {
 
     if (dataStores) {
         if (my_role === "admin") {
-            stores.push({ value: 'Todas', label: 'Todas' })
+            if(model !== 'payment_methods'){
+                stores.push({ value: 'Todas', label: 'Todas' })
+            }
             dataStores.map(x => {
                 stores.push({ value: x.name, label: x.name });
                 return null;
@@ -301,6 +319,12 @@ const Reports = () => {
             collaborators.push({ value: my_name, label: my_name })
         }
     }
+    console.log({
+        data: data,
+        fecha_inicial: dateStart,
+        fecha_final: dateEnd,
+        tienda: dataStore
+    })
     return (
         <Layaout>
             { loading ?
@@ -539,7 +563,7 @@ const Reports = () => {
                                             <ExcelColumn label="ESTADO" value="status" />
                                             <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                             <ExcelColumn label="TIENDA RESEPTORA" value="store_asigned" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
+                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataTickets.entrega_inmediata != null ? dataTickets.entrega_inmediata : []} name={`Entregas_Inmediatas_${today}`}>
                                             <ExcelColumn label="No. FACTURA" value="fact" />
@@ -548,7 +572,7 @@ const Reports = () => {
                                             <ExcelColumn label="ESTADO" value="status" />
                                             <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                             <ExcelColumn label="TIENDA RESEPTORA" value="store_asigned" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
+                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataTickets.retiro_externo != null ? dataTickets.retiro_externo : []} name={`Reritos_Externos_${today}`}>
                                             <ExcelColumn label="No. FACTURA" value="inv_val" />
@@ -556,14 +580,14 @@ const Reports = () => {
                                             <ExcelColumn label="PERSONA QUE AUTORIZA" value="person_authorizing" />
                                             <ExcelColumn label="PRODUCTO" value={row => `${row.product.map(x => `UPC:${x.upc} ALU:${x.alu} TALLA:${x.siz}`)}`} />
                                             <ExcelColumn label="ESTADO" value="status" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
+                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataTickets.tickets_fotografia != null ? dataTickets.tickets_fotografia : []} name={`Tickets_Fotogrfía_${today}`}>
                                             <ExcelColumn label="PERSONA QUE RETRIA" value="caurier" />
                                             <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                             <ExcelColumn label="PRODUCTO" value={row => `${row.product.map(x => `UPC:${x.upc} ALU:${x.alu} TALLA:${x.siz}`)}`} />
                                             <ExcelColumn label="ESTADO" value="status" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
+                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
                                         </ExcelSheet>
                                     </ExcelFile>
                                 )
@@ -620,6 +644,38 @@ const Reports = () => {
                                         </ExcelSheet>
                                     </ExcelFile>
                                 ) : null
+                            ) : model === 'payment_methods' ? (
+                                <ExcelFile element={<Button className="btn text-white green" onClick={() => limpiar()}>Exportar a Excel</Button>} filename={`Metodos_Pago_${today}`}>
+                                    <ExcelSheet data={dataPaymentMethods} name={`Metodos_Pago_${today}`}>
+                                        <ExcelColumn label="VENTA DEL DÍA" value="sale_daily" />
+                                        <ExcelColumn label="EFECTIVO EN QUETZALES" value="cash_quetzales" />
+                                        <ExcelColumn label="EFECTIVO EN DOLARES (QUETZALES)" value="cash_dolares" />
+                                        <ExcelColumn label="CREDOMATIC" value="credomatic" />
+                                        <ExcelColumn label="VISA" value="visa" />
+                                        <ExcelColumn label="VISA ONLINE" value="visaOnline" />
+                                        <ExcelColumn label="VISA DOLARES" value="visaDolares" />
+                                        <ExcelColumn label="MASTER CARD" value="masterCard" />
+                                        <ExcelColumn label="CREDI CUOTAS" value="crediCuotas" />
+                                        <ExcelColumn label="VISA CUOTAS" value="visaCuotas" />
+                                        <ExcelColumn label="VALOR DE ENVÍO EFECTIVO" value="numb_send_cash_value" />
+                                        <ExcelColumn label="LIFE MILES NÚMERO" value="lifeMilesNum" />
+                                        <ExcelColumn label="LIFE MILES VALOR" value="lifeMilesVa" />
+                                        <ExcelColumn label="EXTENCIÓN IVA" value="extIva" />
+                                        <ExcelColumn label="LOYALTI" value="loyalty" />
+                                        <ExcelColumn label="GASTOS AUTORIZADOS" value="Authorized_Expenditure_v" />
+                                        <ExcelColumn label="RETIROS DE MERCADERÍA" value="retreats" />
+                                        <ExcelColumn label="VENTA EN LINEA" value="total_on" />
+                                        <ExcelColumn label="NOTA DE CREADITO" value="note_credit" />
+                                        <ExcelColumn label="FALTANTE" value="diff" />
+                                        <ExcelColumn label="CUADRE DE CAJA" value="box_square" />
+                                        <ExcelColumn label="DIFERENCIA" value="diference" />
+                                        <ExcelColumn label="VALOR CASHBACK" value="cashBackVa" />
+                                        <ExcelColumn label="GIFTCARD" value="giftcard" />
+                                        <ExcelColumn label="TIENDA" value="store_creat" />
+                                        <ExcelColumn label="ENCARGADO" value="manager" />
+                                        <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                    </ExcelSheet>
+                                </ExcelFile>
                             ) : null
                         )
                     }

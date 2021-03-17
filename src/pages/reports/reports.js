@@ -48,7 +48,7 @@ const Reports = () => {
     const [data, setData] = useState([]);
     const [dateStart, setDateStart] = useState(date_init);
     const [dateEnd, setDateEnd] = useState(date_init);
-    const [dataStore, setDataStore] = useState(my_role=='admin'?'Todas':my_store);
+    const [dataStore, setDataStore] = useState(my_role==='admin'?'Todas':my_store);
     const [dataRetrat, setDataRetreat] = useState('Todos');
     const [dataCollaborator, setDataCollaborator] = useState('Todos');
     const [dataTicket, setDataTicket] = useState('Todos');
@@ -461,7 +461,7 @@ const Reports = () => {
                                     <label>Tienda</label>
                                     <Select
                                         onChange={e => setDataStore(e.value === 'Todas' ? null : e.value)}
-                                        defaultValue={stores[0]}
+                                        defaultValue={stores[0].label === 'Todas'? stores[0]:{label: my_store, value: my_store}}
                                         options={stores}
                                     />
                                 </MDBCol>) : null
@@ -483,17 +483,17 @@ const Reports = () => {
                                         <ExcelColumn label="TALLA" value="siz" />
                                         <ExcelColumn label="PREIO" value="price" />
                                         <ExcelColumn label="TIENDA" value="store_created" />
-                                        <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                        <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                     </ExcelSheet>
                                 </ExcelFile>
                             ) : model === 'bitacora' ? (
                                 <ExcelFile element={<Button className="btn text-white green" onClick={() => limpiar()}>Exportar a Excel</Button>} filename={`Bitacora_Ejecución_${today}`}>
                                     <ExcelSheet data={dataBinacleEjection} name={`Bitacora_Ejecución_${today}`}>
+                                        <ExcelColumn label="TIENDA" value="store_created" />
                                         <ExcelColumn label="META" value="daily_goal" />
                                         <ExcelColumn label="AÑO ANTERIOR" value="year_before_sale" />
                                         <ExcelColumn label="VENDEDORES" value="vendor_number" />
-                                        <ExcelColumn label="FECHA" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
-                                        <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                        <ExcelColumn label="FECHA CREACIÓN" value="date_created" />
                                     </ExcelSheet>
                                 </ExcelFile>
                             ) : model === 'venta_diaria' ? (
@@ -503,7 +503,7 @@ const Reports = () => {
                                         <ExcelColumn label="META" value="metas" />
                                         <ExcelColumn label="ENCARGADO" value="manager" />
                                         <ExcelColumn label="TIENDA" value="tienda" />
-                                        <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.fechaCreacion, 'dd/mm/yyyy')} />
+                                        <ExcelColumn label="FECHA CREACIÓN" value="fechaCreacion" />
                                     </ExcelSheet>
                                 </ExcelFile>
                             ) : model === 'tickets' ? (
@@ -517,7 +517,7 @@ const Reports = () => {
                                                 <ExcelColumn label="ESTADO" value="status" />
                                                 <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                                 <ExcelColumn label="TIENDA RESEPTORA" value="store_asigned" />
-                                                <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                                <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                             </ExcelSheet>
                                         </ExcelFile>
                                     ) : dataTickets.entrega_inmediata !== null ? (
@@ -529,7 +529,7 @@ const Reports = () => {
                                                 <ExcelColumn label="ESTADO" value="status" />
                                                 <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                                 <ExcelColumn label="TIENDA RESEPTORA" value="store_asigned" />
-                                                <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                                <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                             </ExcelSheet>
                                         </ExcelFile>
                                     ) : dataTickets.retiro_externo !== null ? (
@@ -540,7 +540,7 @@ const Reports = () => {
                                                 <ExcelColumn label="PERSONA QUE AUTORIZA" value="person_authorizing" />
                                                 <ExcelColumn label="PRODUCTO" value={row => `${row.product.map(x => `UPC:${x.upc} ALU:${x.alu} TALLA:${x.siz}`)}`} />
                                                 <ExcelColumn label="ESTADO" value="status" />
-                                                <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                                <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                             </ExcelSheet>
                                         </ExcelFile>
                                     ) : dataTickets.tickets_fotografia !== null ? (
@@ -550,7 +550,7 @@ const Reports = () => {
                                                 <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                                 <ExcelColumn label="PRODUCTO" value={row => `${row.product.map(x => `UPC:${x.upc} ALU:${x.alu} TALLA:${x.siz}`)}`} />
                                                 <ExcelColumn label="ESTADO" value="status" />
-                                                <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                                <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                             </ExcelSheet>
                                         </ExcelFile>
                                     ) : null
@@ -563,7 +563,7 @@ const Reports = () => {
                                             <ExcelColumn label="ESTADO" value="status" />
                                             <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                             <ExcelColumn label="TIENDA RESEPTORA" value="store_asigned" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataTickets.entrega_inmediata != null ? dataTickets.entrega_inmediata : []} name={`Entregas_Inmediatas_${today}`}>
                                             <ExcelColumn label="No. FACTURA" value="fact" />
@@ -572,7 +572,7 @@ const Reports = () => {
                                             <ExcelColumn label="ESTADO" value="status" />
                                             <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                             <ExcelColumn label="TIENDA RESEPTORA" value="store_asigned" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataTickets.retiro_externo != null ? dataTickets.retiro_externo : []} name={`Reritos_Externos_${today}`}>
                                             <ExcelColumn label="No. FACTURA" value="inv_val" />
@@ -580,14 +580,14 @@ const Reports = () => {
                                             <ExcelColumn label="PERSONA QUE AUTORIZA" value="person_authorizing" />
                                             <ExcelColumn label="PRODUCTO" value={row => `${row.product.map(x => `UPC:${x.upc} ALU:${x.alu} TALLA:${x.siz}`)}`} />
                                             <ExcelColumn label="ESTADO" value="status" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataTickets.tickets_fotografia != null ? dataTickets.tickets_fotografia : []} name={`Tickets_Fotogrfía_${today}`}>
                                             <ExcelColumn label="PERSONA QUE RETRIA" value="caurier" />
                                             <ExcelColumn label="TIENDA CREADORA" value="store_created" />
                                             <ExcelColumn label="PRODUCTO" value={row => `${row.product.map(x => `UPC:${x.upc} ALU:${x.alu} TALLA:${x.siz}`)}`} />
                                             <ExcelColumn label="ESTADO" value="status" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                         </ExcelSheet>
                                     </ExcelFile>
                                 )
@@ -597,8 +597,8 @@ const Reports = () => {
                                         <ExcelColumn label="No. CERTIFICADO" value="no_cer" />
                                         <ExcelColumn label="NOMBRE" value="name_cer" />
                                         <ExcelColumn label="VALOR" value="val_cer" />
-                                        <ExcelColumn label="FECHA EMISIÓN" value={row => dateFormat(row.date_start_cer, 'dd/mm/yyyy')} />
-                                        <ExcelColumn label="FECHA VENCIMIENTO" value={row => dateFormat(row.date_end_cer, 'dd/mm/yyyy')} />
+                                        <ExcelColumn label="FECHA EMISIÓN" value="date_start_cer" />
+                                        <ExcelColumn label="FECHA VENCIMIENTO" value="date_end_cer" />
                                         <ExcelColumn label="OBSERVACIONES" value="obs_cer" />
                                         <ExcelColumn label="MEATPACK" value="meatpack" />
                                         <ExcelColumn label="SPERRY" value="sperry" />
@@ -606,7 +606,7 @@ const Reports = () => {
                                         <ExcelColumn label="GUESS" value="guess" />
                                         <ExcelColumn label="COLE HAAN" value="colehaan" />
                                         <ExcelColumn label="DIESEL" value="diesel" />
-                                        <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.timestamp, 'dd/mm/yyyy')} />
+                                        <ExcelColumn label="FECHA CREACIÓN" value="timestamp" />
                                     </ExcelSheet>
                                 </ExcelFile>
                             ) : model === 'retiros' ? (
@@ -617,7 +617,7 @@ const Reports = () => {
                                             <ExcelColumn label="PRECIO" value="price" />
                                             <ExcelColumn label="DESCUENTO" value="descount" />
                                             <ExcelColumn label="PRECIO FINAL" value="price_f" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="date_created" />
                                         </ExcelSheet>
                                     </ExcelFile>
                                 ) : dataRetreats.type === 'debitos' ? (
@@ -625,7 +625,7 @@ const Reports = () => {
                                         <ExcelSheet data={dataRetreats.retiro_debito} name={`Debitos_Retiros_${dataCollaborator}_${today}`}>
                                             <ExcelColumn label="NOMBRE" value="name" />
                                             <ExcelColumn label="DEUDA" value="total_debt" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="date_created" />
                                         </ExcelSheet>
                                     </ExcelFile>
                                 ) : dataRetreats.type === 'Todos' ? (
@@ -635,12 +635,12 @@ const Reports = () => {
                                             <ExcelColumn label="PRECIO" value="price" />
                                             <ExcelColumn label="DESCUENTO" value="descount" />
                                             <ExcelColumn label="PRECIO FINAL" value="price_f" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="date_created" />
                                         </ExcelSheet>
                                         <ExcelSheet data={dataRetreats.retiro_debito} name={`Debitos_Retiros_${dataCollaborator}_${today}`}>
                                             <ExcelColumn label="NOMBRE" value="name" />
                                             <ExcelColumn label="DEUDA" value="total_debt" />
-                                            <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                            <ExcelColumn label="FECHA CREACIÓN" value="date_created" />
                                         </ExcelSheet>
                                     </ExcelFile>
                                 ) : null
@@ -673,7 +673,7 @@ const Reports = () => {
                                         <ExcelColumn label="GIFTCARD" value="giftcard" />
                                         <ExcelColumn label="TIENDA" value="store_creat" />
                                         <ExcelColumn label="ENCARGADO" value="manager" />
-                                        <ExcelColumn label="FECHA CREACIÓN" value={row => dateFormat(row.date_created, 'dd/mm/yyyy')} />
+                                        <ExcelColumn label="FECHA CREACIÓN" value="date_created" />
                                     </ExcelSheet>
                                 </ExcelFile>
                             ) : null

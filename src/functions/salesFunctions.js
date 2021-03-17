@@ -298,7 +298,7 @@ export const getDataReportSales = (date_start, date_end, store = false) => {
 /* Obtiene los datos de metodos de pago de venta diaria para el reporte*/
 export const getDataReportSalesPaymentMethods = (date_start, date_end, store = false) => {
     let data = store !== null ? (
-        { store: store, role: localStorage.getItem("type") }
+        { store: store==='Todas'?localStorage.getItem('store'):store, role: localStorage.getItem("type") }
     ) : ({ role: localStorage.getItem("type") })
     return axios
         .post(`${url}/sales/payment_methods/report/${date_start}/${date_end}`, data)

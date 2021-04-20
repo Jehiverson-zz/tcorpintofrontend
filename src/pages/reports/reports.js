@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Redirect } from "react-router-dom";
 import {
     MDBRow,
     MDBCol,
@@ -33,6 +34,7 @@ const Reports = () => {
     const my_store = localStorage.getItem("store");
     const my_role = localStorage.getItem("type");
     const my_name = localStorage.getItem("name");
+    const session = localStorage.getItem("session");
     const date_split = date.toISOString().split("T");
     const date_init = date_split[0];
     const [dataStores, setDataStores] = useState([]);
@@ -87,22 +89,22 @@ const Reports = () => {
                 setDataUsers(res);
             });
             getDamagedMerchandiseReport(dateStart, dateEnd, my_store).then((res) => {
-                setDataDamagedMerchandise(res.data.data);
+                if(res.data) setDataDamagedMerchandise(res.data.data);
             })
             getDataReportDailies(dateStart, dateEnd, my_store).then((res) => {
-                setDataBinacleEjection(res.data.data);
+                if(res.data) setDataBinacleEjection(res.data.data);
             })
             getDataReportSales(dateStart, dateEnd, my_store).then((res) => {
-                setDataTickets(res.data.data);
+                if(res.data) setDataTickets(res.data.data);
             })
             getDataReportTickets(dateStart, dateEnd, dataTicket, dataStore).then((res) => {
-                setDataTickets(res.data.data);
+                if(res.data) setDataTickets(res.data.data);
             })
             getDataReportCertificates(dateStart, dateEnd).then((res) => {
-                setDataCertificates(res.data.data);
+                if(res.data) setDataCertificates(res.data.data);
             })
             getDataReportRetreats(dateStart, dateEnd, dataRetrat).then((res) => {
-                setdataRetreats(res.data.data);
+                if(res.data) setdataRetreats(res.data.data);
             })
             setLoading(false);
         }
@@ -113,34 +115,34 @@ const Reports = () => {
     const getData = () => {
         getStoreActives().then(res => {
             setDataStores(res);
-        });
+        }).catch(err => console.log(err) );
         CollaboratorShow().then(res => {
             setDataCollaborators(res);
-        });
+        }).catch(err => console.log(err) );
         userShow().then(res => {
             setDataUsers(res);
-        });
+        }).catch(err => console.log(err) );
         getDamagedMerchandiseReport(dateStart, dateEnd, my_store).then((res) => {
-            setDataDamagedMerchandise(res.data.data);
-        })
+            if(res.data) setDataDamagedMerchandise(res.data.data);
+        }).catch(err => console.log(err) );
         getDataReportDailies(dateStart, dateEnd, my_store).then((res) => {
-            setDataBinacleEjection(res.data.data);
-        })
+            if(res.data) setDataBinacleEjection(res.data.data);
+        }).catch(err => console.log(err) );
         getDataReportSales(dateStart, dateEnd, my_store).then((res) => {
-            setDataTickets(res.data.data);
-        })
+            if(res.data) setDataTickets(res.data.data);
+        }).catch(err => console.log(err) );
         getDataReportSalesPaymentMethods(dateStart, dateEnd, my_store).then(res => {
-            setDataPaymentMethods(res.data.data)
-        })
+            if(res.data) setDataPaymentMethods(res.data.data)
+        }).catch(err => console.log(err) );
         getDataReportTickets(dateStart, dateEnd, dataTicket, dataStore).then((res) => {
-            setDataTickets(res.data.data);
-        })
+            if(res.data) setDataTickets(res.data.data);
+        }).catch(err => console.log(err) );
         getDataReportCertificates(dateStart, dateEnd).then((res) => {
-            setDataCertificates(res.data.data);
-        })
+            if(res.data) setDataCertificates(res.data.data);
+        }).catch(err => console.log(err) );
         getDataReportRetreats(dateStart, dateEnd, dataRetrat).then((res) => {
-            setdataRetreats(res.data.data);
-        })
+            if(res.data) setdataRetreats(res.data.data);
+        }).catch(err => console.log(err) );
         setLoading(false);
     }
 
@@ -319,12 +321,11 @@ const Reports = () => {
             collaborators.push({ value: my_name, label: my_name })
         }
     }
-    console.log({
-        data: data,
-        fecha_inicial: dateStart,
-        fecha_final: dateEnd,
-        tienda: dataStore
-    })
+
+    if(!session){
+        return <Redirect path="/" />
+    }
+
     return (
         <Layaout>
             { loading ?

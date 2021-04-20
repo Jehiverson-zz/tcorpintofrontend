@@ -303,7 +303,6 @@ export const getDataReportSalesPaymentMethods = (date_start, date_end, store = f
     return axios
         .post(`${url}/sales/payment_methods/report/${date_start}/${date_end}`, data)
         .then((response) => {
-            console.log(response.data.data)
             return response;
         })
         .catch((error) => {
@@ -319,6 +318,7 @@ export const getDataReportDailies = (date_start, date_end, store = null) => {
     return axios
         .post(`${url}/binnacles_dailies/report/${date_start}/${date_end}`, data)
         .then((response) => {
+            console.log(response)
             return response;
         })
         .catch((error) => {

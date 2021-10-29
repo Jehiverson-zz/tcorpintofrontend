@@ -31,7 +31,7 @@ const StoreList = () => {
     const [modalCreate, setModalCreate] = useState(false);
 
 
-    const [setItem] = useState(false);
+    //const [item,setItem] = useState(false);
     const [name, setName] = useState(false);
     const [subsidiaria, setSubsidiaria] = useState(false);
     const [status, setStatus] = useState(false);
@@ -143,7 +143,7 @@ const StoreList = () => {
     }
 
     const falseData = () => {
-        setItem(false);
+        //setItem(false);
         setId(false);
         setName(false);
         setSubsidiaria(false);

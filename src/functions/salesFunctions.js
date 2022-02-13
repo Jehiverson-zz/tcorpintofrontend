@@ -1,5 +1,6 @@
 import axios from 'axios'
-
+import moment from 'moment-timezone';
+import momentAdd from 'moment';
 const url = process.env.REACT_APP_URL_BASE;
 
 /*Muestra los datos de venta buscados por _id*/
@@ -45,11 +46,10 @@ export const validDataSales = async (dateStart, storeStart, manager) => {
             return response.data
         })
         .catch((error) => {
-            console.error(error);
+            return error;
         })
 
 }
-
 
 /*Vlida los datos de vendedores*/
 export const confirmdataVendors = (vendors, vendorDescount, sale) => {

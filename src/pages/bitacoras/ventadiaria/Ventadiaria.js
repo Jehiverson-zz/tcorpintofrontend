@@ -18,6 +18,7 @@ import {
     MDBCard,
     MDBCardBody,
 } from 'mdbreact';
+import moment from 'moment-timezone';
 
 //componentes
 import Layaout from '../../parcials/Layaout';
@@ -110,7 +111,7 @@ const TransferSystemPage = () => {
         giftcard: 0,
         observaciones: "-",
     }]);
-    const [startDate, setStartDate] = useState(null);
+    const [startDate, setStartDate] = useState(moment().tz("America/Guatemala").format("yyyy-MM-DD"));
     const [store, setStore] = useState(null);
     //ApiRest datos de colaboradores
     const datos = [];
@@ -120,9 +121,7 @@ const TransferSystemPage = () => {
     const datosTiendas = [];
     getStore().then((res) => { res.map(resdata => datosTiendas.push({ name: resdata.name, label: resdata.name })) });
 
-    useEffect(() => {
-
-    }, []);
+    useEffect(() => {}, []);
 
     //Pinta datos en el stepper
     function getStepContent(stepIndex) {
@@ -819,19 +818,20 @@ const TransferSystemPage = () => {
                 } else {
                     await validDataSales(startDate, store, dataSales[0].encargado)
                         .then((res) => {
-
-                            if (res.salesNew.length > 0) {
-                                setStepper(0)
-                                setStepperMessage("Ya tienes ingresado un dato de venta, no puedes ingresar otro.")
-                                pagNext = 0;
-                            } else {
-
+                            if (res.error == false) {
                                 setStepper(null)
                                 pagNext = 1;
-
+                            }else{
+                                setStepper(0)
+                                setStepperMessage(res.message)
+                                setTimeout(() => {
+                                    setStepper(null);
+                                }, 6000);
+                                pagNext = 0;
                             }
                         })
                         .catch((err) => {
+                            console.log(err)
                             setStepper(0)
                             setStepperMessage("Hubo un problema técnico por comunicar a soporte técnico.")
                             pagNext = 0;
@@ -859,7 +859,6 @@ const TransferSystemPage = () => {
                         pagNext = 0;
                     }
                 }
-
                 break;
             case 1:
                 var validateVendorsempty = 0;

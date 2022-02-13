@@ -43,6 +43,7 @@ export const login_google = user => {
       return data;
     })
     .catch(err => {
+      console.log(err);
       let data = { error: 1, message: err};
       return data;
     })
